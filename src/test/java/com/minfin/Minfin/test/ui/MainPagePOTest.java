@@ -18,6 +18,7 @@ public class MainPagePOTest extends TestBase {
         mainPage.authButton.click();
 
         loginFormPO.loginButton.should(visible);
+        //comment
     }
 
 }
