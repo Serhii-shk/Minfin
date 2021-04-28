@@ -4,17 +4,12 @@ import com.codeborne.selenide.AuthenticationType;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.minfin.Minfin.pageobjects.LoginFormPO;
-import com.minfin.Minfin.pageobjects.MainPagePO;
+import com.minfin.Minfin.pageobjects.*;
 import com.minfin.Minfin.test.TestBase;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
@@ -111,34 +106,41 @@ public class VaReviews extends TestBase {
 
     // Проверка на добавление жалобы для не зарегистрированого пользователя
     @Test
-    public void createReviewNoAuth() throws InterruptedException {
+    public void createReviewNoAuth() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        $x("//button[@id='navigation-undefined']").click();
-        $x("//button[@data-gtm-ea='undefined-5f0e43bd66bf9b665803abac']").click();
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 styles__AddReviewButton-sc-1phpxpj-35 egksgo TIUKk']").click();
+        new CurrencyPO().nawBarAll.click();
+        SelenideElement card = $x("//button[@data-gtm-ea='undefined-5f0e43bd66bf9b665803abac']");
+        card.click();
+
+        new ExchangeCardPO().reviewsButton.click();
         // Проверка заполнения обязательных полей (поле общая оценка)
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
-        $x("//div[@class='styles__ErrorMessage-sc-1phpxpj-28 jbYlYW']").shouldBe(visible);
-        $x("//*[@data-rating='5']").click();
-        $x("//button[@data-id='pos_no_errors']").click();
-        $x("//textarea[@name='text']").setValue("Безопасность на высшем уровне, хороший курс");
+        ReviewsPO reviewsPO = new ReviewsPO();
+        reviewsPO.clickNextStep();
+        reviewsPO.ratingErrorMassage.shouldBe(visible); // todo delete
 
+        reviewsPO
+                .setRatingStar(5)
+                .setExcellentService()
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
 
-        File imagePath = new File("118521740.jpg");
-        $x("//input[@multiple]").uploadFile(imagePath);
         $x("//img[@class='ImageItem__Img']").shouldBe(visible);
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
-        $x("(//*[@data-rating='5'])[1]").click();
-        $x("(//*[@data-rating='5'])[2]").click();
-        $x("(//*[@data-rating='5'])[3]").click();
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
-        $(".mfm-auth--input").sendKeys("poseki4371@yncyjs.com");
-        $("[name='Password']").sendKeys("123qweQWE");
-        $x("//button[@class='mfm-auth--submit-btn']").click();
+
+        reviewsPO
+                .clickNextStep()
+                .setRatingStar(1)
+                .setRatingStar(2)
+                .setRatingStar(3)
+                .clickNextStep();
+
+        new LoginPagePO()
+                .login("poseki4371@yncyjs.com", "123qweQWE");
         $x("//div[@class='styles__ModalThanks-sc-1phpxpj-43 kRKYo']").shouldBe(visible);
 
     }
+
+
     // Редактирование отзыва юзером с правами администратора
 
     @Test
