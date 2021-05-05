@@ -7,7 +7,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class LoginFormPO {
     public SelenideElement loginButton = $("[class='mfm-auth--submit-btn login-form-submit-button']");
-    public SelenideElement loginField = $x("//form[@action=\"//minfin.com.ua/login/\"]//input[@name=\"Login\"]");
+    public SelenideElement loginField = $x("//form[@action='//minfin.com.ua/login/']//input[@name='Login']");
     public SelenideElement passwordField = $x("//div[@class='mfm-auth--screen']//input[@type='password']");
 
     String login = "kider73274@netjook.com";

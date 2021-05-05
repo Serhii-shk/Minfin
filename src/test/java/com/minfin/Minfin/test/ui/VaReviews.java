@@ -22,41 +22,58 @@ public class VaReviews extends TestBase {
     public void createReview() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        $(".mfm-auth--input").sendKeys("poseki4371@yncyjs.com");
-        $("[name='Password']").sendKeys("123qweQWE");
-        $(".mfm-auth--submit-btn.login-form-submit-button").click();
-        $x("//button[@id='navigation-undefined']").click();
-        $x("//button[@data-gtm-ea='undefined-5f0e43bd66bf9b665803abac']").click();
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 styles__AddReviewButton-sc-1phpxpj-35 egksgo TIUKk']").click();
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
-        $x("//div[@class='styles__ErrorMessage-sc-1phpxpj-28 jbYlYW']").shouldBe(visible);
-        $x("//*[@data-rating='5']").click();
-        $x("//button[@data-id='pos_no_errors']").click();
-        $x("//textarea[@name='text']").setValue("Безопасность на высшем уровне, хороший курс");
-        File imagePath = new File("118521740.jpg");
-        $x("//input[@multiple]").uploadFile(imagePath);
+
+        new LoginPagePO()
+                .login("poseki4371@yncyjs.com", "123qweQWE");
+        new CurrencyPO()
+                .nawBarAll.click();
+        new CurrencyPO()
+                .card.click();
+        new ExchangeCardPO()
+                .reviewsButton.click();
+        ReviewsPO reviewsPO = new ReviewsPO();
+
+        reviewsPO
+                .nextStep.click();
+        reviewsPO
+                .ratingErrorMassage.shouldBe(visible);
+
+        reviewsPO
+                .setRatingStar(5)
+                .setExcellentService()
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
         $x("//img[@class='ImageItem__Img']").shouldBe(visible);
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
-        $x("(//*[@data-rating='5'])[1]").click();
-        $x("(//*[@data-rating='5'])[2]").click();
-        $x("(//*[@data-rating='5'])[3]").click();
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 egksgo']").click();
-        $x("//div[@class='styles__ModalThanks-sc-1phpxpj-43 kRKYo']").shouldBe(visible);
+        reviewsPO
+                .clickNextStep()
+                .setRatingStar(1)
+                .setRatingStar(2)
+                .setRatingStar(3)
+                .clickNextStep();
+
+        new ModalWindows()
+                .thanksForReview.shouldBe(visible);
+
         Selenide.actions()
                 .moveToElement($("#top-banner-wrapper"), 1, 1)
                 .click().build()
                 .perform();
         $x("//img[@loading='lazy']")
                 .scrollIntoView(true);
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 styles__AddReviewButton-sc-1phpxpj-35 egksgo TIUKk']")
-                .scrollIntoView(false);
+
+        new ExchangeCardPO()
+                .reviewsButton.scrollIntoView(false);
 
         // Проверка на повторное добавление отзыва для того же обменника в течении 24ч
 
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 styles__AddReviewButton-sc-1phpxpj-35 egksgo TIUKk']").click();
-        $x(" //span[contains(text(),'Новый отзыв для этого пользователя можно оставить через 24 часа')]").shouldBe(Condition.appear);
+        new ExchangeCardPO().reviewsButton.click();
+        new ModalWindows().nextReviewAfter24.shouldBe(Condition.appear);
+
         sleep(3000);
-        $x("//button[@aria-label='close']").click();
+
+        new ModalWindows().closeModalWindow.click();
+
     }
 
     // Лайк отзыва
@@ -64,15 +81,19 @@ public class VaReviews extends TestBase {
     public void likeButton() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        $(".mfm-auth--input").sendKeys("poseki4371@yncyjs.com");
-        $("[name='Password']").sendKeys("123qweQWE");
-        $(".mfm-auth--submit-btn.login-form-submit-button").click();
-        $x("//button[@id='navigation-undefined']").click();
-        $x("(//button[@data-gtm-el='offers'])[1]").click();
+        new LoginPagePO()
+                .login("poseki4371@yncyjs.com", "123qweQWE");
+        new CurrencyPO()
+                .nawBarAll.click();
+        new CurrencyPO()
+                .card.click();
+        new ExchangeCardPO()
+                .reviewsLike.scrollTo().click();
+        new ExchangeCardPO()
+                .reviewsLike.click();
+        new ExchangeCardPO()
+                .reviewsLike.click();
 
-        $x("(//button[@class='styles__LikeButton-c3s3ls-1 gPXnsC'])[1]").scrollTo().click();
-        $x("(//button[@class='styles__LikeButton-c3s3ls-1 gPXnsC'])[1]").click();
-        $x("(//button[@class='styles__LikeButton-c3s3ls-1 gPXnsC'])[1]").click();
     }
 
     // Жалоба на отзыв
@@ -80,11 +101,13 @@ public class VaReviews extends TestBase {
     public void complaint() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        $(".mfm-auth--input").sendKeys("yewosi9268@tlhao86.com");
-        $("[name='Password']").sendKeys("123qweQWE");
-        $(".mfm-auth--submit-btn.login-form-submit-button").click();
-        $x("//button[@id='navigation-undefined']").click();
-        $x("//button[@data-gtm-ea='undefined-5f0e43bd66bf9b665803abac']").click();
+        new LoginPagePO()
+                .login("niser71341@yncyjs.com", "123qweQWE");
+        new CurrencyPO()
+                .nawBarAll.click();
+        new CurrencyPO()
+                .card.click();
+
         $x("(//div[@class='UserContextMenu'])[2]").scrollTo().click();
         $x("//button[@class='styles__ContextMenuButton-sc-1phpxpj-37 eypryF']").click();
         $x("(//button[@class='styles__Button-sc-1phpxpj-33 styles__OutlineButton-sc-1phpxpj-34 egksgo clkiGZ'])[1]").click();
@@ -104,20 +127,23 @@ public class VaReviews extends TestBase {
 
     }
 
-    // Проверка на добавление жалобы для не зарегистрированого пользователя
+    // Проверка на добавление отзыва для не зарегистрированого пользователя
     @Test
     public void createReviewNoAuth() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        new CurrencyPO().nawBarAll.click();
-        SelenideElement card = $x("//button[@data-gtm-ea='undefined-5f0e43bd66bf9b665803abac']");
-        card.click();
-
-        new ExchangeCardPO().reviewsButton.click();
+        new CurrencyPO()
+                .nawBarAll.click();
+        new CurrencyPO()
+                .card.click();
+        new ExchangeCardPO()
+                .reviewsButton.click();
         // Проверка заполнения обязательных полей (поле общая оценка)
         ReviewsPO reviewsPO = new ReviewsPO();
-        reviewsPO.clickNextStep();
-        reviewsPO.ratingErrorMassage.shouldBe(visible); // todo delete
+        reviewsPO
+                .clickNextStep();
+        reviewsPO
+                .ratingErrorMassage.shouldBe(visible); // todo delete
 
         reviewsPO
                 .setRatingStar(5)
@@ -136,7 +162,8 @@ public class VaReviews extends TestBase {
 
         new LoginPagePO()
                 .login("poseki4371@yncyjs.com", "123qweQWE");
-        $x("//div[@class='styles__ModalThanks-sc-1phpxpj-43 kRKYo']").shouldBe(visible);
+        new ModalWindows()
+                .thanksForReview.shouldBe(visible);
 
     }
 
@@ -147,13 +174,17 @@ public class VaReviews extends TestBase {
     public void editReviewAdmin() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        $(".mfm-auth--input").sendKeys("kider73274@netjook.com");
-        $("[name='Password']").sendKeys("123qweQWE");
-        $(".mfm-auth--submit-btn.login-form-submit-button").click();
-        $x("//button[@id='navigation-undefined']").click();
-        $x("//button[@data-gtm-ea='undefined-5f0e43bd66bf9b665803abac']").click();
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 styles__AddReviewButton-sc-1phpxpj-35 egksgo TIUKk']").click();
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
+        new LoginPagePO()
+                .login("kider73274@netjook.com","123qweQWE");
+        new CurrencyPO()
+                .nawBarAll.click();
+        new CurrencyPO()
+                .card.click();
+        new ExchangeCardPO()
+                .reviewsButton.click();  //???
+        new ReviewsPO()
+                .nextStep.click();
+
 
     }
 

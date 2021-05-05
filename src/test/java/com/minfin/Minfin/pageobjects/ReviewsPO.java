@@ -15,8 +15,8 @@ public class ReviewsPO {
     public SelenideElement ratingErrorMassage = $x("//div[@class='styles__ErrorMessage-sc-1phpxpj-28 jbYlYW']");
     public String ratingStar = "//*[@data-rating='%d']";
     public SelenideElement excellentService = $x("//button[@data-id='pos_no_errors']");
-public         SelenideElement reviewText = $x("//textarea[@name='text']");
-public         SelenideElement uploadImage = $(".Section__Main.BranchPhotos input");
+    public SelenideElement reviewText = $x("//textarea[@name='text']");
+    public SelenideElement uploadImage = $(".Section__Main.BranchPhotos input");
 
 
     public ReviewsPO setRatingStar(int starNumber){
