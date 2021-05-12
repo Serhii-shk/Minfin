@@ -23,37 +23,36 @@ public class VaReviews extends TestBase {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
 
-        new LoginPagePO()
+        LoginPagePO loginPagePO = new LoginPagePO();
+        loginPagePO
                 .login("poseki4371@yncyjs.com", "123qweQWE");
-        new CurrencyPO()
-                .nawBarAll.click();
-        new CurrencyPO()
-                .card.click();
-        new ExchangeCardPO()
-                .reviewsButton.click();
+
+        CurrencyPO currencyPO = new CurrencyPO();
+        currencyPO
+                .selectNawBarAll()
+                .selectFirstCard();
+
+        ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
+        exchangeCardPO
+                .clickReviewButton();
+
         ReviewsPO reviewsPO = new ReviewsPO();
+        reviewsPO.clickNextStep()
+                 .checkRequiredRatingStars()
+                 .setRatingStar(5)
+                 .setExcellentService()
+                 .setReviewText("Безопасность на высшем уровне, хороший курс")
+                 .uploadImage("118521740.jpg")
+                 .checkUploadedImageItem()
+                 .clickNextStep()
+                 .setRatingStar(1)
+                 .setRatingStar(2)
+                 .setRatingStar(3)
+                 .clickNextStep();
 
-        reviewsPO
-                .nextStep.click();
-        reviewsPO
-                .ratingErrorMassage.shouldBe(visible);
-
-        reviewsPO
-                .setRatingStar(5)
-                .setExcellentService()
-                .setReviewText("Безопасность на высшем уровне, хороший курс")
-                .uploadImage("118521740.jpg");
-
-        $x("//img[@class='ImageItem__Img']").shouldBe(visible);
-        reviewsPO
-                .clickNextStep()
-                .setRatingStar(1)
-                .setRatingStar(2)
-                .setRatingStar(3)
-                .clickNextStep();
-
-        new ModalWindows()
-                .thanksForReview.shouldBe(visible);
+        ModalWindows modalWindows = new ModalWindows();
+        modalWindows
+                .checkModalThanksForAddReview();
 
         Selenide.actions()
                 .moveToElement($("#top-banner-wrapper"), 1, 1)
@@ -62,51 +61,57 @@ public class VaReviews extends TestBase {
         $x("//img[@loading='lazy']")
                 .scrollIntoView(true);
 
-        new ExchangeCardPO()
+        exchangeCardPO
                 .reviewsButton.scrollIntoView(false);
 
         // Проверка на повторное добавление отзыва для того же обменника в течении 24ч
 
-        new ExchangeCardPO().reviewsButton.click();
-        new ModalWindows().nextReviewAfter24.shouldBe(Condition.appear);
+        exchangeCardPO
+                .clickReviewButton();
+        modalWindows
+                .checkForAddReviewDuring24()
+                .clickOnCloseModal();
 
-        sleep(3000);
-
-        new ModalWindows().closeModalWindow.click();
 
     }
 
-    // Лайк отзыва
+    // Лайк
     @Test
-    public void likeButton() {
+    public void likeForReview() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        new LoginPagePO()
+        LoginPagePO loginPagePO = new LoginPagePO();
+        loginPagePO
                 .login("poseki4371@yncyjs.com", "123qweQWE");
-        new CurrencyPO()
-                .nawBarAll.click();
-        new CurrencyPO()
-                .card.click();
-        new ExchangeCardPO()
-                .reviewsLike.scrollTo().click();
-        new ExchangeCardPO()
-                .reviewsLike.click();
-        new ExchangeCardPO()
-                .reviewsLike.click();
+        CurrencyPO currencyPO = new CurrencyPO();
+        currencyPO
+                .selectNawBarAll()
+                .selectFirstCard();
+
+        ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
+        exchangeCardPO
+                .scrollAndSelectToReviewsLike()
+                .clickReviewsLike()
+                // добавить проверку enabled like
+                .clickReviewsLike();
+                // добавить проверку disabled like
+
 
     }
 
     // Жалоба на отзыв
     @Test
-    public void complaint() {
+    public void complaintForReview() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        new LoginPagePO()
+        LoginPagePO loginPagePO = new LoginPagePO();
+        loginPagePO
                 .login("niser71341@yncyjs.com", "123qweQWE");
-        new CurrencyPO()
-                .nawBarAll.click();
-        new CurrencyPO()
-                .card.click();
+        CurrencyPO currencyPO = new CurrencyPO();
+        currencyPO
+                .selectNawBarAll()
+                .selectFirstCard();
+
 
         $x("(//div[@class='UserContextMenu'])[2]").scrollTo().click();
         $x("//button[@class='styles__ContextMenuButton-sc-1phpxpj-37 eypryF']").click();
@@ -132,41 +137,39 @@ public class VaReviews extends TestBase {
     public void createReviewNoAuth() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        new CurrencyPO()
-                .nawBarAll.click();
-        new CurrencyPO()
-                .card.click();
-        new ExchangeCardPO()
-                .reviewsButton.click();
+        CurrencyPO currencyPO = new CurrencyPO();
+        currencyPO
+                .selectNawBarAll()
+                .selectFirstCard();
+
+        ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
+        exchangeCardPO.clickReviewButton();
+
         // Проверка заполнения обязательных полей (поле общая оценка)
         ReviewsPO reviewsPO = new ReviewsPO();
         reviewsPO
-                .clickNextStep();
-        reviewsPO
-                .ratingErrorMassage.shouldBe(visible); // todo delete
-
-        reviewsPO
+                .clickNextStep()
+                .checkRequiredRatingStars() // todo delete
                 .setRatingStar(5)
                 .setExcellentService()
                 .setReviewText("Безопасность на высшем уровне, хороший курс")
-                .uploadImage("118521740.jpg");
-
-        $x("//img[@class='ImageItem__Img']").shouldBe(visible);
-
-        reviewsPO
+                .uploadImage("118521740.jpg")
+                .checkUploadedImageItem()
                 .clickNextStep()
                 .setRatingStar(1)
                 .setRatingStar(2)
                 .setRatingStar(3)
                 .clickNextStep();
 
-        new LoginPagePO()
+        LoginPagePO loginPagePO = new LoginPagePO();
+        loginPagePO
                 .login("poseki4371@yncyjs.com", "123qweQWE");
-        new ModalWindows()
-                .thanksForReview.shouldBe(visible);
+
+        ModalWindows modalWindows = new ModalWindows();
+        modalWindows
+                .checkModalThanksForAddReview();
 
     }
-
 
     // Редактирование отзыва юзером с правами администратора
 
@@ -174,16 +177,23 @@ public class VaReviews extends TestBase {
     public void editReviewAdmin() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
-        new LoginPagePO()
+        LoginPagePO loginPagePO = new LoginPagePO();
+        loginPagePO
                 .login("kider73274@netjook.com","123qweQWE");
-        new CurrencyPO()
-                .nawBarAll.click();
-        new CurrencyPO()
-                .card.click();
-        new ExchangeCardPO()
-                .reviewsButton.click();  //???
-        new ReviewsPO()
-                .nextStep.click();
+
+        CurrencyPO currencyPO = new CurrencyPO();
+        currencyPO
+                .selectNawBarAll()
+                .selectFirstCard();
+
+        ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
+        exchangeCardPO
+                .clickReviewButton();
+
+        ReviewsPO reviewsPO = new ReviewsPO();
+        reviewsPO
+                .clickNextStep();
+
 
 
     }
