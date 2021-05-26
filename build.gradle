@@ -34,6 +34,7 @@ test {
 allure {
     autoconfigure = true
     version = "${allureVersion}"
+    configuration = "compile"
 
     useJUnit5 {
         version = "${allureVersion}"

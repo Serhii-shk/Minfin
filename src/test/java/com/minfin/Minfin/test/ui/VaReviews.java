@@ -5,7 +5,13 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.minfin.Minfin.pageobjects.*;
+import com.minfin.Minfin.pageobjects.currency.auction.CurrencyPO;
+import com.minfin.Minfin.pageobjects.currency.auction.ExchangeCardPO;
+import com.minfin.Minfin.pageobjects.currency.auction.ModalWindowsPO;
+import com.minfin.Minfin.pageobjects.currency.auction.ReviewsPO;
 import com.minfin.Minfin.test.TestBase;
+import io.qameta.allure.Issue;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -19,22 +25,22 @@ public class VaReviews extends TestBase {
 
     // Создание отзыва
     @Test
+    @Issue("CA-563")
+    @Tag("currency-auction")
     public void createReview() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
-        mainPage.authButton.click();
 
-        LoginPagePO loginPagePO = new LoginPagePO();
-        loginPagePO
-                .login("poseki4371@yncyjs.com", "123qweQWE");
+        MainPagePO mainPagePO = new MainPagePO();
+        mainPagePO
+                .clickAuthButton()
+                .login("mejin95276@tlhao86.com", "123qweQWE");
 
         CurrencyPO currencyPO = new CurrencyPO();
         currencyPO
                 .selectNawBarAll()
-                .selectFirstCard();
-
-        ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
-        exchangeCardPO
-                .clickReviewButton();
+                .selectFirstCard()
+                .clickReviewButton()
+                .clickNextStep();
 
         ReviewsPO reviewsPO = new ReviewsPO();
         reviewsPO.clickNextStep()
@@ -50,33 +56,55 @@ public class VaReviews extends TestBase {
                  .setRatingStar(3)
                  .clickNextStep();
 
-        ModalWindows modalWindows = new ModalWindows();
-        modalWindows
-                .checkModalThanksForAddReview();
-
-        Selenide.actions()
-                .moveToElement($("#top-banner-wrapper"), 1, 1)
-                .click().build()
-                .perform();
-        $x("//img[@loading='lazy']")
-                .scrollIntoView(true);
-
-        exchangeCardPO
-                .reviewsButton.scrollIntoView(false);
+        ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
 
         // Проверка на повторное добавление отзыва для того же обменника в течении 24ч
 
+        ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
         exchangeCardPO
                 .clickReviewButton();
         modalWindows
                 .checkForAddReviewDuring24()
-                .clickOnCloseModal();
+                .clickOnCloseModal24();
 
+        thenExchangeCardAssert.checkReviewOnModeration();
 
+        // Редактирование отзыва
+        exchangeCardPO
+                .clickUserContextMenu()
+                .clickEditReviewButton();
+
+        whenReviewsPO.setRatingStar(4)
+                .setGoodSafety()
+                .clearReviewText()
+                .setReviewText("Процесс обмена был прозрачным и ясным")
+                .uploadImage("images-Train.jpeg");
+
+        thenreviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO.clickNextStep()
+                .setAvailability4Stars()
+                .setCurrencyRate4Stars()
+                .setQuality4Stars()
+                .setSafety4Stars()
+                .clickPublishReviewButton();
+
+        // Удаление отзыва
+        exchangeCardPO
+                .clickUserContextMenu()
+                .clickDeleteReviewButton();
+        new ExchangeCardAssert()
+                .checkModalReviewDeleted();
     }
 
     // Лайк
     @Test
+    @Issue("CA-563")
+    @Tag("currency-auction")
     public void likeForReview() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
@@ -86,21 +114,18 @@ public class VaReviews extends TestBase {
         CurrencyPO currencyPO = new CurrencyPO();
         currencyPO
                 .selectNawBarAll()
-                .selectFirstCard();
-
-        ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
-        exchangeCardPO
+                .selectFirstCard()
                 .scrollAndSelectToReviewsLike()
+                .checkLikeEnabledForFirstReview()
                 .clickReviewsLike()
-                // добавить проверку enabled like
-                .clickReviewsLike();
-                // добавить проверку disabled like
-
-
+                .checkLikeDisabledForFirstReview();
     }
+
 
     // Жалоба на отзыв
     @Test
+    @Issue("CA-563")
+    @Tag("currency-auction")
     public void complaintForReview() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
@@ -110,17 +135,16 @@ public class VaReviews extends TestBase {
         CurrencyPO currencyPO = new CurrencyPO();
         currencyPO
                 .selectNawBarAll()
-                .selectFirstCard();
+                .selectFirstCard()
+                .clickUserContextMenu()
+                .clickContextMenuComplaintButton()
+                .clickCancelComplaintButton()
+                .clickUserContextMenu()
+                .clickContextMenuComplaintButton()
+                .setComplaintText()
+                .clickPostComplaintButton();
 
-
-        $x("(//div[@class='UserContextMenu'])[2]").scrollTo().click();
-        $x("//button[@class='styles__ContextMenuButton-sc-1phpxpj-37 eypryF']").click();
-        $x("(//button[@class='styles__Button-sc-1phpxpj-33 styles__OutlineButton-sc-1phpxpj-34 egksgo clkiGZ'])[1]").click();
-        $x("(//div[@class='UserContextMenu'])[2]").scrollTo().click();
-        $x("//button[@class='styles__ContextMenuButton-sc-1phpxpj-37 eypryF']").click();
-        $x("(//textarea[@name='answer'])[1]").setValue("Test complaint for review");
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
-        $x("//div[@class='styles__SnackbarWrapper-sc-110il7f-0 gCStbe']").shouldBe(visible);
+        //  $x("//div[@class='styles__SnackbarWrapper-sc-110il7f-0 gCStbe']").shouldBe(visible);
 
         // Проверка на повторную жалобу на тот же обменник
 
@@ -134,6 +158,8 @@ public class VaReviews extends TestBase {
 
     // Проверка на добавление отзыва для не зарегистрированого пользователя
     @Test
+    @Issue("CA-563")
+    @Tag("currency-auction")
     public void createReviewNoAuth() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
@@ -174,6 +200,8 @@ public class VaReviews extends TestBase {
     // Редактирование отзыва юзером с правами администратора
 
     @Test
+    @Issue("CA-563")
+    @Tag("currency-auction")
     public void editReviewAdmin() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         mainPage.authButton.click();
@@ -188,15 +216,67 @@ public class VaReviews extends TestBase {
 
         ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
         exchangeCardPO
-                .clickReviewButton();
+                .clickUserContextMenu()
+                .clickEditReviewButton();
 
-        ReviewsPO reviewsPO = new ReviewsPO();
-        reviewsPO
-                .clickNextStep();
+        whenReviewsPO
+                .clearReviewText()
+                .setReviewText("Тест редактирование отзыва Админом")
+                .uploadImage("hotpng1.com.png");
 
+        thenreviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO
+                .clickNextStep()
+                .clickPublishReviewButton();
+
+        ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
+        modalWindowsPO.checkModalEditReview();
+
+        // Удаление отзыва админом
+        exchangeCardPO
+                .clickUserContextMenu()
+                .clickDeleteReviewButton();
+
+        new ExchangeCardAssert().checkModalReviewDeleted();
+
+        modalWindowsPO
+                .clickCloseModalReviewDeleted();  //спросить почему нельзя вызвать два метода через точку.
+
+        thenExchangeCardAssert
+                .checkReviewDeleted();
+
+                // Востановленин отзыва админом
+        exchangeCardPO.clickRestoreReview();
+
+        modalWindowsPO
+                .checkModalReviewRestored();
 
 
     }
 
+    // Ответ на отзыв
+    @Test
+    @Issue("CA-563")
+    @Tag("currency-auction")
+    public void answerForReview() {
+        open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
+        mainPage.authButton.click();
+        LoginPagePO loginPagePO = new LoginPagePO();
+        loginPagePO
+                .login("pikota1555@whyflkj.com", "123qweQWE");
+
+        $x("//button[@data-gtm-ea='my-branches-top']").click();
+        $x("//div[@class='exchanger-card__content']").click();
+        $x("(//button[@class='styles__Button-sc-1phpxpj-34 styles__OutlineButton-sc-1phpxpj-35 gFxekH icGSYQ'])[1]").click();
+        $x("//button[@class='styles__Button-sc-1phpxpj-34 styles__OutlineButton-sc-1phpxpj-35 gFxekH icGSYQ']").click();
+        $x("(//button[@class='styles__Button-sc-1phpxpj-34 styles__OutlineButton-sc-1phpxpj-35 gFxekH icGSYQ'])[1]").click();
+        $x("//button[@class='styles__Button-sc-1phpxpj-34 fcurHU']").click();
+        $x("//div[@class='errorText']").shouldBe(visible);
+        $x("//div[@class='feedback__message TextareaWrapper']").setValue("Ответ Админа на отзыв!!!!!");
+        $x("//button[@class='styles__Button-sc-1phpxpj-34 fcurHU']").click();
+
+
+    }
 }
 
