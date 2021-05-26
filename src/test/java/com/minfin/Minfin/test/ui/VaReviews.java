@@ -1,9 +1,8 @@
 package com.minfin.Minfin.test.ui;
 
 import com.codeborne.selenide.AuthenticationType;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
+import com.minfin.Minfin.asserts.currency.auction.ExchangeCardAssert;
+import com.minfin.Minfin.asserts.currency.auction.ReviewsAssert;
 import com.minfin.Minfin.pageobjects.*;
 import com.minfin.Minfin.pageobjects.currency.auction.CurrencyPO;
 import com.minfin.Minfin.pageobjects.currency.auction.ExchangeCardPO;
@@ -14,14 +13,15 @@ import io.qameta.allure.Issue;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class VaReviews extends TestBase {
     MainPagePO mainPage = new MainPagePO();
     LoginFormPO loginFormPO = new LoginFormPO();
+    ReviewsPO whenReviewsPO = new ReviewsPO();
+    ReviewsAssert thenreviewsAssert = new ReviewsAssert();
+    ExchangeCardAssert thenExchangeCardAssert = new ExchangeCardAssert();
 
     // Создание отзыва
     @Test
@@ -42,19 +42,22 @@ public class VaReviews extends TestBase {
                 .clickReviewButton()
                 .clickNextStep();
 
-        ReviewsPO reviewsPO = new ReviewsPO();
-        reviewsPO.clickNextStep()
-                 .checkRequiredRatingStars()
-                 .setRatingStar(5)
-                 .setExcellentService()
-                 .setReviewText("Безопасность на высшем уровне, хороший курс")
-                 .uploadImage("118521740.jpg")
-                 .checkUploadedImageItem()
-                 .clickNextStep()
-                 .setRatingStar(1)
-                 .setRatingStar(2)
-                 .setRatingStar(3)
-                 .clickNextStep();
+        thenreviewsAssert
+                .checkRequiredRatingStars();
+
+        whenReviewsPO.setRatingStar(5)
+                .setExcellentService()
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
+        thenreviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO.clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
 
         ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
         modalWindowsPO
@@ -66,8 +69,7 @@ public class VaReviews extends TestBase {
 
         ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
         exchangeCardPO
-                .clickReviewButton();
-        modalWindows
+                .secondClickReviewButton()
                 .checkForAddReviewDuring24()
                 .clickOnCloseModal24();
 
@@ -169,19 +171,21 @@ public class VaReviews extends TestBase {
                 .selectFirstCard();
 
         ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
-        exchangeCardPO.clickReviewButton();
+        ReviewsAssert thenReviewsAssert = new ReviewsAssert();
+        exchangeCardPO
+                .clickReviewButton()
+                .clickNextStep();
 
-        // Проверка заполнения обязательных полей (поле общая оценка)
-        ReviewsPO reviewsPO = new ReviewsPO();
-        reviewsPO
-                .clickNextStep()
-                .checkRequiredRatingStars() // todo delete
-                .setRatingStar(5)
+        thenReviewsAssert.checkRequiredRatingStars();
+
+        whenReviewsPO.setRatingStar(5)
                 .setExcellentService()
                 .setReviewText("Безопасность на высшем уровне, хороший курс")
-                .uploadImage("118521740.jpg")
-                .checkUploadedImageItem()
-                .clickNextStep()
+                .uploadImage("118521740.jpg");
+
+        thenReviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO.clickNextStep()
                 .setRatingStar(1)
                 .setRatingStar(2)
                 .setRatingStar(3)
@@ -191,7 +195,7 @@ public class VaReviews extends TestBase {
         loginPagePO
                 .login("poseki4371@yncyjs.com", "123qweQWE");
 
-        ModalWindows modalWindows = new ModalWindows();
+        ModalWindowsPO modalWindows = new ModalWindowsPO();
         modalWindows
                 .checkModalThanksForAddReview();
 
@@ -207,7 +211,7 @@ public class VaReviews extends TestBase {
         mainPage.authButton.click();
         LoginPagePO loginPagePO = new LoginPagePO();
         loginPagePO
-                .login("kider73274@netjook.com","123qweQWE");
+                .login("QAE", "qae2021");
 
         CurrencyPO currencyPO = new CurrencyPO();
         currencyPO
