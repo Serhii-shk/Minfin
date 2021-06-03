@@ -1,6 +1,7 @@
 package com.minfin.Minfin.pageobjects.currency.auction;
 
 import com.codeborne.selenide.SelenideElement;
+import com.minfin.Minfin.enums.ExchangeCons;
 import com.minfin.Minfin.pageobjects.BasePO;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -31,8 +32,8 @@ public class ReviewsPO {
         return this;
     }
 
-    public ReviewsPO setExcellentService(){
-        excellentService.click();
+    public ReviewsPO setCons(ExchangeCons cons){
+        $(cons.getSelector()).click();
         return this;
     }
 
