@@ -1,9 +1,9 @@
-package com.minfin.Minfin.test.ui;
+package com.minfin.Minfin.test.ui.currency.auction;
 
-import com.codeborne.selenide.AuthenticationType;
 import com.minfin.Minfin.asserts.currency.auction.ExchangeCardAssert;
 import com.minfin.Minfin.asserts.currency.auction.ReviewsAssert;
-import com.minfin.Minfin.pageobjects.*;
+import com.minfin.Minfin.enums.ExchangeCons;
+import com.minfin.Minfin.pageobjects.LoginPO;
 import com.minfin.Minfin.pageobjects.currency.auction.CurrencyPO;
 import com.minfin.Minfin.pageobjects.currency.auction.ExchangeCardPO;
 import com.minfin.Minfin.pageobjects.currency.auction.ModalWindowsPO;
@@ -15,14 +15,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$x;
 
-public class VaReviews extends TestBase {
-    MainPagePO mainPage = new MainPagePO();
-    LoginFormPO loginFormPO = new LoginFormPO();
+public class Reviews extends TestBase {
+
     ReviewsPO whenReviewsPO = new ReviewsPO();
-    ReviewsAssert thenreviewsAssert = new ReviewsAssert();
+    ReviewsAssert thenReviewsAssert = new ReviewsAssert();
     ExchangeCardAssert thenExchangeCardAssert = new ExchangeCardAssert();
+    CurrencyPO whenCurrencyPO = new CurrencyPO();
 
     // Создание отзыва
     @Test
@@ -30,31 +30,26 @@ public class VaReviews extends TestBase {
     @Tag("currency-auction")
     @TmsLink("CA-A-4")
     public void createReview() {
-        open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
-
-        MainPagePO mainPagePO = new MainPagePO();
-        mainPagePO
-                .clickAuthButton()
-                .login("mejin95276@tlhao86.com", "123qweQWE");
-
-        CurrencyPO currencyPO = new CurrencyPO();
-        currencyPO
+        whenCurrencyPO
+                .openAs("mejin95276@tlhao86.com", "123qweQWE")
                 .selectNawBarAll()
                 .selectFirstCard()
                 .clickReviewButton()
                 .clickNextStep();
 
-        thenreviewsAssert
+        thenReviewsAssert
                 .checkRequiredRatingStars();
 
-        whenReviewsPO.setRatingStar(5)
-                .setExcellentService()
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeCons.ERRORS)
                 .setReviewText("Безопасность на высшем уровне, хороший курс")
                 .uploadImage("118521740.jpg");
 
-        thenreviewsAssert.checkUploadedImageItem();
+        thenReviewsAssert.checkUploadedImageItem();
 
-        whenReviewsPO.clickNextStep()
+        whenReviewsPO
+                .clickNextStep()
                 .setAvailability5Stars()
                 .setCurrencyRate5Stars()
                 .setQuality3Stars()
@@ -88,7 +83,7 @@ public class VaReviews extends TestBase {
                 .setReviewText("Процесс обмена был прозрачным и ясным")
                 .uploadImage("images-Train.jpeg");
 
-        thenreviewsAssert.checkUploadedImageItem();
+        thenReviewsAssert.checkUploadedImageItem();
 
         whenReviewsPO.clickNextStep()
                 .setAvailability4Stars()
@@ -110,13 +105,8 @@ public class VaReviews extends TestBase {
     @Issue("CA-563")
     @Tag("currency-auction")
     public void likeForReview() {
-        open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
-        mainPage.authButton.click();
-        LoginPagePO loginPagePO = new LoginPagePO();
-        loginPagePO
-                .login("poseki4371@yncyjs.com", "123qweQWE");
-        CurrencyPO currencyPO = new CurrencyPO();
-        currencyPO
+        whenCurrencyPO
+                .openAs("poseki4371@yncyjs.com", "123qweQWE")
                 .selectNawBarAll()
                 .selectFirstCard()
                 .scrollAndSelectToReviewsLike()
@@ -131,13 +121,8 @@ public class VaReviews extends TestBase {
     @Issue("CA-563")
     @Tag("currency-auction")
     public void complaintForReview() {
-        open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
-        mainPage.authButton.click();
-        LoginPagePO loginPagePO = new LoginPagePO();
-        loginPagePO
-                .login("niser71341@yncyjs.com", "123qweQWE");
-        CurrencyPO currencyPO = new CurrencyPO();
-        currencyPO
+        whenCurrencyPO
+                .openAs("niser71341@yncyjs.com", "123qweQWE")
                 .selectNawBarAll()
                 .selectFirstCard()
                 .clickUserContextMenu()
@@ -165,10 +150,8 @@ public class VaReviews extends TestBase {
     @Issue("CA-563")
     @Tag("currency-auction")
     public void createReviewNoAuth() {
-        open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
-        mainPage.authButton.click();
-        CurrencyPO currencyPO = new CurrencyPO();
-        currencyPO
+        whenCurrencyPO
+                .open()
                 .selectNawBarAll()
                 .selectFirstCard();
 
@@ -180,22 +163,24 @@ public class VaReviews extends TestBase {
 
         thenReviewsAssert.checkRequiredRatingStars();
 
-        whenReviewsPO.setRatingStar(5)
-                .setExcellentService()
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeCons.ERRORS)
                 .setReviewText("Безопасность на высшем уровне, хороший курс")
                 .uploadImage("118521740.jpg");
 
         thenReviewsAssert.checkUploadedImageItem();
 
-        whenReviewsPO.clickNextStep()
+        whenReviewsPO
+                .clickNextStep()
                 .setRatingStar(1)
                 .setRatingStar(2)
                 .setRatingStar(3)
                 .setSafety5Stars()
                 .clickNextStep();
 
-        LoginPagePO loginPagePO = new LoginPagePO();
-        loginPagePO
+        LoginPO loginPO = new LoginPO();
+        loginPO
                 .login("poseki4371@yncyjs.com", "123qweQWE");
 
         ModalWindowsPO modalWindows = new ModalWindowsPO();
@@ -210,14 +195,8 @@ public class VaReviews extends TestBase {
     @Issue("CA-563")
     @Tag("currency-auction")
     public void editReviewAdmin() {
-        open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
-        mainPage.authButton.click();
-        LoginPagePO loginPagePO = new LoginPagePO();
-        loginPagePO
-                .login("QAE", "qae2021");
-
-        CurrencyPO currencyPO = new CurrencyPO();
-        currencyPO
+        whenCurrencyPO
+                .openAs("QAE", "qae2021")
                 .selectNawBarAll()
                 .selectFirstCard();
 
@@ -231,7 +210,7 @@ public class VaReviews extends TestBase {
                 .setReviewText("Тест редактирование отзыва Админом")
                 .uploadImage("hotpng1.com.png");
 
-        thenreviewsAssert.checkUploadedImageItem();
+        thenReviewsAssert.checkUploadedImageItem();
 
         whenReviewsPO
                 .clickNextStep()
@@ -247,17 +226,15 @@ public class VaReviews extends TestBase {
 
         new ExchangeCardAssert().checkModalReviewDeleted();
 
-        modalWindowsPO
-                .clickCloseModalReviewDeleted();  //спросить почему нельзя вызвать два метода через точку.
+        modalWindowsPO.clickCloseModalReviewDeleted();
 
         thenExchangeCardAssert
                 .checkReviewDeleted();
 
-                // Востановленин отзыва админом
+        // Востановленин отзыва админом
         exchangeCardPO.clickRestoreReview();
 
-        modalWindowsPO
-                .checkModalReviewRestored();
+        modalWindowsPO.checkModalReviewRestored();
 
 
     }
@@ -267,11 +244,7 @@ public class VaReviews extends TestBase {
     @Issue("CA-563")
     @Tag("currency-auction")
     public void answerForReview() {
-        open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
-        mainPage.authButton.click();
-        LoginPagePO loginPagePO = new LoginPagePO();
-        loginPagePO
-                .login("pikota1555@whyflkj.com", "123qweQWE");
+        whenCurrencyPO.openAs("pikota1555@whyflkj.com", "123qweQWE");
 
         $x("//button[@data-gtm-ea='my-branches-top']").click();
         $x("//div[@class='exchanger-card__content']").click();
