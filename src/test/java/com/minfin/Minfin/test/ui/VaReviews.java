@@ -10,6 +10,7 @@ import com.minfin.Minfin.pageobjects.currency.auction.ModalWindowsPO;
 import com.minfin.Minfin.pageobjects.currency.auction.ReviewsPO;
 import com.minfin.Minfin.test.TestBase;
 import io.qameta.allure.Issue;
+import io.qameta.allure.TmsLink;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,7 @@ public class VaReviews extends TestBase {
     @Test
     @Issue("CA-563")
     @Tag("currency-auction")
+    @TmsLink("CA-A-4")
     public void createReview() {
         open("https://minfin.com.ua/currency/auction-review/", AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
 
@@ -152,9 +154,9 @@ public class VaReviews extends TestBase {
 
         $x("(//button[@class='Button UserContextMenu__OptionsButton outlined'])[2]").click();
         $x("//button[@class='styles__ContextMenuButton-sc-1phpxpj-37 eypryF']").click();
-        $x("//textarea[@name='answer']").setValue("Test complaint for review");
-        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
-        $x("//div[@class='styles__SnackbarWrapper-sc-110il7f-0 gCStbe']").shouldBe(visible);
+//        $x("//textarea[@name='answer']").setValue("Test complaint for review");
+//        $x("//button[@class='styles__Button-sc-1phpxpj-33 efUZin']").click();
+//        $x("//div[@class='styles__SnackbarWrapper-sc-110il7f-0 gCStbe']").shouldBe(visible);
 
     }
 
@@ -189,6 +191,7 @@ public class VaReviews extends TestBase {
                 .setRatingStar(1)
                 .setRatingStar(2)
                 .setRatingStar(3)
+                .setSafety5Stars()
                 .clickNextStep();
 
         LoginPagePO loginPagePO = new LoginPagePO();
@@ -277,7 +280,7 @@ public class VaReviews extends TestBase {
         $x("(//button[@class='styles__Button-sc-1phpxpj-34 styles__OutlineButton-sc-1phpxpj-35 gFxekH icGSYQ'])[1]").click();
         $x("//button[@class='styles__Button-sc-1phpxpj-34 fcurHU']").click();
         $x("//div[@class='errorText']").shouldBe(visible);
-        $x("//div[@class='feedback__message TextareaWrapper']").setValue("Ответ Админа на отзыв!!!!!");
+        $x("//div[@class='feedback__message TextareaWrapper']").setValue("Ответ Обменника на отзыв");
         $x("//button[@class='styles__Button-sc-1phpxpj-34 fcurHU']").click();
 
 
