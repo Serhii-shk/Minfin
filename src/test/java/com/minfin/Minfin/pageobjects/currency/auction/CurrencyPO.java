@@ -7,6 +7,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
+import static io.qameta.allure.Allure.step;
 
 public class CurrencyPO {
 
@@ -16,28 +17,38 @@ public class CurrencyPO {
     String baseUrl = "/currency/auction-review/";
 
     public CurrencyPO selectNawBarAll() {
-        nawBarAll.click();
+        step("when select naw bar all ", () -> nawBarAll.click());
         return this;
     }
 
+//    public CurrencyPO openAs(String login, String password) {
+//        this.open();
+//        new HeaderPO().clickAuthButton().login(login, password);
+//        return this;
+//    }
+
+
     public CurrencyPO openAs(String login, String password) {
-        open();
-        new HeaderPO().clickAuthButton().login(login, password);
+        step("when open as " + login + password
+                , () -> {
+                    this.open();
+                    new HeaderPO().clickAuthButton().login(login, password);
+
+                });
         return this;
+
     }
 
     public CurrencyPO open() {
-        Selenide.open(baseUrl, AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
+        step("when open "
+                , () -> Selenide.open(baseUrl, AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w"));
         return this;
     }
 
-    public ExchangeCardPO selectFirstCard() {
-        firstCard.shouldBe(Condition.visible, Duration.ofSeconds(10)).click(ClickOptions.usingJavaScript());
-        return new ExchangeCardPO();
-    }
 
     public ExchangeCardPO selectCardById(String id) {
-        $(String.format(cardId, id)).shouldBe(Condition.visible, Duration.ofSeconds(10)).click();
+        step("when select card by id "
+                + id, () -> $(String.format(cardId, id)).shouldBe(Condition.visible, Duration.ofSeconds(10)).click());
         return new ExchangeCardPO();
     }
 

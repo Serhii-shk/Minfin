@@ -1,8 +1,9 @@
 package com.minfin.Minfin.enums;
 
-public enum ExchangeCons {
+public enum ExchangeProsAndCons {
 
     ERRORS("", "В момент обмена были совершены ошибки", "[data-id='neg_errors']"),
+    POS_NO_ERRORS("", "Превосходное обслуживание", "[data-id='pos_no_errors']"),
     FRAUD("", "Мошенничество/обман", "[data-id='neg_fraud']"),
     NO_AGREEMENTS("", "Не соблюдены договоренности", "[data-id='neg_no_agreements']"),
     UNSAFE("", "Было небезопасно", "[data-id='neg_unsafe']"),
@@ -13,7 +14,7 @@ public enum ExchangeCons {
     private String ruName;
     private String selector;
 
-    ExchangeCons(String uaName, String ruName, String selector) {
+    ExchangeProsAndCons(String uaName, String ruName, String selector) {
 
         this.uaName = uaName;
         this.ruName = ruName;

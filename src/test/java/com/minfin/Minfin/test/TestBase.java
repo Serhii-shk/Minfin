@@ -8,6 +8,7 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 @ExtendWith({TextReportExtension.class})
 @ExtendWith({BrowserPerTestStrategyExtension.class})
@@ -18,6 +19,7 @@ public class TestBase {
         Configuration.browserSize = "1920x1080";
         Configuration.baseUrl = "https://minfin.com.ua";
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
+        Configuration.timeout = 10_000;
     }
 
     @AfterAll

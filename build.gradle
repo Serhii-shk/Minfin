@@ -34,6 +34,9 @@ dependencies {
 
     testCompileOnly ("org.projectlombok:lombok:${lombokVersion}")
     testAnnotationProcessor ("org.projectlombok:lombok:${lombokVersion}")
+    testImplementation 'io.rest-assured:rest-assured:4.3.0'
+    testImplementation 'io.rest-assured:json-schema-validator:4.3.0'
+    testImplementation 'io.rest-assured:json-path:4.3.0'
 }
 
 test {
