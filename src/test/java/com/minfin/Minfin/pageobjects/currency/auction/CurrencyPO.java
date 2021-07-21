@@ -14,7 +14,7 @@ public class CurrencyPO {
     public SelenideElement nawBarAll = $x("//button[@id='navigation-undefined']");
     public SelenideElement firstCard = $x("(//button[@class='Card'])[1]");
     String cardId = "[data-gtm-ea='%s']";
-    String baseUrl = "/currency/auction-review/";
+    String baseUrl = "/currency/auction-stage/";
 
     public CurrencyPO selectNawBarAll() {
         step("when select naw bar all ", () -> nawBarAll.click());

@@ -7,16 +7,19 @@ import com.minfin.Minfin.enums.ExchangeProsAndCons;
 import com.minfin.Minfin.pageobjects.LoginPO;
 import com.minfin.Minfin.pageobjects.currency.auction.*;
 import com.minfin.Minfin.test.TestBase;
+import com.minfin.Minfin.utils.StringUtils;
 import io.qameta.allure.Issue;
 import io.qameta.allure.TmsLink;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 
-    @DisplayName("Тесты UI")
+@DisplayName("Тесты UI")
     public class Reviews extends TestBase {
         ReviewsPO whenReviewsPO = new ReviewsPO();
         ReviewsAssert thenReviewsAssert = new ReviewsAssert();
@@ -26,7 +29,8 @@ import static com.codeborne.selenide.Selenide.$x;
         ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
         ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
 
-
+    @Test
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-4")
     @DisplayName("Создание отзыва")
@@ -34,10 +38,40 @@ import static com.codeborne.selenide.Selenide.$x;
     @Tag("Currency auction")
     @Tag("Reviews")
     public void createReview() {
+
+
+        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+        given().log().all().accept(ContentType.JSON)
+                .auth().basic("minfin", "Vs7ek37PQk")
+                .contentType("multipart/form-data")
+                .multiPart("Email", email)
+                .multiPart("Login", "test_xesil26867")
+                .multiPart("Password", "123qweQWE")
+                .multiPart("Privacy", true)
+                .multiPart("Rules", true)
+                .multiPart("check", 2)
+                .multiPart("first_name", "test_xesil26867")
+                .multiPart("phone", "380970004432")
+                .when().post("https://minfin.com.ua/api/user/register/")
+                .then().log().body().statusCode(200);
+
+        given()
+                .with()
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .formParam("Login", email)
+                .formParam("Password", "123qweQWE")
+                .post("https://minfin.com.ua/api/ib/partner/auth").then().statusCode(200);
+
+
+        given()
+                .header("Cookie", "minfin_sessions=a7497b06881fa70bc5bc7ed6ca0c6387a1c6b781")
+                .when().get("https://minfin.com.ua/api/auth/auction-review/")
+                .then().log().body().statusCode(200);
+
         whenCurrencyPO
-                .openAs("sokiva1299@yncyjs.com", "123qweQWE")
+                .openAs(email, "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("velep69883-60f7af74f329645f3f9e4074")
                 .clickReviewButton()
                 .clickNextStep();
 
