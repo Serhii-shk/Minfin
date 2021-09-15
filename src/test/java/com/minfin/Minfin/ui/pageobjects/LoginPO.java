@@ -12,7 +12,6 @@ public class LoginPO {
     public SelenideElement passwordInput = $("[name='Password']");
     public SelenideElement loginButton = $(".mfm-auth--submit-btn");
     public SelenideElement registerButton = $(".mfm-auth--footer [onclick*='/register']");
-    public SelenideElement modalAuthOrRegistration = $x("//div[@class='styles__ModalAuthWrapper-sc-1phpxpj-32 gRUelK']");
 
 
     public void login(String login, String password) {

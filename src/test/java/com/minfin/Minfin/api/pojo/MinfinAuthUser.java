@@ -12,7 +12,7 @@ public class MinfinAuthUser{
 	private String accountType;
 
 	@SerializedName("user_id")
-	private int userId;
+	private Integer userId;
 
 	@SerializedName("nickname")
 	private String nickname;
@@ -25,6 +25,9 @@ public class MinfinAuthUser{
 
 	@SerializedName("login")
 	private String login;
+
+	@SerializedName("password")
+	private String password;
 
 	@SerializedName("first_name")
 	private String firstName;

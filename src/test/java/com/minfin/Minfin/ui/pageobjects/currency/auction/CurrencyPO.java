@@ -2,6 +2,8 @@ package com.minfin.Minfin.ui.pageobjects.currency.auction;
 
 import com.codeborne.selenide.*;
 import com.minfin.Minfin.ui.pageobjects.HeaderPO;
+import com.minfin.Minfin.ui.pageobjects.LoginPO;
+import com.minfin.Minfin.ui.pageobjects.RegisterPO;
 
 import java.time.Duration;
 
@@ -13,14 +15,20 @@ public class CurrencyPO {
 
     public SelenideElement nawBarAll = $x("//button[@id='navigation-undefined']");
     public SelenideElement firstCard = $x("(//button[@class='Card'])[1]");
+    public SelenideElement authButton = $x("//div[@class='js-toggle-auth']");
+    public SelenideElement registrButton = $(".mfm-auth--screen .mfm-auth--footer-btn");
     String cardId = "[data-gtm-ea='%s']";
     String baseUrl = "/currency/auction-stage/";
+
+    public LoginPO clickLoginButton() {
+        step("when click auth button", () ->authButton.click());
+        return new LoginPO();
+    }
 
     public CurrencyPO selectNawBarAll() {
         step("when select naw bar all ", () -> nawBarAll.click());
         return this;
     }
-
 
 
     public CurrencyPO openAs(String login, String password) {

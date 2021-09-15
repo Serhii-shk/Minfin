@@ -1,17 +1,21 @@
 package com.minfin.Minfin.api.test;
 
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
+import com.minfin.Minfin.api.pojo.Rating;
+import com.minfin.Minfin.api.pojo.RatingReviewPojo;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
+import okhttp3.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
+import java.io.IOException;
+
 import static io.restassured.RestAssured.when;
 import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
 
@@ -22,7 +26,6 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
         RestAssuredConfig.config().objectMapperConfig(
                 objectMapperConfig().defaultObjectMapperType(ObjectMapperType.GSON));
     }
-    String baseUrl = "https://va-backend-stage2.treeum.net/";
 
     @Test
     @DisplayName("Получение всех обменников")
@@ -71,6 +74,17 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
                 .body(minfinAuthUser)
                 .post(baseUrl + "api/auth/minfin_login")
                 .then().log().body().extract().body().jsonPath().get("access_token");
+        RatingReviewPojo ratingReviewPojo = RatingReviewPojo.builder()
+                .text("Test bank66  Test bank66 revie66w bank Tes66t revie bank")
+                .target_id("609a62e0d7df019585ada406")
+                .rating(Rating.builder()
+                        .availability(3)
+                        .common(5)
+                        .currencyRate(3)
+                        .quality(4)
+                        .safety(5)
+                        .build())
+                .build();
         RestAssured
                 .given()
                 .headers("Authorization",
@@ -79,19 +93,8 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
                         ContentType.JSON,
                         "Accept",
                         ContentType.JSON
-
                 )
-                .body("{\n" +
-                        "    \"target_id\":\"609a62e0d7df019585ada406\",\n" +
-                        "    \"rating\": {\n" +
-                        "        \"availability\": 3,\n" +
-                        "        \"common\": 2,\n" +
-                        "        \"currency_rate\": 1,\n" +
-                        "        \"quality\": 4,\n" +
-                        "        \"safety\": 5\n" +
-                        "    },\n" +
-                        "    \"text\": \"Test bank66  Test bank66 revie66w bank Tes66t revie bank\"\n" +
-                        "}")
+                .body(ratingReviewPojo)
                 .post(baseUrl + "api/branches/reviews")
                 .then().statusCode(201);
     }
@@ -134,36 +137,100 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
     @Test
     @DisplayName("Создание юзера")
     @Tag("Api")
-    @Tag("Currency auction")
-    void createUser200() {
+    @Tag("CurrencyAuction")
+    void createUser200() throws IOException, InterruptedException {
+        // new UserService().createRandomUser();
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        String login = "test_" + StringUtils.randomAlphabeticString(5);
-        given().log().all().accept(ContentType.JSON)
-                .auth().basic("minfin", "Vs7ek37PQk")
-                .contentType("multipart/form-data")
-                .multiPart("Email", email)
-                .multiPart("Login", "test_xesil26867")
-                .multiPart("Password", "123qweQWE")
-                .multiPart("Privacy", true)
-                .multiPart("Rules", true)
-                .multiPart("check", 2)
-                .multiPart("first_name", "test_xesil26867")
-                .multiPart("phone", "380970004432")
-        .when().post("https://minfin.com.ua/api/user/register/")
-                .then().log().body().statusCode(200);
+        client
+                .newBuilder()
+                .build();
+        MediaType mediaTypeText = MediaType.parse("text/plain");
+        RequestBody bodyMultipart = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("Email", email)
+                .addFormDataPart("Login", "secene10test")
+                .addFormDataPart("Password", "123qweQWE")
+                .addFormDataPart("Privacy", "true")
+                .addFormDataPart("Rules", "true")
+                .addFormDataPart("check", "2")
+                .addFormDataPart("first_name", "secene1856")
+                .addFormDataPart("phone", "+380003672393")
+                .build();
+        Request request1 = new Request.Builder()
+                .url("https://minfin.com.ua/api/user/register/")
+                .method("POST", bodyMultipart)
+                .addHeader("Authorization", "Basic bWluZmluOlZzN2VrMzdQUWs=")
+                .build();
+        Response response1 = client.newCall(request1).execute();
+        System.out.println(response1.code() == 200);
 
-        given()
-                .with()
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .formParam("Login", email)
-                .formParam("Password", "123qweQWE")
-                .post("https://minfin.com.ua/api/ib/partner/auth").then().statusCode(200);
+
+        client
+                .newBuilder()
+                .build();
+        MediaType mediaTypeXForm = MediaType.parse("application/x-www-form-urlencoded");
+        RequestBody bodyXForm = RequestBody.create(mediaTypeXForm, "Login=secene10test@mi166.com&Password=123qweQWE");
+        Request request2 = new Request.Builder()
+                .url("https://minfin.com.ua/api/ib/partner/auth")
+                .method("POST", bodyXForm)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        Response response2 = client.newCall(request2).execute();
+        System.out.println(response2.code() == 200);
 
 
-        given()
-                .header("Cookie", "minfin_sessions=a7497b06881fa70bc5bc7ed6ca0c6387a1c6b781")
-                .when().get("https://minfin.com.ua/api/auth/auction-stage/")
-                .then().log().body().statusCode(200);
+        client
+                .newBuilder()
+                .build();
+        Request request3 = new Request.Builder()
+                .url("https://minfin.com.ua/api/auth/auction-stage/")
+                .method("GET", null)
+                .addHeader("Cookie", "minfin_sessions=a77f3459ab2b5ac9e2369f8ef78d3d17fbda754a")
+                .build();
+        Response response3 = client.newCall(request3).execute();
+        System.out.println(response3.code() == 200);
+
+
+        client.newBuilder()
+                .build();
+        MediaType mediaTypeApplicationJson = MediaType.parse("application/json");
+        RequestBody bodyRaw = RequestBody.create(mediaTypeApplicationJson, "{\n\"type\": \"exchanger\"\n}\n");
+        Request request4 = new Request.Builder()
+                .url("https://va-backend-stage.treeum.net/api/auth/change_profile_type")
+                .method("POST", bodyRaw)
+                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzEwODMyNTksIm5iZiI6MTYzMTA4MzI1OSwianRpIjoiYzMyMjc1NjItNzUwMC00ZDFiLTljYzktODY0NjA0OTIzOWNmIiwiZXhwIjoxNjMxMDg0MTU5LCJpZGVudGl0eSI6eyJhdXRoX2lkIjoiNjEzODVhZmI5OTMxM2I4MjZlMWUxM2JlIn0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.oS0O-JZG7zoBIBWIbF-X6kPjrcBoQOX0eqLYEjpVMHw")
+                .addHeader("Content-Type", "application/json")
+                .build();
+        Response response4 = client.newCall(request4).execute();
+        System.out.println(response4.code() == 200);
+
+
+        client
+                .newBuilder()
+                .build();
+        MediaType mediaTypeAdmin = MediaType.parse("application/json");
+        RequestBody bodyAdmin = RequestBody.create(mediaTypeAdmin, "{\n\"user_id\":870351,\n\"first_name\":\"testRVKtest\",\n\"last_name\":\"testRVKtest\",\n\"account_type\":\"register_user\",\n\"login\":\"newusertest94@yopmail.com\",\n\"nickname\":\"testRVKtest\",\n\"slug\":null,\n\"agree\":true,\n\"verified\":false\n}");
+        Request request = new Request.Builder()
+                .url("https://va-backend-stage.treeum.net/api/auth/minfin_login")
+                .method("POST", bodyAdmin)
+                .addHeader("Content-Type", "application/json")
+                .build();
+        Response responseAdmin = client.newCall(request).execute();
+        System.out.println(responseAdmin.code() == 200);
+
+
+        client
+                .newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody bodyRaw2 = RequestBody.create(mediaType, "{\n\"service_product_id\": \"5efdb5b6dda04383b8f03570\",\n\"active_at\": \"2021-09-10T15:08:07\",\n\"count_items\": 1\n}");
+        Request request5 = new Request.Builder()
+                .url("https://va-backend-stage.treeum.net/api/admin/profile/6140b11f16bc1e7fc3e4c9c8/subscription")
+                .method("POST", bodyRaw2)
+                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzE2Mjk3MzAsIm5iZiI6MTYzMTYyOTczMCwianRpIjoiZTY4YTNhNDEtMzVmOS00ZWUxLWE5NTUtZDk4N2VlNTNjYjZhIiwiZXhwIjoxNjMxNjMwNjMwLCJpZGVudGl0eSI6eyJhdXRoX2lkIjoiNWZhYTUwN2QwY2EwM2UxYTk0ODZhNzY2In0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.zNNcaUKI2tlxJ-B5dLuG4D405Ui_o-RmhyjrlQCS3sQ")
+                .addHeader("Content-Type", "application/json")
+                .build();
+        Response response5 = client.newCall(request5).execute();
+        System.out.println(response5.code() == 200);
 
 
     }
@@ -171,7 +238,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
     @Test
     @DisplayName("Создание обменника")
     @Tag("Api")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     void createExchanger() {
 
     }
@@ -179,7 +246,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
     @Test
     @DisplayName("Получение всех отзывов всех обменников Администратором")
     @Tag("Api")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     void getAllReviewsByBranchesAdmin200() {
         when().get(baseUrl + "api/profiles/reviews/")
                 .then().statusCode(200);

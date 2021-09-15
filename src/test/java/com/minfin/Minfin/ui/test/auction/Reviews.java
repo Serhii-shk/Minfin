@@ -7,29 +7,53 @@ import com.minfin.Minfin.ui.asserts.LoginAssert;
 import com.minfin.Minfin.ui.asserts.ReviewsAssert;
 import com.minfin.Minfin.ui.enums.ExchangeProsAndCons;
 import com.minfin.Minfin.ui.pageobjects.LoginPO;
+import com.minfin.Minfin.ui.pageobjects.RegisterPO;
 import com.minfin.Minfin.ui.pageobjects.currency.auction.*;
 import com.minfin.Minfin.ui.test.TestBase;
 import com.minfin.Minfin.utils.StringUtils;
 import io.qameta.allure.Issue;
 import io.qameta.allure.TmsLink;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import static com.codeborne.selenide.Selenide.$$;
 import static io.restassured.RestAssured.given;
 
 @DisplayName("Тесты UI")
-    public class Reviews extends TestBase {
-        ReviewsPO whenReviewsPO = new ReviewsPO();
-        ReviewsAssert thenReviewsAssert = new ReviewsAssert();
-        ExchangeCardAssert thenExchangeCardAssert = new ExchangeCardAssert();
-        CurrencyPO whenCurrencyPO = new CurrencyPO();
-        MyExchangersPO myExchangersPO = new MyExchangersPO();
-        ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
-        ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
+public class Reviews extends TestBase {
+    ReviewsPO whenReviewsPO = new ReviewsPO();
+    ReviewsAssert thenReviewsAssert = new ReviewsAssert();
+    ExchangeCardAssert thenExchangeCardAssert = new ExchangeCardAssert();
+    CurrencyPO whenCurrencyPO = new CurrencyPO();
+    MyExchangersPO myExchangersPO = new MyExchangersPO();
+    ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
+    ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
+    RegisterPO whenRegisterPO = new RegisterPO();
+    static MinfinAuthUser randomUser;
+    @BeforeAll
+    static void setupprecondition(){
+//        randomUser = new UserService().createRandomUser();
+    }
+
+    @Test
+    @Issue("CA-563")
+    @TmsLink("CA-A-30")
+    @DisplayName("Создание ползователя")
+    @Tag("UI")
+    @Tag("CurrencyAuction")
+    @Tag("Reviews")
+    public void registerUserViaUi() {
+        whenCurrencyPO
+                .open()
+                .clickLoginButton()
+                .clickRegisterButton()
+                .setLoginInput()
+                .setEmailInput()
+                .setPassword1Input()
+                .setPassword2Input()
+                .clickCheckboxRecaptcha()
+                .clickRegisterButton();
+
+    }
 
 
     @Test
@@ -38,13 +62,9 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-4")
     @DisplayName("Создание отзыва")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReview() {
-
-        MinfinAuthUser randomUser = new UserService().createRandomUser();
-        new UserService().authUser(randomUser.getLogin());
-
 
         whenCurrencyPO
                 .openAs(randomUser.getLogin(), "123qweQWE")
@@ -81,14 +101,13 @@ import static io.restassured.RestAssured.given;
     }
 
 
-
     @Test
     @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-12")
     @DisplayName("Проверка на повторное добавление отзыва для того же обменника в течении 24ч")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void secondCreateReview() {
 
@@ -97,7 +116,7 @@ import static io.restassured.RestAssured.given;
                 .auth().basic("minfin", "Vs7ek37PQk")
                 .contentType("multipart/form-data")
                 .multiPart("Email", email)
-                .multiPart("Login", "test_xesil26867")
+                .multiPart("Login", email)
                 .multiPart("Password", "123qweQWE")
                 .multiPart("Privacy", true)
                 .multiPart("Rules", true)
@@ -162,12 +181,12 @@ import static io.restassured.RestAssured.given;
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-7")
     @DisplayName("Редактирование отзыва")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void editReview() {
 
@@ -199,57 +218,57 @@ import static io.restassured.RestAssured.given;
                 .when().get("https://minfin.com.ua/api/auth/auction-review/")
                 .then().log().body().statusCode(200);
 
-            whenCurrencyPO
-                    .openAs(email, "123qweQWE")
-                    .selectNawBarAll()
-                    .selectCardById("velep69883-60f8082ce590f23e86b51096")
-                    .clickReviewButton()
-                    .clickNextStep();
+        whenCurrencyPO
+                .openAs(email, "123qweQWE")
+                .selectNawBarAll()
+                .selectCardById("velep69883-60f8082ce590f23e86b51096")
+                .clickReviewButton()
+                .clickNextStep();
 
-            thenReviewsAssert
-                    .checkRequiredRatingStars();
+        thenReviewsAssert
+                .checkRequiredRatingStars();
 
-            whenReviewsPO
-                    .setRatingStar(5)
-                    .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
-                    .setReviewText("Безопасность на высшем уровне, хороший курс")
-                    .uploadImage("118521740.jpg");
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
 
-            thenReviewsAssert.checkUploadedImageItem();
+        thenReviewsAssert.checkUploadedImageItem();
 
-            whenReviewsPO
-                    .clickNextStep()
-                    .setAvailability5Stars()
-                    .setCurrencyRate5Stars()
-                    .setQuality3Stars()
-                    .setSafety5Stars()
-                    .clickPublishReviewButton();
+        whenReviewsPO
+                .clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
 
-            modalWindowsPO
-                    .checkModalThanksForAddReview()
-                    .clickCloseModalsThanksForReview()
-                    .scrollAfterCreatedReviews();
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
 
-            thenExchangeCardAssert.checkReviewOnModeration();
+        thenExchangeCardAssert.checkReviewOnModeration();
 
-            whenExchangeCardPO
-                    .clickUserContextMenu()
-                    .clickEditReviewButton();
+        whenExchangeCardPO
+                .clickUserContextMenu()
+                .clickEditReviewButton();
 
-            whenReviewsPO.setRatingStar(4)
-                    .setGoodSafety()
-                    .clearReviewText()
-                    .setReviewText("Процесс обмена был прозрачным и ясным")
-                    .uploadImage("images-Train.jpeg");
+        whenReviewsPO.setRatingStar(4)
+                .setGoodSafety()
+                .clearReviewText()
+                .setReviewText("Процесс обмена был прозрачным и ясным")
+                .uploadImage("images-Train.jpeg");
 
-            thenReviewsAssert.checkUploadedImageItem();
+        thenReviewsAssert.checkUploadedImageItem();
 
-            whenReviewsPO.clickNextStep()
-                    .setAvailability4Stars()
-                    .setCurrencyRate4Stars()
-                    .setQuality4Stars()
-                    .setSafety4Stars()
-                    .clickPublishReviewButton();
+        whenReviewsPO.clickNextStep()
+                .setAvailability4Stars()
+                .setCurrencyRate4Stars()
+                .setQuality4Stars()
+                .setSafety4Stars()
+                .clickPublishReviewButton();
     }
 
 
@@ -258,7 +277,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-8")
     @DisplayName("Удаление отзыва")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void deleteReview() {
         whenCurrencyPO
@@ -306,7 +325,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-9")
     @DisplayName("Удаление картинки в отзыве")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void deleteImageInReview() {
         whenCurrencyPO
@@ -358,13 +377,12 @@ import static io.restassured.RestAssured.given;
     }
 
 
-
     @Test
     @Issue("CA-563")
     @TmsLink("CA-A-5")
     @DisplayName("Лайк для отзыва")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void likeForReview() {
         whenCurrencyPO
@@ -383,9 +401,9 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-10")
     @DisplayName("Лайк для не авторизованого юзера")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
-    public void likeReviewNoAuth(){
+    public void likeReviewNoAuth() {
         whenCurrencyPO
                 .open()
                 .selectNawBarAll()
@@ -397,13 +415,12 @@ import static io.restassured.RestAssured.given;
     }
 
 
-
     @Test
     @Issue("CA-563")
     @TmsLink("CA-A-6")
     @DisplayName("Жалоба на отзыв")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void complaintForReview() {
         whenCurrencyPO
@@ -421,13 +438,12 @@ import static io.restassured.RestAssured.given;
     }
 
 
-
     @Test
     @Issue("CA-563")
     @TmsLink("CA-A-11")
     @DisplayName("Проверка на повторную жалобу на тот же обменник")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void secondComplaintForReview() {
         whenCurrencyPO
@@ -453,7 +469,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-13")
     @DisplayName("Проверка на добавление отзыва для не зарегистрированого пользователя")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewNoAuth() {
         whenCurrencyPO
@@ -496,13 +512,12 @@ import static io.restassured.RestAssured.given;
     }
 
 
-
     @Test
     @Issue("CA-563")
     @TmsLink("CA-A-14")
     @DisplayName("Редактирование отзыва юзером с правами администратора")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void editReviewAdmin() {
         whenCurrencyPO
@@ -530,14 +545,12 @@ import static io.restassured.RestAssured.given;
     }
 
 
-
-
     @Test
     @Issue("CA-563")
     @TmsLink("CA-A-15")
     @DisplayName("Удаление отзыва админом")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void deleteReviewAdmin() {
         whenCurrencyPO
@@ -560,13 +573,12 @@ import static io.restassured.RestAssured.given;
     }
 
 
-
     @Test
     @Issue("CA-563")
     @TmsLink("CA-A-16")
     @DisplayName("Востановление отзыва админом")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void recoveryReviewAdmin() {
         whenCurrencyPO
@@ -602,7 +614,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-17")
     @DisplayName("Ответ на отзыв")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void answerForReview() {
         whenCurrencyPO.openAs("pikota1555@whyflkj.com", "123qweQWE");
@@ -627,7 +639,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-18")
     @DisplayName("Редактирование ответа на отзыв")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void editAnswerForReview() {
         whenCurrencyPO.openAs("pikota1555@whyflkj.com", "123qweQWE");
@@ -651,7 +663,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-20")
     @DisplayName("Сортировка 'Сначала новые'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortNewFirst() {
         whenCurrencyPO
@@ -666,7 +678,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-19")
     @DisplayName("Сортировка 'По умолчанию'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortDefault() {
         whenCurrencyPO
@@ -683,7 +695,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-21")
     @DisplayName("Сортировка 'По убыванию рейтинга'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortDescendingRating() {
         whenCurrencyPO
@@ -700,7 +712,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-22")
     @DisplayName("Сортировка 'По возрастанию рейтинга'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortRatingGrowth() {
         whenCurrencyPO
@@ -718,7 +730,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-23")
     @DisplayName(" Сортировка 'По популярности'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortByPopularity() {
         whenCurrencyPO
@@ -735,7 +747,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-24")
     @DisplayName("Фильтр 'Отзывы без ответа'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void filterByUnansweredReviews() {
         whenCurrencyPO
@@ -752,7 +764,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-25")
     @DisplayName("Фильтр 'Негативные отзывы'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void filterByNegativeReviews() {
         whenCurrencyPO
@@ -769,7 +781,7 @@ import static io.restassured.RestAssured.given;
     @TmsLink("CA-A-26")
     @DisplayName("Фильтр 'Положительные отзывы'")
     @Tag("UI")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void filterByPositiveReviews() {
         whenCurrencyPO
