@@ -1,20 +1,23 @@
 package com.minfin.Minfin.api.test;
 
-import com.minfin.Minfin.api.pojo.MinfinAuthUser;
-import com.minfin.Minfin.api.pojo.Rating;
-import com.minfin.Minfin.api.pojo.RatingReviewPojo;
+import com.google.gson.Gson;
+import com.minfin.Minfin.api.pojo.*;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
 import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
 import okhttp3.*;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static io.restassured.RestAssured.when;
 import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
@@ -168,11 +171,12 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
                 .newBuilder()
                 .build();
         MediaType mediaTypeXForm = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody bodyXForm = RequestBody.create(mediaTypeXForm, "Login=secene10test@mi166.com&Password=123qweQWE");
+        RequestBody bodyXForm = RequestBody.create(mediaTypeXForm, "Login=" + email +"&Password=123qweQWE");
         Request request2 = new Request.Builder()
                 .url("https://minfin.com.ua/api/ib/partner/auth")
                 .method("POST", bodyXForm)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("Cookie", "minfin_sessions=a77f3459ab2b5ac9e2369f8ef78d3d17fbda754a")
                 .build();
         Response response2 = client.newCall(request2).execute();
         System.out.println(response2.code() == 200);
@@ -187,6 +191,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
                 .addHeader("Cookie", "minfin_sessions=a77f3459ab2b5ac9e2369f8ef78d3d17fbda754a")
                 .build();
         Response response3 = client.newCall(request3).execute();
+        AuthAuctioneResponse authAuctioneResponse = new Gson().fromJson(response3.body().string(), AuthAuctioneResponse.class);
         System.out.println(response3.code() == 200);
 
 
@@ -197,11 +202,26 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
         Request request4 = new Request.Builder()
                 .url("https://va-backend-stage.treeum.net/api/auth/change_profile_type")
                 .method("POST", bodyRaw)
-                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzEwODMyNTksIm5iZiI6MTYzMTA4MzI1OSwianRpIjoiYzMyMjc1NjItNzUwMC00ZDFiLTljYzktODY0NjA0OTIzOWNmIiwiZXhwIjoxNjMxMDg0MTU5LCJpZGVudGl0eSI6eyJhdXRoX2lkIjoiNjEzODVhZmI5OTMxM2I4MjZlMWUxM2JlIn0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.oS0O-JZG7zoBIBWIbF-X6kPjrcBoQOX0eqLYEjpVMHw")
+                .addHeader("Authorization", "Bearer " + authAuctioneResponse.getAccessToken())
                 .addHeader("Content-Type", "application/json")
                 .build();
         Response response4 = client.newCall(request4).execute();
         System.out.println(response4.code() == 200);
+
+
+
+        client.newBuilder()
+                .build();
+        Request requestUserInfo = new Request.Builder()
+                .url("https://va-backend-stage.treeum.net/api/auth/user_info")
+                .method("GET", null)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + authAuctioneResponse.getAccessToken())
+                .build();
+        Response responseUserInfo = client.newCall(requestUserInfo).execute();
+        AuthUserInfoResponse authUserInfoResponse = new Gson().fromJson(responseUserInfo.body().string(), AuthUserInfoResponse.class);
+        System.out.println(responseUserInfo.code() == 200);
+
 
 
         client
@@ -215,18 +235,21 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
                 .addHeader("Content-Type", "application/json")
                 .build();
         Response responseAdmin = client.newCall(request).execute();
+        AuthMinfinLoginResponse authMinfinLoginResponse = new Gson().fromJson(responseAdmin.body().string(), AuthMinfinLoginResponse.class);
         System.out.println(responseAdmin.code() == 200);
+
+
 
 
         client
                 .newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody bodyRaw2 = RequestBody.create(mediaType, "{\n\"service_product_id\": \"5efdb5b6dda04383b8f03570\",\n\"active_at\": \"2021-09-10T15:08:07\",\n\"count_items\": 1\n}");
+        RequestBody bodyRaw2 = RequestBody.create(mediaType, "{\n\"service_product_id\": \"5efdb5b6dda04383b8f03570\",\n\"active_at\": \"" + LocalDateTime.now() +"\",\n\"count_items\": 1\n}");
         Request request5 = new Request.Builder()
-                .url("https://va-backend-stage.treeum.net/api/admin/profile/6140b11f16bc1e7fc3e4c9c8/subscription")
+                .url("https://va-backend-stage.treeum.net/api/admin/profile/" + authUserInfoResponse.getProfileId() +"/subscription")
                 .method("POST", bodyRaw2)
-                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzE2Mjk3MzAsIm5iZiI6MTYzMTYyOTczMCwianRpIjoiZTY4YTNhNDEtMzVmOS00ZWUxLWE5NTUtZDk4N2VlNTNjYjZhIiwiZXhwIjoxNjMxNjMwNjMwLCJpZGVudGl0eSI6eyJhdXRoX2lkIjoiNWZhYTUwN2QwY2EwM2UxYTk0ODZhNzY2In0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.zNNcaUKI2tlxJ-B5dLuG4D405Ui_o-RmhyjrlQCS3sQ")
+                .addHeader("Authorization", "Bearer " + authMinfinLoginResponse.getAccessToken())
                 .addHeader("Content-Type", "application/json")
                 .build();
         Response response5 = client.newCall(request5).execute();
