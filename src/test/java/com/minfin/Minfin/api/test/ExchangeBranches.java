@@ -22,8 +22,12 @@ import java.util.Date;
 import static io.restassured.RestAssured.when;
 import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
 
-    @DisplayName("Тесты API")
-    public class ExchangeBranches {
+@DisplayName("Тесты API")
+public class ExchangeBranches {
+    String baseUrl = "https://va-backend-stage.treeum.net/";
+    OkHttpClient client = new OkHttpClient();
+
+
     @BeforeEach
     void setupRaConfig() {
         RestAssuredConfig.config().objectMapperConfig(
@@ -34,7 +38,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
     @DisplayName("Получение всех обменников")
     @Tag("Api")
     @Tag("Currency auction")
-    void getExchangeBranchesReturn200(){
+    void getExchangeBranchesReturn200() {
         when().get(baseUrl + "api/branches")
                 .then().statusCode(200);
     }
@@ -52,7 +56,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
     @DisplayName("Получение отзывов конкретного обменника")
     @Tag("Api")
     @Tag("Currency auction")
-    void getReviewsGivenExchangeBranchesReturn200(){
+    void getReviewsGivenExchangeBranchesReturn200() {
         when().get(baseUrl + "api/branches/609a62e0d7df019585ada406")
                 .then().statusCode(200);
     }
@@ -253,6 +257,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
                 .addHeader("Content-Type", "application/json")
                 .build();
         Response response5 = client.newCall(request5).execute();
+        System.out.println(response5.body().string());
         System.out.println(response5.code() == 200);
 
 

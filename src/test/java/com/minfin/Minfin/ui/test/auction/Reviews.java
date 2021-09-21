@@ -1,7 +1,6 @@
 package com.minfin.Minfin.ui.test.auction;
 
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
-import com.minfin.Minfin.api.services.UserService;
 import com.minfin.Minfin.ui.asserts.ExchangeCardAssert;
 import com.minfin.Minfin.ui.asserts.LoginAssert;
 import com.minfin.Minfin.ui.asserts.ReviewsAssert;
@@ -67,7 +66,7 @@ public class Reviews extends TestBase {
     public void createReview() {
 
         whenCurrencyPO
-                .openAs(randomUser.getLogin(), "123qweQWE")
+                .openAs(randomUser.getLogin(), randomUser.getPassword())
                 .selectNawBarAll()
                 .selectCardById("velep69883-60f8082ce590f23e86b51096")
                 .clickReviewButton()

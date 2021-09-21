@@ -47,6 +47,7 @@ public class UserService {
 
         return MinfinAuthUser.builder()
                 .login(email)
+                .password(password)
                 .accountType("register_user")
                 .userId(userId)
                 .nickname("nickname_test")
