@@ -156,7 +156,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
                 .addFormDataPart("Rules", "true")
                 .addFormDataPart("check", "2")
                 .addFormDataPart("first_name", "secene1856")
-                .addFormDataPart("phone", "+380003672393")
+                .addFormDataPart("phone", "+380005554455")
                 .build();
         Request request1 = new Request.Builder()
                 .url("https://minfin.com.ua/api/user/register/")
@@ -271,7 +271,7 @@ import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
     @Tag("Api")
     @Tag("CurrencyAuction")
     void getAllReviewsByBranchesAdmin200() {
-        when().get(baseUrl + "api/profiles/reviews/")
+        when().get(baseUrl + "api/branches/reviews/")
                 .then().statusCode(200);
     }
 
