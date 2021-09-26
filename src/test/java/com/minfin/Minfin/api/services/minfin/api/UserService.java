@@ -1,4 +1,4 @@
-package com.minfin.Minfin.api.services;
+package com.minfin.Minfin.api.services.minfin.api;
 
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
 import com.minfin.Minfin.utils.StringUtils;
@@ -40,7 +40,8 @@ public class UserService {
         JsonPath jsonPath = given()
                 .contentType(ContentType.JSON)
                 .header("Cookie", "minfin_sessions=a7497b06881fa70bc5bc7ed6ca0c6387a1c6b781")
-                .when().get("https://minfin.com.ua/api/auth/auction-stage/")
+                .when()
+                .get("https://minfin.com.ua/api/auth/auction-stage/")
                 .body().jsonPath();
 
         Integer userId = jsonPath.getInt("send_data.user_id");

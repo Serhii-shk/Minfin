@@ -1,10 +1,10 @@
-package com.minfin.Minfin.api.pojo;
+package com.minfin.Minfin.api.model.minfin.api.auth.auction;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class AuthAuctioneResponse{
+public class AuctionResponse {
 
 	@SerializedName("access_token")
 	private String accessToken;

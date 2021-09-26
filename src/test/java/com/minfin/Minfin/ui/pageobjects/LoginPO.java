@@ -3,7 +3,6 @@ package com.minfin.Minfin.ui.pageobjects;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
 import static io.qameta.allure.Allure.step;
 
 public class LoginPO {
@@ -22,8 +21,6 @@ public class LoginPO {
                     loginButton.click();
                 });
     }
-
-
 
     public RegisterPO clickRegisterButton() {
         step("when click register button ", () -> registerButton.click());

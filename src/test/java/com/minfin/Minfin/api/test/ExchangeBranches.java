@@ -1,26 +1,36 @@
 package com.minfin.Minfin.api.test;
 
-import com.google.gson.Gson;
-import com.minfin.Minfin.api.pojo.*;
+import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
+import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
+import com.minfin.Minfin.api.model.va.api.admin.profile.ProfileRequest;
+import com.minfin.Minfin.api.model.va.api.auth.changeProfileType.ChangeProfileTypeRequest;
+import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
+import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
+import com.minfin.Minfin.api.pojo.MinfinAuthUser;
+import com.minfin.Minfin.api.pojo.Rating;
+import com.minfin.Minfin.api.pojo.RatingReviewPojo;
+import com.minfin.Minfin.api.services.minfin.api.auth.auction.AuctionService;
+import com.minfin.Minfin.api.services.minfin.api.ib.partner.auth.AuthService;
+import com.minfin.Minfin.api.services.minfin.api.user.register.RegisterService;
+import com.minfin.Minfin.api.services.va.api.admin.profile.ProfileService;
+import com.minfin.Minfin.api.services.va.api.auth.changeProfileType.ChangeProfileTypeService;
+import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
+import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.http.ContentType;
-import io.restassured.mapper.ObjectMapperType;
-import okhttp3.*;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
+import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import retrofit2.Response;
+
+import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.when;
-import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;
+import static io.restassured.config.JsonConfig.jsonConfig;
+import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.DOUBLE;
 
 @DisplayName("Тесты API")
 public class ExchangeBranches {
@@ -30,14 +40,20 @@ public class ExchangeBranches {
 
     @BeforeEach
     void setupRaConfig() {
-        RestAssuredConfig.config().objectMapperConfig(
-                objectMapperConfig().defaultObjectMapperType(ObjectMapperType.GSON));
+//        JsonConfig jsonConfig = JsonConfig.jsonConfig()
+//                .numberReturnType(JsonPathConfig.NumberReturnType.DOUBLE);
+//        RestAssuredConfig.config()
+//                .jsonConfig(jsonConfig)
+//                .getEncoderConfig()
+//                .appendDefaultContentCharsetToContentTypeIfUndefined(false);
+        RestAssured.config = RestAssured.config().jsonConfig(jsonConfig().numberReturnType((DOUBLE)));
+
     }
 
     @Test
     @DisplayName("Получение всех обменников")
     @Tag("Api")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     void getExchangeBranchesReturn200() {
         when().get(baseUrl + "api/branches")
                 .then().statusCode(200);
@@ -46,7 +62,7 @@ public class ExchangeBranches {
     @Test
     @DisplayName("Получение конкретного обменника")
     @Tag("Api")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     void getGivenExchangeBranchesReturn200() {
         when().get(baseUrl + "api/branches/609a62e0d7df019585ada406")
                 .then().statusCode(200);
@@ -55,7 +71,7 @@ public class ExchangeBranches {
     @Test
     @DisplayName("Получение отзывов конкретного обменника")
     @Tag("Api")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     void getReviewsGivenExchangeBranchesReturn200() {
         when().get(baseUrl + "api/branches/609a62e0d7df019585ada406")
                 .then().statusCode(200);
@@ -64,7 +80,7 @@ public class ExchangeBranches {
     @Test
     @DisplayName("Создание отзыва для обменника")
     @Tag("Api")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     void createReviewForExchangeBranch201() {
         MinfinAuthUser minfinAuthUser = MinfinAuthUser.builder()
                 .userId(1146314)
@@ -109,20 +125,20 @@ public class ExchangeBranches {
     @Test
     @DisplayName("Создание жалобы")
     @Tag("Api")
-    @Tag("Currency auction")
+    @Tag("CurrencyAuction")
     void createComplaint201() {
         Object accessToken = RestAssured
                 .given()
-                .body("{\n" +
-                        "    \"user_id\":1146314,\n" +
-                        "    \"first_name\":\"Serhii123321\",\n" +
-                        "    \"last_name\":\"Serhii123321\",\n" +
-                        "    \"account_type\":\"register_user\",\n" +
-                        "    \"login\":\"kider73274@netjook.com\",\n" +
-                        "    \"nickname\":\"Serhii123321\",\n" +
-                        "    \"slug\":null,\n" +
-                        "    \"agree\":true,\n" +
-                        "    \"verified\":false\n" +
+                .body("{" +
+                        "    \"user_id\":1146314," +
+                        "    \"first_name\":\"Serhii123321\"," +
+                        "    \"last_name\":\"Serhii123321\"," +
+                        "    \"account_type\":\"register_user\"," +
+                        "    \"login\":\"kider73274@netjook.com\"," +
+                        "    \"nickname\":\"Serhii123321\"," +
+                        "    \"slug\":null," +
+                        "    \"agree\":true," +
+                        "    \"verified\":false" +
                         "}")
                 .post(baseUrl + "api/auth/minfin_login")
                 .then().log().body().extract().body().jsonPath().get("access_token");
@@ -145,120 +161,69 @@ public class ExchangeBranches {
     @DisplayName("Создание юзера")
     @Tag("Api")
     @Tag("CurrencyAuction")
-    void createUser200() throws IOException, InterruptedException {
+    void createUser200() {
         // new UserService().createRandomUser();
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        client
-                .newBuilder()
+        String password = "123qweQWE";
+
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(email)
+                .login("secene10test")
+                .password(password)
+                .privacy(true)
+                .rules(true)
+                .check(2)
+                .firstName("secene1856")
+                .phone("+380005554455")
                 .build();
-        MediaType mediaTypeText = MediaType.parse("text/plain");
-        RequestBody bodyMultipart = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("Email", email)
-                .addFormDataPart("Login", "secene10test")
-                .addFormDataPart("Password", "123qweQWE")
-                .addFormDataPart("Privacy", "true")
-                .addFormDataPart("Rules", "true")
-                .addFormDataPart("check", "2")
-                .addFormDataPart("first_name", "secene1856")
-                .addFormDataPart("phone", "+380005554455")
+        assert new RegisterService().postRegister(registerRequest).code() == 200;
+
+        assert new AuthService().postAuth(email, password).code() == 200;
+
+        Response<AuctionResponse> auction = new AuctionService().getAuction();
+        assert auction.code() == 200;
+
+        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
+        String accessToken = auction.body().getAccessToken();
+        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+
+        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
+        assert userInfo.code() == 200;
+
+        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
+                .userId(870351)
+                .firstName("testRVKtest")
+                .lastName("testRVKtest")
+                .accountType("register_user")
+                .login("newusertest94@yopmail.com")
+                .nickname("testRVKtest")
+                .slug("null")
+                .agree(true)
+                .verified(false)
                 .build();
-        Request request1 = new Request.Builder()
-                .url("https://minfin.com.ua/api/user/register/")
-                .method("POST", bodyMultipart)
-                .addHeader("Authorization", "Basic bWluZmluOlZzN2VrMzdQUWs=")
+        assert new MinfinLoginService().postMinfinLogin(minfinLoginRequest).code() == 200;
+
+        ProfileRequest profileRequest = ProfileRequest.builder()
+                .activeAt(String.valueOf(LocalDateTime.now()))
+                .countItems(1)
+                .serviceProductId("5efdb5b6dda04383b8f03570")
                 .build();
-        Response response1 = client.newCall(request1).execute();
-        System.out.println(response1.code() == 200);
+        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), accessToken, profileRequest).code() == 200;
 
-
-        client
-                .newBuilder()
-                .build();
-        MediaType mediaTypeXForm = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody bodyXForm = RequestBody.create(mediaTypeXForm, "Login=" + email +"&Password=123qweQWE");
-        Request request2 = new Request.Builder()
-                .url("https://minfin.com.ua/api/ib/partner/auth")
-                .method("POST", bodyXForm)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("Cookie", "minfin_sessions=a77f3459ab2b5ac9e2369f8ef78d3d17fbda754a")
-                .build();
-        Response response2 = client.newCall(request2).execute();
-        System.out.println(response2.code() == 200);
-
-
-        client
-                .newBuilder()
-                .build();
-        Request request3 = new Request.Builder()
-                .url("https://minfin.com.ua/api/auth/auction-stage/")
-                .method("GET", null)
-                .addHeader("Cookie", "minfin_sessions=a77f3459ab2b5ac9e2369f8ef78d3d17fbda754a")
-                .build();
-        Response response3 = client.newCall(request3).execute();
-        AuthAuctioneResponse authAuctioneResponse = new Gson().fromJson(response3.body().string(), AuthAuctioneResponse.class);
-        System.out.println(response3.code() == 200);
-
-
-        client.newBuilder()
-                .build();
-        MediaType mediaTypeApplicationJson = MediaType.parse("application/json");
-        RequestBody bodyRaw = RequestBody.create(mediaTypeApplicationJson, "{\n\"type\": \"exchanger\"\n}\n");
-        Request request4 = new Request.Builder()
-                .url("https://va-backend-stage.treeum.net/api/auth/change_profile_type")
-                .method("POST", bodyRaw)
-                .addHeader("Authorization", "Bearer " + authAuctioneResponse.getAccessToken())
-                .addHeader("Content-Type", "application/json")
-                .build();
-        Response response4 = client.newCall(request4).execute();
-        System.out.println(response4.code() == 200);
-
-
-
-        client.newBuilder()
-                .build();
-        Request requestUserInfo = new Request.Builder()
-                .url("https://va-backend-stage.treeum.net/api/auth/user_info")
-                .method("GET", null)
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer " + authAuctioneResponse.getAccessToken())
-                .build();
-        Response responseUserInfo = client.newCall(requestUserInfo).execute();
-        AuthUserInfoResponse authUserInfoResponse = new Gson().fromJson(responseUserInfo.body().string(), AuthUserInfoResponse.class);
-        System.out.println(responseUserInfo.code() == 200);
-
-
-
-        client
-                .newBuilder()
-                .build();
-        MediaType mediaTypeAdmin = MediaType.parse("application/json");
-        RequestBody bodyAdmin = RequestBody.create(mediaTypeAdmin, "{\n\"user_id\":870351,\n\"first_name\":\"testRVKtest\",\n\"last_name\":\"testRVKtest\",\n\"account_type\":\"register_user\",\n\"login\":\"newusertest94@yopmail.com\",\n\"nickname\":\"testRVKtest\",\n\"slug\":null,\n\"agree\":true,\n\"verified\":false\n}");
-        Request request = new Request.Builder()
-                .url("https://va-backend-stage.treeum.net/api/auth/minfin_login")
-                .method("POST", bodyAdmin)
-                .addHeader("Content-Type", "application/json")
-                .build();
-        Response responseAdmin = client.newCall(request).execute();
-        AuthMinfinLoginResponse authMinfinLoginResponse = new Gson().fromJson(responseAdmin.body().string(), AuthMinfinLoginResponse.class);
-        System.out.println(responseAdmin.code() == 200);
-
-
-
-
-        client
-                .newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody bodyRaw2 = RequestBody.create(mediaType, "{\n\"service_product_id\": \"5efdb5b6dda04383b8f03570\",\n\"active_at\": \"" + LocalDateTime.now() +"\",\n\"count_items\": 1\n}");
-        Request request5 = new Request.Builder()
-                .url("https://va-backend-stage.treeum.net/api/admin/profile/" + authUserInfoResponse.getProfileId() +"/subscription")
-                .method("POST", bodyRaw2)
-                .addHeader("Authorization", "Bearer " + authMinfinLoginResponse.getAccessToken())
-                .addHeader("Content-Type", "application/json")
-                .build();
-        Response response5 = client.newCall(request5).execute();
-        System.out.println(response5.body().string());
-        System.out.println(response5.code() == 200);
+//        client //todo
+//                .newBuilder()
+//                .build();
+//        MediaType mediaType = MediaType.parse("application/json");
+//        RequestBody bodyRaw2 = RequestBody.create(mediaType, "{service_product_id: 5efdb5b6dda04383b8f03570,active_at: " + LocalDateTime.now() +",count_items: 1}");
+//        Request request5 = new Request.Builder()
+//                .url("https://va-backend-stage.treeum.net/api/admin/profile/" + authUserInfoResponse.getProfileId() +"/subscription")
+//                .method("POST", bodyRaw2)
+//                .addHeader("Authorization", "Bearer " + authMinfinLoginResponse.getAccessToken())
+//                .addHeader("Content-Type", "application/json")
+//                .build();
+//        Response response5 = client.newCall(request5).execute();
+//        System.out.println(response5.body().string());
+//        System.out.println(response5.code() == 200);
 
 
     }

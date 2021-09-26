@@ -1,7 +1,8 @@
-package com.minfin.Minfin.api.pojo;
+package com.minfin.Minfin.api.model.minfin.api.auth.auction;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
-import com.google.gson.annotations.SerializedName;
 
 public class SendData{
 
