@@ -6,6 +6,7 @@ import com.minfin.Minfin.api.model.va.api.admin.profile.ProfileRequest;
 import com.minfin.Minfin.api.model.va.api.auth.changeProfileType.ChangeProfileTypeRequest;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
 import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
+import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
 import com.minfin.Minfin.api.pojo.Rating;
 import com.minfin.Minfin.api.pojo.RatingReviewPojo;
@@ -16,6 +17,7 @@ import com.minfin.Minfin.api.services.va.api.admin.profile.ProfileService;
 import com.minfin.Minfin.api.services.va.api.auth.changeProfileType.ChangeProfileTypeService;
 import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
 import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
+import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -224,6 +226,10 @@ public class ExchangeBranches {
 //        Response response5 = client.newCall(request5).execute();
 //        System.out.println(response5.body().string());
 //        System.out.println(response5.code() == 200);
+
+
+        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones("380007465534", accessToken);
+        assert phonesResponse.code() == 200;
 
 
     }
