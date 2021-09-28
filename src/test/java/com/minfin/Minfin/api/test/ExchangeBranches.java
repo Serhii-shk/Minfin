@@ -5,6 +5,7 @@ import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
 import com.minfin.Minfin.api.model.va.api.admin.profile.ProfileRequest;
 import com.minfin.Minfin.api.model.va.api.auth.changeProfileType.ChangeProfileTypeRequest;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
+import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginResponse;
 import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
 import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
@@ -203,29 +204,15 @@ public class ExchangeBranches {
                 .agree(true)
                 .verified(false)
                 .build();
-        assert new MinfinLoginService().postMinfinLogin(minfinLoginRequest).code() == 200;
+        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
+        assert minfinLoginResponse.code() == 200;
 
         ProfileRequest profileRequest = ProfileRequest.builder()
                 .activeAt(String.valueOf(LocalDateTime.now()))
                 .countItems(1)
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .build();
-        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), accessToken, profileRequest).code() == 200;
-
-//        client //todo
-//                .newBuilder()
-//                .build();
-//        MediaType mediaType = MediaType.parse("application/json");
-//        RequestBody bodyRaw2 = RequestBody.create(mediaType, "{service_product_id: 5efdb5b6dda04383b8f03570,active_at: " + LocalDateTime.now() +",count_items: 1}");
-//        Request request5 = new Request.Builder()
-//                .url("https://va-backend-stage.treeum.net/api/admin/profile/" + authUserInfoResponse.getProfileId() +"/subscription")
-//                .method("POST", bodyRaw2)
-//                .addHeader("Authorization", "Bearer " + authMinfinLoginResponse.getAccessToken())
-//                .addHeader("Content-Type", "application/json")
-//                .build();
-//        Response response5 = client.newCall(request5).execute();
-//        System.out.println(response5.body().string());
-//        System.out.println(response5.code() == 200);
+        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), minfinLoginResponse.body().getAccessToken(), profileRequest).code() == 200;
 
 
         Response<PhonesResponse> phonesResponse = new PhonesService().postPhones("380007465534", accessToken);
