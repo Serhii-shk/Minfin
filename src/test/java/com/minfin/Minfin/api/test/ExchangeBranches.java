@@ -8,6 +8,7 @@ import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginResponse;
 import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
 import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
+import com.minfin.Minfin.api.model.va.api.phones.VerifyCodeRequest;
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
 import com.minfin.Minfin.api.pojo.Rating;
 import com.minfin.Minfin.api.pojo.RatingReviewPojo;
@@ -19,6 +20,7 @@ import com.minfin.Minfin.api.services.va.api.auth.changeProfileType.ChangeProfil
 import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
 import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
 import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
+import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -215,8 +217,17 @@ public class ExchangeBranches {
         assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), minfinLoginResponse.body().getAccessToken(), profileRequest).code() == 200;
 
 
-        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones("380007465534", accessToken);
+        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones("380007960537", accessToken);
         assert phonesResponse.code() == 200;
+
+
+        VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
+                .verificationCode("234234")
+                .build();
+        assert new VerifyCodeService().postVerifyCode("380007960537", accessToken, verifyCodeRequest).code() == 200;
+
+
+
 
 
     }
