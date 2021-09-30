@@ -7,8 +7,11 @@ import com.minfin.Minfin.api.model.va.api.auth.changeProfileType.ChangeProfileTy
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginResponse;
 import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
+import com.minfin.Minfin.api.model.va.api.branches.body.*;
+import com.minfin.Minfin.api.model.va.api.phones.phoneId.PhoneIdBody;
 import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
 import com.minfin.Minfin.api.model.va.api.phones.VerifyCodeRequest;
+import com.minfin.Minfin.api.model.va.api.phones.phoneId.PhoneIdResponse;
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
 import com.minfin.Minfin.api.pojo.Rating;
 import com.minfin.Minfin.api.pojo.RatingReviewPojo;
@@ -19,6 +22,8 @@ import com.minfin.Minfin.api.services.va.api.admin.profile.ProfileService;
 import com.minfin.Minfin.api.services.va.api.auth.changeProfileType.ChangeProfileTypeService;
 import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
 import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
+import com.minfin.Minfin.api.services.va.api.branches.BranchesService;
+import com.minfin.Minfin.api.services.va.api.phones.PhoneIdService;
 import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.utils.StringUtils;
@@ -32,6 +37,9 @@ import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.when;
 import static io.restassured.config.JsonConfig.jsonConfig;
@@ -214,21 +222,76 @@ public class ExchangeBranches {
                 .countItems(1)
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .build();
-        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), minfinLoginResponse.body().getAccessToken(), profileRequest).code() == 200;
+        String adminToken = minfinLoginResponse.body().getAccessToken();
+        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code() == 200;
 
 
-        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones("380007960537", accessToken);
+        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+
+        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
         assert phonesResponse.code() == 200;
 
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
                 .build();
-        assert new VerifyCodeService().postVerifyCode("380007960537", accessToken, verifyCodeRequest).code() == 200;
+        assert new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code() == 200;
 
 
+        PhoneIdBody phoneIdBody = new PhoneIdBody();
+        phoneIdBody.setProfileId(userInfo.body().getProfileId());
+        Response<PhoneIdResponse> phonesIdResponse = new PhoneIdService().getPhonesId(phoneIdBody);
+        assert phonesIdResponse.code() == 200;
 
 
+        Mon mon = Mon.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
+        Sat sat = Sat.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
+        Sun sun = Sun.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
+        Tue tue = Tue.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
+        Wed wed = Wed.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
+        Thu thu = Thu.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
+        Fri fri = Fri.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
+        BranchesBody branchesBody = BranchesBody.builder()
+                .siteId("5e9457447c84a212fbe91ecd")
+                .branchType("exchanger")
+                .profileId(userInfo.body().getProfileId())
+                .phoneId(phonesIdResponse.body().getItems().get(0).getId())
+                .location(Location.builder().coordinates(List.of(50.403326, 30.630425)).type("Point").build())
+                .address("ул. Малоземельная 75")
+                .city(1)
+                .workTime(WorkTime.builder()
+                        .mon(mon)
+                        .tue(tue)
+                        .wed(wed)
+                        .thu(thu)
+                        .fri(fri)
+                        .sat(sat)
+                        .sun(sun)
+                        .build())
+                .services(Services.builder()
+                        .cctv(false)
+                        .damagedBills(false)
+                        .recountRoom(false)
+                        .parts(false)
+                        .transfer(false)
+                        .verified(false)
+                        .build())
+                .build();
+
+        assert new BranchesService().postBranches(accessToken,branchesBody).code() == 201;
+
+
+//        OkHttpClient client = new OkHttpClient().newBuilder()
+//                .build();
+//        MediaType mediaType = MediaType.parse("application/json");
+//        RequestBody body = RequestBody.create(mediaType, "{\n    \"site_id\": \"5e9457447c84a212fbe91ecd\",\n    \"branch_type\": \"exchanger\",\n    \"profile_id\": \"6152e47db61f703acc1c250e\",\n    \"phone_id\": \"6152e53067f4a5d5995322a0\",\n    \"location\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n            50.403326,\n            30.630425\n        ]\n    },\n    \"address\": \"ул. Малоземельная 70\",\n    \"city\": 1,\n    \"work_time\": {\n        \"mon\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"sat\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"sun\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"tue\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"wed\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"thu\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"fri\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        }\n    },\n    \"services\": {\n        \"cctv\": false,\n        \"damaged_bills\": false,\n        \"recount_room\": false,\n        \"parts\": false,\n        \"transfer\": false,\n        \"verified\": false\n    }\n}");
+//        Request request = new Request.Builder()
+//                .url("https://va-backend-stage.treeum.net/api/branches")
+//                .method("POST", body)
+//                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzI5MjQwNDksIm5iZiI6MTYzMjkyNDA0OSwianRpIjoiNGQ1ZTIxOGUtMWYzNi00NTNlLTlmZmEtMjRlMTc3YmYzNGFkIiwiZXhwIjoxNjMyOTI0OTQ5LCJpZGVudGl0eSI6eyJhdXRoX2lkIjoiNjE1MmU0N2RiNjFmNzAzYWNjMWMyNTBmIn0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.UyDefgJuvHNbtaOL1dBvsTxFDiOqfk9r_pvl5Up7EX8")
+//                .addHeader("Content-Type", "application/json")
+//                .build();
+//        Response response = client.newCall(request).execute();
 
     }
 

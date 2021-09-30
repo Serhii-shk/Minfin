@@ -8,7 +8,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface PhonesAPI {
-
     @Headers({"Content-Type: text/plain"})
     @POST("api/phones/{phoneNumber}")
     Call<PhonesResponse> postPhones(@Path("phoneNumber") String phoneNumber,

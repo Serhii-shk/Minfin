@@ -14,4 +14,7 @@ public class ProfileRequest {
 
     @SerializedName("count_items")
     private int countItems;
+
+    @SerializedName("amount")
+    private int amount;
 }
