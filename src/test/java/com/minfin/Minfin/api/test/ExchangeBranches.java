@@ -8,6 +8,7 @@ import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginResponse;
 import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
 import com.minfin.Minfin.api.model.va.api.branches.body.*;
+import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.body.LicensesBody;
 import com.minfin.Minfin.api.model.va.api.phones.phoneId.PhoneIdBody;
 import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
 import com.minfin.Minfin.api.model.va.api.phones.VerifyCodeRequest;
@@ -23,6 +24,7 @@ import com.minfin.Minfin.api.services.va.api.auth.changeProfileType.ChangeProfil
 import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
 import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
 import com.minfin.Minfin.api.services.va.api.branches.BranchesService;
+import com.minfin.Minfin.api.services.va.api.licenses.createLicenses.LicensesService;
 import com.minfin.Minfin.api.services.va.api.phones.PhoneIdService;
 import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
@@ -280,18 +282,14 @@ public class ExchangeBranches {
 
         assert new BranchesService().postBranches(accessToken,branchesBody).code() == 201;
 
+        String licensesNumber = "123" + ThreadLocalRandom.current().nextLong(91000000L, 91099999L);
+        LicensesBody licensesBody = LicensesBody.builder()
+                .profileId(userInfo.body().getProfileId())
+                .name(licensesNumber)
+                .build();
+        assert new LicensesService().postLicenses(accessToken, licensesBody).code() == 201;
 
-//        OkHttpClient client = new OkHttpClient().newBuilder()
-//                .build();
-//        MediaType mediaType = MediaType.parse("application/json");
-//        RequestBody body = RequestBody.create(mediaType, "{\n    \"site_id\": \"5e9457447c84a212fbe91ecd\",\n    \"branch_type\": \"exchanger\",\n    \"profile_id\": \"6152e47db61f703acc1c250e\",\n    \"phone_id\": \"6152e53067f4a5d5995322a0\",\n    \"location\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n            50.403326,\n            30.630425\n        ]\n    },\n    \"address\": \"ул. Малоземельная 70\",\n    \"city\": 1,\n    \"work_time\": {\n        \"mon\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"sat\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"sun\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"tue\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"wed\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"thu\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        },\n        \"fri\": {\n            \"worked\": true,\n            \"start\": \"9:00\",\n            \"end\": \"20:00\",\n            \"breaks\": []\n        }\n    },\n    \"services\": {\n        \"cctv\": false,\n        \"damaged_bills\": false,\n        \"recount_room\": false,\n        \"parts\": false,\n        \"transfer\": false,\n        \"verified\": false\n    }\n}");
-//        Request request = new Request.Builder()
-//                .url("https://va-backend-stage.treeum.net/api/branches")
-//                .method("POST", body)
-//                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MzI5MjQwNDksIm5iZiI6MTYzMjkyNDA0OSwianRpIjoiNGQ1ZTIxOGUtMWYzNi00NTNlLTlmZmEtMjRlMTc3YmYzNGFkIiwiZXhwIjoxNjMyOTI0OTQ5LCJpZGVudGl0eSI6eyJhdXRoX2lkIjoiNjE1MmU0N2RiNjFmNzAzYWNjMWMyNTBmIn0sImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.UyDefgJuvHNbtaOL1dBvsTxFDiOqfk9r_pvl5Up7EX8")
-//                .addHeader("Content-Type", "application/json")
-//                .build();
-//        Response response = client.newCall(request).execute();
+
 
     }
 
