@@ -2,8 +2,8 @@ package com.minfin.Minfin.api.services.va.api.licenses.createLicenses;
 
 
 import com.minfin.Minfin.api.client.va.api.licenses.createLicenses.LicensesAPI;
-import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.body.LicensesBody;
-import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.response.LicensesResponse;
+import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesBody;
+import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesResponse;
 import com.minfin.Minfin.api.services.va.BaseVAService;
 import lombok.SneakyThrows;
 import retrofit2.Call;

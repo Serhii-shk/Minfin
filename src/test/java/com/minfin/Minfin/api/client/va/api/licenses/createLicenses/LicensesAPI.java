@@ -1,7 +1,7 @@
 package com.minfin.Minfin.api.client.va.api.licenses.createLicenses;
 
-import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.body.LicensesBody;
-import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.response.LicensesResponse;
+import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesBody;
+import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;

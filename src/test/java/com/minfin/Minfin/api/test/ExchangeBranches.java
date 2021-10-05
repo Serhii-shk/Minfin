@@ -8,11 +8,18 @@ import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginResponse;
 import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
 import com.minfin.Minfin.api.model.va.api.branches.body.*;
-import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.body.LicensesBody;
+import com.minfin.Minfin.api.model.va.api.branches.response.BranchesResponse;
+import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesBody;
+import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesResponse;
+import com.minfin.Minfin.api.model.va.api.licenses.setLicenseStatus.SetLicenseStatusBody;
 import com.minfin.Minfin.api.model.va.api.phones.phoneId.PhoneIdBody;
 import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
 import com.minfin.Minfin.api.model.va.api.phones.VerifyCodeRequest;
 import com.minfin.Minfin.api.model.va.api.phones.phoneId.PhoneIdResponse;
+import com.minfin.Minfin.api.model.va.api.rates.body.Buy;
+import com.minfin.Minfin.api.model.va.api.rates.body.RatesBody;
+import com.minfin.Minfin.api.model.va.api.rates.body.Rate;
+import com.minfin.Minfin.api.model.va.api.rates.body.Sell;
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
 import com.minfin.Minfin.api.pojo.Rating;
 import com.minfin.Minfin.api.pojo.RatingReviewPojo;
@@ -25,9 +32,11 @@ import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService
 import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
 import com.minfin.Minfin.api.services.va.api.branches.BranchesService;
 import com.minfin.Minfin.api.services.va.api.licenses.createLicenses.LicensesService;
+import com.minfin.Minfin.api.services.va.api.licenses.setLicenseStatus.SetLicenseStatusService;
 import com.minfin.Minfin.api.services.va.api.phones.PhoneIdService;
 import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
+import com.minfin.Minfin.api.services.va.api.rates.RatesService;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -38,6 +47,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -219,8 +229,10 @@ public class ExchangeBranches {
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
         assert minfinLoginResponse.code() == 200;
 
+
+        LocalDateTime date = LocalDateTime.now();
         ProfileRequest profileRequest = ProfileRequest.builder()
-                .activeAt(String.valueOf(LocalDateTime.now()))
+                .activeAt(String.valueOf(date.plusMonths(1)))
                 .countItems(1)
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .build();
@@ -279,15 +291,47 @@ public class ExchangeBranches {
                         .verified(false)
                         .build())
                 .build();
-
-        assert new BranchesService().postBranches(accessToken,branchesBody).code() == 201;
+        Response<BranchesResponse> branchesResponseResponse = new BranchesService().postBranches(accessToken, branchesBody);
+        assert branchesResponseResponse.code() == 201;
 
         String licensesNumber = "123" + ThreadLocalRandom.current().nextLong(91000000L, 91099999L);
         LicensesBody licensesBody = LicensesBody.builder()
                 .profileId(userInfo.body().getProfileId())
                 .name(licensesNumber)
                 .build();
-        assert new LicensesService().postLicenses(accessToken, licensesBody).code() == 201;
+        Response<LicensesResponse> licensesResponseResponse = new LicensesService().postLicenses(accessToken, licensesBody);
+        assert licensesResponseResponse.code() == 201;
+
+
+
+        SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
+                .licenseId(licensesResponseResponse.body().getId())
+                .status("success")
+                .build();
+        assert new SetLicenseStatusService().postSetLicenseStatus(setLicenseStatusBody).code() == 200;
+
+
+        Buy buy = Buy.builder()
+                .minCount(1000)
+                .maxCount(20000)
+                .value(27.00)
+                .build();
+        Sell sell = Sell.builder()
+                .minCount(1000)
+                .maxCount(20000)
+                .value(28.00)
+                .build();
+
+        RatesBody ratesBody = RatesBody.builder()
+                .branchId(branchesResponseResponse.body().getId())
+                .profileId(userInfo.body().getProfileId())
+                .currency("usd")
+                .rate(Rate.builder()
+                        .buy(buy)
+                        .sell(sell)
+                        .build())
+                .build();
+        assert new RatesService().postRates(adminToken,ratesBody).code() == 200;
 
 
 

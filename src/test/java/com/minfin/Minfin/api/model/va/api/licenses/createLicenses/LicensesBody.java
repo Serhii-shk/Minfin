@@ -1,4 +1,4 @@
-package com.minfin.Minfin.api.model.va.api.licenses.createLicenses.body;
+package com.minfin.Minfin.api.model.va.api.licenses.createLicenses;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;

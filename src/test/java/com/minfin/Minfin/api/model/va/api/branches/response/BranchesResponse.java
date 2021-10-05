@@ -1,6 +1,7 @@
 package com.minfin.Minfin.api.model.va.api.branches.response;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
