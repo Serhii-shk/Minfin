@@ -36,43 +36,4 @@ public class UserInfoResponse {
     @SerializedName("last_subscription_update_payment")
     private Object lastSubscriptionUpdatePayment;
 
-    public Object getServiceKey() {
-        return serviceKey;
-    }
-
-    public String getProfileType() {
-        return profileType;
-    }
-
-    public String getAuthId() {
-        return authId;
-    }
-
-    public String getProfileId() {
-        return profileId;
-    }
-
-    public Object getServiceExpire() {
-        return serviceExpire;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public Boolean isVerified() {
-        return verified;
-    }
-
-    public Boolean isActiveSubscription() {
-        return activeSubscription;
-    }
-
-    public Object getLastSubscriptionPayment() {
-        return lastSubscriptionPayment;
-    }
-
-    public Object getLastSubscriptionUpdatePayment() {
-        return lastSubscriptionUpdatePayment;
-    }
 }

@@ -1,4 +1,4 @@
-package com.minfin.Minfin.api.test;
+package com.minfin.Minfin.api.generation;
 
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
@@ -24,9 +24,6 @@ import com.minfin.Minfin.api.model.va.api.rates.body.Buy;
 import com.minfin.Minfin.api.model.va.api.rates.body.Rate;
 import com.minfin.Minfin.api.model.va.api.rates.body.RatesBody;
 import com.minfin.Minfin.api.model.va.api.rates.body.Sell;
-import com.minfin.Minfin.api.pojo.MinfinAuthUser;
-import com.minfin.Minfin.api.pojo.Rating;
-import com.minfin.Minfin.api.pojo.RatingReviewPojo;
 import com.minfin.Minfin.api.services.minfin.api.auth.auction.AuctionService;
 import com.minfin.Minfin.api.services.minfin.api.ib.partner.auth.AuthService;
 import com.minfin.Minfin.api.services.minfin.api.user.register.RegisterService;
@@ -43,12 +40,6 @@ import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.api.services.va.api.rates.RatesService;
 import com.minfin.Minfin.utils.StringUtils;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import okhttp3.OkHttpClient;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
@@ -57,141 +48,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.restassured.RestAssured.when;
-import static io.restassured.config.JsonConfig.jsonConfig;
-import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.DOUBLE;
+public class UserGenerator {
 
-@DisplayName("Тесты API")
-public class ExchangeBranches {
-    String baseUrl = "https://va-backend-stage.treeum.net/";
-    OkHttpClient client = new OkHttpClient();
-
-
-    @BeforeEach
-    void setupRaConfig() {
-//        JsonConfig jsonConfig = JsonConfig.jsonConfig()
-//                .numberReturnType(JsonPathConfig.NumberReturnType.DOUBLE);
-//        RestAssuredConfig.config()
-//                .jsonConfig(jsonConfig)
-//                .getEncoderConfig()
-//                .appendDefaultContentCharsetToContentTypeIfUndefined(false);
-        RestAssured.config = RestAssured.config().jsonConfig(jsonConfig().numberReturnType((DOUBLE)));
-
-    }
-
-    @Test
-    @DisplayName("Получение всех обменников")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void getExchangeBranchesReturn200() {
-        when().get(baseUrl + "api/branches")
-                .then().statusCode(200);
-    }
-
-    @Test
-    @DisplayName("Получение конкретного обменника")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void getGivenExchangeBranchesReturn200() {
-        when().get(baseUrl + "api/branches/609a62e0d7df019585ada406")
-                .then().statusCode(200);
-    }
-
-    @Test
-    @DisplayName("Получение отзывов конкретного обменника")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void getReviewsGivenExchangeBranchesReturn200() {
-        when().get(baseUrl + "api/branches/609a62e0d7df019585ada406")
-                .then().statusCode(200);
-    }
-
-    @Test
-    @DisplayName("Создание отзыва для обменника")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void createReviewForExchangeBranch201() {
-        MinfinAuthUser minfinAuthUser = MinfinAuthUser.builder()
-                .userId(1146314)
-                .firstName("Serhii123321")
-                .lastName("Serhii123321")
-                .accountType("register_user")
-                .login("kider73274@netjook.com")
-                .nickname("Serhii123321")
-                .slug(null)
-                .agree(true)
-                .verified(false).build();
-        Object accessToken = RestAssured
-                .given()
-                .body(minfinAuthUser)
-                .post(baseUrl + "api/auth/minfin_login")
-                .then().log().body().extract().body().jsonPath().get("access_token");
-        RatingReviewPojo ratingReviewPojo = RatingReviewPojo.builder()
-                .text("Test bank66  Test bank66 revie66w bank Tes66t revie bank")
-                .target_id("609a62e0d7df019585ada406")
-                .rating(Rating.builder()
-                        .availability(3)
-                        .common(5)
-                        .currencyRate(3)
-                        .quality(4)
-                        .safety(5)
-                        .build())
-                .build();
-        RestAssured
-                .given()
-                .headers("Authorization",
-                        "Bearer " + accessToken,
-                        "Content-Type",
-                        ContentType.JSON,
-                        "Accept",
-                        ContentType.JSON
-                )
-                .body(ratingReviewPojo)
-                .post(baseUrl + "api/branches/reviews")
-                .then().statusCode(201);
-    }
-
-    @Test
-    @DisplayName("Создание жалобы")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void createComplaint201() {
-        Object accessToken = RestAssured
-                .given()
-                .body("{" +
-                        "    \"user_id\":1146314," +
-                        "    \"first_name\":\"Serhii123321\"," +
-                        "    \"last_name\":\"Serhii123321\"," +
-                        "    \"account_type\":\"register_user\"," +
-                        "    \"login\":\"kider73274@netjook.com\"," +
-                        "    \"nickname\":\"Serhii123321\"," +
-                        "    \"slug\":null," +
-                        "    \"agree\":true," +
-                        "    \"verified\":false" +
-                        "}")
-                .post(baseUrl + "api/auth/minfin_login")
-                .then().log().body().extract().body().jsonPath().get("access_token");
-        RestAssured
-                .given()
-                .headers("Authorization",
-                        "Bearer " + accessToken,
-                        "Content-Type",
-                        ContentType.JSON,
-                        "Accept",
-                        ContentType.JSON
-
-                )
-                .body("\"text\": \"Test complaint for profile1 Test complaint for profile1\"")
-                .post(baseUrl + "api/profiles/reviews/606b1ca4db2e061cdacfe293/complaint")
-                .then().statusCode(201);
-    }
-
-    @Test
-    @DisplayName("Создание обменника")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void createExchanger200() {
-        // new UserService().createRandomUser();
+    public UserProfile createRandomExchanger() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -307,7 +166,6 @@ public class ExchangeBranches {
         assert licensesResponseResponse.code() == 201;
 
 
-
         SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
                 .licenseId(licensesResponseResponse.body().getId())
                 .status("success")
@@ -335,17 +193,14 @@ public class ExchangeBranches {
                         .sell(sell)
                         .build())
                 .build();
-        assert new RatesService().postRates(adminToken,ratesBody).code() == 200;
-
-
-
+        assert new RatesService().postRates(adminToken, ratesBody).code() == 200;
+        return UserProfile.builder().email(email).password(password).build();
     }
 
-    @Test
-    @DisplayName("Создание пользователя Pro")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void createCustomerPro200() {
+
+
+@Test
+    public UserProfile createRandomCustomerPro() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -416,46 +271,36 @@ public class ExchangeBranches {
         assert phonesIdResponse.code() == 200;
 
 
-
-        ApplicationsBody applicationsBody = ApplicationsBody.builder()
-                .siteId("5e9457447c84a212fbe91ecd")
-                .profileId(userInfo.body().getProfileId())
-                .phoneId(phonesIdResponse.body().getItems().get(0).getId())
-                .location(com.minfin.Minfin.api.model.va.api.applications.body.Location.builder()
-                        .coordinates(List.of(50.400679, 30.616587))
-                        .type("Point")
-                        .build())
-                .address("ул. Княжий Затон 21")
-                .city(1)
-                .type("buy")
-                .currency("usd")
-                .rate(27)
-                .amount(1000)
-                .description("Test test test")
-                .modifications(Modifications.builder()
-                        .pinned(false)
-                        .painted(false)
-                        .build())
-                .services(com.minfin.Minfin.api.model.va.api.applications.body.Services.builder()
-                        .parts(false)
-                        .transfer(false)
-                        .damagedBills(false)
-                        .build())
-                .build();
-        Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
-        assert applicationsResponseResponse.code() == 201;
-
+    ApplicationsBody applicationsBody = ApplicationsBody.builder()
+            .siteId("5e9457447c84a212fbe91ecd")
+            .profileId(userInfo.body().getProfileId())
+            .phoneId(phonesIdResponse.body().getItems().get(0).getId())
+            .location(com.minfin.Minfin.api.model.va.api.applications.body.Location.builder()
+                    .coordinates(List.of(50.400679, 30.616587))
+                    .type("Point")
+                    .build())
+            .address("ул. Княжий Затон 21")
+            .city(1)
+            .type("buy")
+            .currency("usd")
+            .rate(27)
+            .amount(1000)
+            .description("Test test test")
+            .modifications(Modifications.builder()
+                    .pinned(false)
+                    .painted(false)
+                    .build())
+            .services(com.minfin.Minfin.api.model.va.api.applications.body.Services.builder()
+                    .parts(false)
+                    .transfer(false)
+                    .damagedBills(false)
+                    .build())
+            .build();
+    Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
+    assert applicationsResponseResponse.code() == 201;
 
 
-    }
-
-    @Test
-    @DisplayName("Получение всех отзывов всех обменников Администратором")
-    @Tag("Api")
-    @Tag("CurrencyAuction")
-    void getAllReviewsByBranchesAdmin200() {
-        when().get(baseUrl + "api/branches/reviews/")
-                .then().statusCode(200);
+        return UserProfile.builder().email(email).password(password).build();
     }
 
 
