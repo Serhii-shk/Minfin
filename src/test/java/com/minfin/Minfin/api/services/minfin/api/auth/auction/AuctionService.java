@@ -14,7 +14,7 @@ public class AuctionService extends BaseMinfinService {
     @SneakyThrows
     public Response<AuctionResponse> getAuction() {
         AuctionAPI service = retrofit.create(AuctionAPI.class);
-        Call<AuctionResponse> call = service.getAuction();
+        Call<AuctionResponse> call = service.getAuction(getEnv());
         return call.execute();
     }
 }

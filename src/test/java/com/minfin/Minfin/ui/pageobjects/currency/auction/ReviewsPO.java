@@ -10,7 +10,7 @@ import static io.qameta.allure.Allure.step;
 
 public class ReviewsPO {
 
-    public SelenideElement nextStep = $x("//button[@class='styles__Button-sc-1phpxpj-34 fcurHU']");
+    public SelenideElement nextStep = $x("//button[@class='styles__Button-sc-1phpxpj-35 gSchVx']");
     public SelenideElement ratingErrorMessage = $x("//div[@class='styles__ErrorMessage-sc-1phpxpj-27 gPeHPd']");
     public String ratingStar = "//*[@data-rating='%d']";
     public SelenideElement excellentService = $x("//button[@data-id='pos_no_errors']");

@@ -27,6 +27,7 @@ public class Reviews extends TestBase {
     ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
     ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
     RegisterPO whenRegisterPO = new RegisterPO();
+    UserProfile userProfile = new UserGenerator().createRandomExchanger();
     static MinfinAuthUser randomUser;
     @BeforeAll
     static void setupprecondition(){
@@ -68,7 +69,7 @@ public class Reviews extends TestBase {
         whenCurrencyPO
                 .openAs(randomUser.getLogin(), randomUser.getPassword())
                 .selectNawBarAll()
-                .selectCardById("velep69883-60f8082ce590f23e86b51096")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -101,7 +102,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+//    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-12")
     @DisplayName("Проверка на повторное добавление отзыва для того же обменника в течении 24ч")
@@ -109,39 +110,10 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void secondCreateReview() {
-
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        given().log().all().accept(ContentType.JSON)
-                .auth().basic("minfin", "Vs7ek37PQk")
-                .contentType("multipart/form-data")
-                .multiPart("Email", email)
-                .multiPart("Login", email)
-                .multiPart("Password", "123qweQWE")
-                .multiPart("Privacy", true)
-                .multiPart("Rules", true)
-                .multiPart("check", 2)
-                .multiPart("first_name", "test_xesil26867")
-                .multiPart("phone", "380970004432")
-                .when().post("https://minfin.com.ua/api/user/register/")
-                .then().log().body().statusCode(200);
-
-        given()
-                .with()
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .formParam("Login", email)
-                .formParam("Password", "123qweQWE")
-                .post("https://minfin.com.ua/api/ib/partner/auth").then().statusCode(200);
-
-
-        given()
-                .header("Cookie", "minfin_sessions=a7497b06881fa70bc5bc7ed6ca0c6387a1c6b781")
-                .when().get("https://minfin.com.ua/api/auth/auction-review/")
-                .then().log().body().statusCode(200);
-
         whenCurrencyPO
-                .openAs(email, "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("velep69883-60f8082ce590f23e86b51096")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -188,39 +160,10 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void editReview() {
-
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        given().log().all().accept(ContentType.JSON)
-                .auth().basic("minfin", "Vs7ek37PQk")
-                .contentType("multipart/form-data")
-                .multiPart("Email", email)
-                .multiPart("Login", "test_xesil26867")
-                .multiPart("Password", "123qweQWE")
-                .multiPart("Privacy", true)
-                .multiPart("Rules", true)
-                .multiPart("check", 2)
-                .multiPart("first_name", "test_xesil26867")
-                .multiPart("phone", "380970004432")
-                .when().post("https://minfin.com.ua/api/user/register/")
-                .then().log().body().statusCode(200);
-
-        given()
-                .with()
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .formParam("Login", email)
-                .formParam("Password", "123qweQWE")
-                .post("https://minfin.com.ua/api/ib/partner/auth").then().statusCode(200);
-
-
-        given()
-                .header("Cookie", "minfin_sessions=a7497b06881fa70bc5bc7ed6ca0c6387a1c6b781")
-                .when().get("https://minfin.com.ua/api/auth/auction-review/")
-                .then().log().body().statusCode(200);
-
         whenCurrencyPO
-                .openAs(email, "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("velep69883-60f8082ce590f23e86b51096")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -280,9 +223,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void deleteReview() {
         whenCurrencyPO
-                .openAs("nitem11330@yncyjs.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -328,9 +271,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void deleteImageInReview() {
         whenCurrencyPO
-                .openAs("jocalog352@yncyjs.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -385,9 +328,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void likeForReview() {
         whenCurrencyPO
-                .openAs("poseki4371@yncyjs.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickFirstReviewLike()
                 .checkLikeEnabledForFirstReview()
                 .clickReviewsLike()
@@ -406,7 +349,7 @@ public class Reviews extends TestBase {
         whenCurrencyPO
                 .open()
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickFirstReviewLike();
 
         new ModalAuthRegPO().clickAuthRegButton();
@@ -423,9 +366,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void complaintForReview() {
         whenCurrencyPO
-                .openAs("niser71341@yncyjs.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickUserContextMenu()
                 .clickContextMenuComplaintButton()
                 .clickCancelComplaintButton()
@@ -446,9 +389,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void secondComplaintForReview() {
         whenCurrencyPO
-                .openAs("niser71341@yncyjs.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickUserContextMenu()
                 .clickContextMenuComplaintButton()
                 .setComplaintText()
@@ -474,7 +417,7 @@ public class Reviews extends TestBase {
         whenCurrencyPO
                 .open()
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406");
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8");
 
         ExchangeCardPO exchangeCardPO = new ExchangeCardPO();
         ReviewsAssert thenReviewsAssert = new ReviewsAssert();
@@ -485,7 +428,7 @@ public class Reviews extends TestBase {
         thenReviewsAssert.checkRequiredRatingStars();
 
         whenReviewsPO
-                .setRatingStar(5)
+                .setRatingStar(3)
                 .setCons(ExchangeProsAndCons.ERRORS)
                 .setReviewText("Безопасность на высшем уровне, хороший курс")
                 .uploadImage("118521740.jpg");
@@ -502,8 +445,7 @@ public class Reviews extends TestBase {
 
         LoginPO loginPO = new LoginPO();
         loginPO
-                .login("poseki4371@yncyjs.com", "123qweQWE");
-
+                .login(userProfile.getEmail(), "123qweQWE");
         ModalWindowsPO modalWindows = new ModalWindowsPO();
         modalWindows
                 .checkModalThanksForAddReview();
@@ -520,9 +462,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void editReviewAdmin() {
         whenCurrencyPO
-                .openAs("QAE", "qae2021")
+                .openAs("testRVKtest", "test55555")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406");
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8");
 
         whenExchangeCardPO
                 .clickUserContextMenu()
@@ -553,9 +495,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void deleteReviewAdmin() {
         whenCurrencyPO
-                .openAs("QAE", "qae2021")
+                .openAs("testRVKtest", "test55555")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406");
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8");
 
         whenExchangeCardPO
                 .clickUserContextMenu()
@@ -581,9 +523,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void recoveryReviewAdmin() {
         whenCurrencyPO
-                .openAs("QAE", "qae2021")
+                .openAs("testRVKtest", "test55555")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406");
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8");
 
         whenExchangeCardPO
                 .clickUserContextMenu()
@@ -616,7 +558,8 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void answerForReview() {
-        whenCurrencyPO.openAs("pikota1555@whyflkj.com", "123qweQWE");
+        whenCurrencyPO
+                .openAs("pikota1555@whyflkj.com", "123qweQWE");
         myExchangersPO
                 .clickOnMyExchangersButton()
                 .clickMyFirstExchanger()
@@ -666,9 +609,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortNewFirst() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .checkSortNewFirst();
     }
 
@@ -681,9 +624,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortDefault() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
                 .selectSortByDefault()
                 .checkSortByDefault();
@@ -698,9 +641,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortDescendingRating() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
                 .selectSortDescendingRating()
                 .checkSortDescendingRating();
@@ -715,9 +658,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortRatingGrowth() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
                 .selectSortRatingGrowth()
                 .checkSortRatingGrowth();
@@ -733,9 +676,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortByPopularity() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
                 .selectSortByPopularity()
                 .checkSortByPopularity();
@@ -750,9 +693,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByUnansweredReviews() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectUnansweredReviewFilter();
         thenExchangeCardAssert.checkDisplayUnansweredReviewFilter();
 
@@ -767,9 +710,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByNegativeReviews() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectNegativeReviewsFilter();
         thenExchangeCardAssert.checkDisplayNegativeReviewFilter();
 
@@ -784,9 +727,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByPositiveReviews() {
         whenCurrencyPO
-                .openAs("mejin95276@tlhao86.com", "123qweQWE")
+                .openAs(userProfile.getEmail(), "123qweQWE")
                 .selectNawBarAll()
-                .selectCardById("pikota1555-609a62e0d7df019585ada406")
+                .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectPositiveReviewsFilter();
         thenExchangeCardAssert.checkDisplayPositiveReviewFilter();
 

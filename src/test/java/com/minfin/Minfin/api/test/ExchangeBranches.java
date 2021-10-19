@@ -55,6 +55,7 @@ import retrofit2.Response;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.when;
@@ -191,8 +192,9 @@ public class ExchangeBranches {
     @Tag("Api")
     @Tag("CurrencyAuction")
     void createExchanger200() {
-        // new UserService().createRandomUser();
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+
         String password = "123qweQWE";
 
         RegisterRequest registerRequest = RegisterRequest.builder()
@@ -275,7 +277,7 @@ public class ExchangeBranches {
                 .profileId(userInfo.body().getProfileId())
                 .phoneId(phonesIdResponse.body().getItems().get(0).getId())
                 .location(Location.builder().coordinates(List.of(50.403326, 30.630425)).type("Point").build())
-                .address("ул. Малоземельная 75")
+                .address("Малоземельная 75")
                 .city(1)
                 .workTime(WorkTime.builder()
                         .mon(mon)
@@ -414,7 +416,6 @@ public class ExchangeBranches {
         phoneIdBody.setProfileId(userInfo.body().getProfileId());
         Response<PhoneIdResponse> phonesIdResponse = new PhoneIdService().getPhonesId(phoneIdBody);
         assert phonesIdResponse.code() == 200;
-
 
 
         ApplicationsBody applicationsBody = ApplicationsBody.builder()

@@ -51,6 +51,18 @@ import java.util.concurrent.ThreadLocalRandom;
 public class UserGenerator {
 
     public UserProfile createRandomExchanger() {
+        String[] streets = new String[]
+                {"Миропольская 25",
+                "Срибнокильская 16",
+                "Крещатик 21",
+                "Малоземельная 75б",
+                "Григоренка 22",
+                "Бажана 31",
+                "Чавдар 20",
+                "Русовой 1"};
+        int n = (int)Math.floor(Math.random() * streets.length);
+        System.out.println(streets[n]);
+
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -134,7 +146,7 @@ public class UserGenerator {
                 .profileId(userInfo.body().getProfileId())
                 .phoneId(phonesIdResponse.body().getItems().get(0).getId())
                 .location(Location.builder().coordinates(List.of(50.403326, 30.630425)).type("Point").build())
-                .address("ул. Малоземельная 75")
+                .address(streets[n])
                 .city(1)
                 .workTime(WorkTime.builder()
                         .mon(mon)
@@ -199,7 +211,7 @@ public class UserGenerator {
 
 
 
-@Test
+
     public UserProfile createRandomCustomerPro() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
@@ -298,7 +310,6 @@ public class UserGenerator {
             .build();
     Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
     assert applicationsResponseResponse.code() == 201;
-
 
         return UserProfile.builder().email(email).password(password).build();
     }
