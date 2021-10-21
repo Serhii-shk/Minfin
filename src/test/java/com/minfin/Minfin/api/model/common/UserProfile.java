@@ -1,13 +1,7 @@
 package com.minfin.Minfin.api.model.common;
 
-import com.google.gson.annotations.SerializedName;
-import com.minfin.Minfin.api.model.va.api.branches.body.Location;
-import com.minfin.Minfin.api.model.va.api.branches.body.Services;
-import com.minfin.Minfin.api.model.va.api.branches.body.WorkTime;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -21,6 +15,7 @@ public class UserProfile {
 //    int check;
 //    String firstName;
 //    String phone;
+
 //    //AuctionResponse.SendData
 //    private String accountType;
 //    private List<Object> profilePhones;
@@ -35,8 +30,10 @@ public class UserProfile {
 //    private String firstName;
 //    private Object slug;
 //    private String subscriptionExpire;
+
 //    //ChangeProfileTypeRequest
 //    String type;
+
 //    //UserInfoResponse
 //    private Object serviceKey;
 //    private String profileType;
@@ -55,6 +52,7 @@ public class UserProfile {
 //    private String profileId;
 //    private String message;
 //    private String phoneId;
+
 //    //PhoneIdResponse.ItemsItem[]
 //    private String phone;
 //    private String profileId;
@@ -73,13 +71,15 @@ public class UserProfile {
 //    private WorkTime workTime;
 //    private Services services;
 //    private String phoneId;
+
 //    //BranchesResponse
 //    private String created;
 //    private String updated;
-//    private String id;
+      private String id;
 //    private String status;
 //
 //    //LicensesBody
+
 //    //LicensesResponse
 //
 //    //RatesBody

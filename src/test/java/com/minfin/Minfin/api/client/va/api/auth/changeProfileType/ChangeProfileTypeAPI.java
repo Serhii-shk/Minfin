@@ -12,7 +12,7 @@ public interface ChangeProfileTypeAPI {
 
     @Headers({"Cookie:minfin_sessions=a7497b06881fa70bc5bc7ed6ca0c6387a1c6b781",
             "Content-Type: application/json"})
-    @POST("api/auth/change_profile_type/")
+    @POST("api/auth/profile/change-type/")    //change_profile_type/
     Call<ChangeProfileTypeResponse> postChangeProfileType(@Header(value = "Authorization") String bearerToken,
                                                           @Body ChangeProfileTypeRequest type);
 }

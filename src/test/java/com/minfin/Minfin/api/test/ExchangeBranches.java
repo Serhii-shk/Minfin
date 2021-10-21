@@ -368,7 +368,7 @@ public class ExchangeBranches {
         Response<AuctionResponse> auction = new AuctionService().getAuction();
         assert auction.code() == 200;
 
-        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
+        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("customer").build();
         String accessToken = auction.body().getAccessToken();
         assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
 
@@ -446,9 +446,116 @@ public class ExchangeBranches {
         Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
         assert applicationsResponseResponse.code() == 201;
 
-
-
     }
+
+    @Test
+    @DisplayName("Создание Обычного пользователя")
+    @Tag("Api")
+    @Tag("CurrencyAuction")
+    public UserProfile createRandomCustomerFree() {
+        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+        String password = "123qweQWE";
+
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(email)
+                .login("secene10test")
+                .password(password)
+                .privacy(true)
+                .rules(true)
+                .check(2)
+                .firstName("secene1856")
+                .phone("+380005554455")
+                .build();
+        assert new RegisterService().postRegister(registerRequest).code() == 200;
+
+        assert new AuthService().postAuth(email, password).code() == 200;
+
+        Response<AuctionResponse> auction = new AuctionService().getAuction();
+        assert auction.code() == 200;
+
+        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("customer").build();
+        String accessToken = auction.body().getAccessToken();
+        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+
+        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
+        assert userInfo.code() == 200;
+//
+//        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
+//                .userId(870351)
+//                .firstName("testRVKtest")
+//                .lastName("testRVKtest")
+//                .accountType("register_user")
+//                .login("newusertest94@yopmail.com")
+//                .nickname("testRVKtest")
+//                .slug("null")
+//                .agree(true)
+//                .verified(false)
+//                .build();
+//        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
+//        assert minfinLoginResponse.code() == 200;
+
+
+//        LocalDateTime date = LocalDateTime.now();
+//        ProfileRequest profileRequest = ProfileRequest.builder()
+//                .activeAt(String.valueOf(date.plusMonths(1)))
+//                .countItems(1)
+//                .serviceProductId("5efdb5b6dda04383b8f0355f")
+//                .build();
+//        String adminToken = minfinLoginResponse.body().getAccessToken();
+//        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code() == 200;
+
+
+        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+
+        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
+        assert phonesResponse.code() == 200;
+
+
+        VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
+                .verificationCode("234234")
+                .build();
+        assert new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code() == 200;
+
+
+        PhoneIdBody phoneIdBody = new PhoneIdBody();
+        phoneIdBody.setProfileId(userInfo.body().getProfileId());
+        Response<PhoneIdResponse> phonesIdResponse = new PhoneIdService().getPhonesId(phoneIdBody);
+        assert phonesIdResponse.code() == 200;
+
+
+        ApplicationsBody applicationsBody = ApplicationsBody.builder()
+                .siteId("5e9457447c84a212fbe91ecd")
+                .profileId(userInfo.body().getProfileId())
+                .phoneId(phonesIdResponse.body().getItems().get(0).getId())
+                .location(com.minfin.Minfin.api.model.va.api.applications.body.Location.builder()
+                        .coordinates(List.of(50.400679, 30.616587))
+                        .type("Point")
+                        .build())
+                .address("ул. Княжий Затон 30")
+                .city(1)
+                .type("buy")
+                .currency("usd")
+                .rate(27)
+                .amount(1000)
+                .description("Test test test")
+                .modifications(Modifications.builder()
+                        .pinned(false)
+                        .painted(false)
+                        .build())
+                .services(com.minfin.Minfin.api.model.va.api.applications.body.Services.builder()
+                        .parts(false)
+                        .transfer(false)
+                        .damagedBills(false)
+                        .build())
+                .build();
+        Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
+        assert applicationsResponseResponse.code() == 201;
+
+        return UserProfile.builder().email(email).password(password).build();
+    }
+
+
+
 
     @Test
     @DisplayName("Получение всех отзывов всех обменников Администратором")
