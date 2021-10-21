@@ -2,6 +2,7 @@ package com.minfin.Minfin.api.services.va;
 
 import com.google.gson.Gson;
 import com.minfin.Minfin.api.LogJsonInterceptor;
+import com.minfin.Minfin.ui.test.TestBase;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -17,9 +18,10 @@ public abstract class BaseVAService {
                 .addInterceptor(new LogJsonInterceptor())
                 .build();
         this.retrofit = new Retrofit.Builder()
-                .baseUrl("https://va-backend-stage.treeum.net/")
+                .baseUrl(String.format("https://va-backend-%s.treeum.net/", TestBase.getEnv()))
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .build();
     }
+
 }

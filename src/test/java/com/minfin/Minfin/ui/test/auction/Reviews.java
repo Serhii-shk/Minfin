@@ -1,5 +1,7 @@
 package com.minfin.Minfin.ui.test.auction;
 
+import com.minfin.Minfin.api.generation.UserGenerator;
+import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.pojo.MinfinAuthUser;
 import com.minfin.Minfin.ui.asserts.ExchangeCardAssert;
 import com.minfin.Minfin.ui.asserts.LoginAssert;
@@ -67,10 +69,9 @@ public class Reviews extends TestBase {
     @Tag("UI")
     @Tag("CurrencyAuction")
     @Tag("Reviews")
-    public void createReview() {
-
+    public void createReviewBranchToBranch() {
         whenCurrencyPO
-                .openAs(randomUser.getLogin(), randomUser.getPassword())
+                .openAs(firstExchanger.getEmail(), firstExchanger.getPassword())
                 .selectNawBarAll()
                 .selectCardById(secondExchanger.getId())
                 .clickReviewButton()

@@ -205,7 +205,7 @@ public class ExchangeBranches {
                 .rules(true)
                 .check(2)
                 .firstName("secene1856")
-                .phone("+380005554455")
+                .phone(phoneNumber)
                 .build();
         assert new RegisterService().postRegister(registerRequest).code() == 200;
 
@@ -244,9 +244,6 @@ public class ExchangeBranches {
                 .build();
         String adminToken = minfinLoginResponse.body().getAccessToken();
         assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code() == 200;
-
-
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
 
         Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
         assert phonesResponse.code() == 200;
@@ -309,7 +306,6 @@ public class ExchangeBranches {
         assert licensesResponseResponse.code() == 201;
 
 
-
         SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
                 .licenseId(licensesResponseResponse.body().getId())
                 .status("success")
@@ -337,8 +333,7 @@ public class ExchangeBranches {
                         .sell(sell)
                         .build())
                 .build();
-        assert new RatesService().postRates(adminToken,ratesBody).code() == 200;
-
+        assert new RatesService().postRates(adminToken, ratesBody).code() == 200;
 
 
     }

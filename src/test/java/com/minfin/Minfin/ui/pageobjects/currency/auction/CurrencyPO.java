@@ -1,9 +1,12 @@
 package com.minfin.Minfin.ui.pageobjects.currency.auction;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.AuthenticationType;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.minfin.Minfin.ui.pageobjects.HeaderPO;
 import com.minfin.Minfin.ui.pageobjects.LoginPO;
-import com.minfin.Minfin.ui.pageobjects.RegisterPO;
+import com.minfin.Minfin.ui.test.TestBase;
 
 import java.time.Duration;
 
@@ -18,10 +21,11 @@ public class CurrencyPO {
     public SelenideElement authButton = $x("//div[@class='js-toggle-auth']");
     public SelenideElement registrButton = $(".mfm-auth--screen .mfm-auth--footer-btn");
     String cardId = "[data-gtm-ea='%s']";
-    String baseUrl = "/currency/auction-stage/";
+    //    String baseUrl = "/currency/auction-stage/";
+    String baseUrl = "/currency/auction-%s/";
 
     public LoginPO clickLoginButton() {
-        step("when click auth button", () ->authButton.click());
+        step("when click auth button", () -> authButton.click());
         return new LoginPO();
     }
 
@@ -43,11 +47,11 @@ public class CurrencyPO {
     }
 
     public CurrencyPO open() {
-        step("when open "
-                , () -> Selenide.open(baseUrl, AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w"));
+        step("when open ", () -> {
+            Selenide.open(String.format(baseUrl, TestBase.getEnv()), AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
+        });
         return this;
     }
-
 
     public ExchangeCardPO selectCardById(String id) {
         step("when select card by id "
