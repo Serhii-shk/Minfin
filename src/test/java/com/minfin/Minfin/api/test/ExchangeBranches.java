@@ -55,7 +55,6 @@ import retrofit2.Response;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.when;
@@ -447,7 +446,7 @@ public class ExchangeBranches {
     @DisplayName("Создание Обычного пользователя")
     @Tag("Api")
     @Tag("CurrencyAuction")
-    public UserProfile createRandomCustomerFree() {
+    public void createRandomCustomerFree() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -546,7 +545,7 @@ public class ExchangeBranches {
         Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
         assert applicationsResponseResponse.code() == 201;
 
-        return UserProfile.builder().email(email).password(password).build();
+        UserProfile.builder().email(email).password(password).build();
     }
 
 
