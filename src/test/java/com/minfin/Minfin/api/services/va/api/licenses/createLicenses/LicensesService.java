@@ -12,7 +12,7 @@ import retrofit2.Response;
 public class LicensesService extends BaseVAService {
     @SneakyThrows
     public Response<LicensesResponse> postLicenses(String bearerToken, LicensesBody body) {
-        LicensesAPI service = retrofit.create(LicensesAPI.class);
+        LicensesAPI service = getRetrofit().create(LicensesAPI.class);
         Call<LicensesResponse> call = service.postLicenses("Bearer " + bearerToken, body);
         return call.execute();
     }

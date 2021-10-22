@@ -12,7 +12,7 @@ import retrofit2.Response;
 public class SetLicenseStatusService extends BaseVAService {
     @SneakyThrows
     public Response<SetLicenseStatusResponse> postSetLicenseStatus(SetLicenseStatusBody body) {
-        SetLicenseStatusAPI service = retrofit.create(SetLicenseStatusAPI.class);
+        SetLicenseStatusAPI service = getRetrofit().create(SetLicenseStatusAPI.class);
         Call<SetLicenseStatusResponse> call = service.postSetLicenseStatus(body);
         return call.execute();
     }

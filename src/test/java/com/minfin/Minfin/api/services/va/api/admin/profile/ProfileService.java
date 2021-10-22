@@ -12,7 +12,7 @@ public class ProfileService extends BaseVAService {
 
     @SneakyThrows
     public Response<ProfileResponse> postChangeProfileType(String id, String adminBearerToken, ProfileRequest body) {
-        ProfileAPI service = retrofit.create(ProfileAPI.class);
+        ProfileAPI service = getRetrofit().create(ProfileAPI.class);
         Call<ProfileResponse> call = service.postProfile(id, "Bearer " + adminBearerToken, body);
         return call.execute();
     }

@@ -12,7 +12,7 @@ import retrofit2.Response;
 public class BranchesService extends BaseVAService {
     @SneakyThrows
     public Response<BranchesResponse> postBranches(String bearerToken, BranchesBody body) {
-        BranchesAPI service = retrofit.create(BranchesAPI.class);
+        BranchesAPI service = getRetrofit().create(BranchesAPI.class);
         Call<BranchesResponse> call = service.postBranches("Bearer " + bearerToken, body);
         return call.execute();
     }

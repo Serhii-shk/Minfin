@@ -20,7 +20,7 @@ public class CurrencyPO {
     public SelenideElement firstCard = $x("(//button[@class='Card'])[1]");
     public SelenideElement authButton = $x("//div[@class='js-toggle-auth']");
     public SelenideElement registrButton = $(".mfm-auth--screen .mfm-auth--footer-btn");
-    String cardId = "[data-gtm-ea='%s']";
+    String cardId = "[id='%s']";
     //    String baseUrl = "/currency/auction-stage/";
     String baseUrl = "/currency/auction-%s/";
 

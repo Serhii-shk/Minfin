@@ -11,7 +11,7 @@ import retrofit2.Response;
 public class ApplicationsService extends BaseVAService {
     @SneakyThrows
     public Response<ApplicationsResponse> postApplications(String bearerToken, ApplicationsBody body) {
-        ApplicationsAPI service = retrofit.create(ApplicationsAPI.class);
+        ApplicationsAPI service = getRetrofit().create(ApplicationsAPI.class);
         Call<ApplicationsResponse> call = service.postApplications("Bearer " + bearerToken, body);
         return call.execute();
     }

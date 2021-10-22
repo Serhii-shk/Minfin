@@ -11,7 +11,7 @@ import retrofit2.Response;
 public class RatesService extends BaseVAService {
     @SneakyThrows
     public Response<RatesResponse> postRates(String adminBearerToken, RatesBody body) {
-        RatesAPI service = retrofit.create(RatesAPI.class);
+        RatesAPI service = getRetrofit().create(RatesAPI.class);
         Call<RatesResponse> call = service.postRates("Bearer " + adminBearerToken, body);
         return call.execute();
     }

@@ -10,7 +10,7 @@ import retrofit2.Response;
 public class PhonesService extends BaseVAService {
     @SneakyThrows
     public Response<PhonesResponse> postPhones(String phoneNumber, String bearerToken) {
-        PhonesAPI service = retrofit.create(PhonesAPI.class);
+        PhonesAPI service = getRetrofit().create(PhonesAPI.class);
         Call<PhonesResponse> call = service.postPhones(phoneNumber,"Bearer " + bearerToken);
         return call.execute();
     }

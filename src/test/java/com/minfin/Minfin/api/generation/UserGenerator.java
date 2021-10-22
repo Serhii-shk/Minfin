@@ -1,5 +1,6 @@
 package com.minfin.Minfin.api.generation;
 
+import com.github.javafaker.Faker;
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
 import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
@@ -40,28 +41,21 @@ import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.api.services.va.api.rates.RatesService;
 import com.minfin.Minfin.utils.StringUtils;
-import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class UserGenerator {
+    final String isoTime = LocalDateTime.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+    String street = new Faker(new Locale("uk")).address().streetAddress();
+
 
     public UserProfile createRandomExchanger() {
-        String[] streets = new String[]
-                {"Миропольская 25",
-                "Срибнокильская 16",
-                "Крещатик 21",
-                "Малоземельная 75б",
-                "Григоренка 22",
-                "Бажана 31",
-                "Чавдар 20",
-                "Русовой 1"};
-        int n = (int)Math.floor(Math.random() * streets.length);
-        System.out.println(streets[n]);
 
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
@@ -105,9 +99,8 @@ public class UserGenerator {
         assert minfinLoginResponse.code() == 200;
 
 
-        LocalDateTime date = LocalDateTime.now();
         ProfileRequest profileRequest = ProfileRequest.builder()
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .build();
@@ -146,7 +139,7 @@ public class UserGenerator {
                 .profileId(userInfo.body().getProfileId())
                 .phoneId(phonesIdResponse.body().getItems().get(0).getId())
                 .location(Location.builder().coordinates(List.of(50.403326, 30.630425)).type("Point").build())
-                .address(streets[n])
+                .address(street)
                 .city(1)
                 .workTime(WorkTime.builder()
                         .mon(mon)
@@ -206,7 +199,8 @@ public class UserGenerator {
                         .build())
                 .build();
         assert new RatesService().postRates(adminToken, ratesBody).code() == 200;
-        return UserProfile.builder().email(email).password(password).id(branchesResponseResponse.body().getId()).build();
+        return UserProfile.builder().email(email).password(password)
+                .address(street).id(branchesResponseResponse.body().getId()).build();
     }
 
 
@@ -255,9 +249,8 @@ public class UserGenerator {
         assert minfinLoginResponse.code() == 200;
 
 
-        LocalDateTime date = LocalDateTime.now();
         ProfileRequest profileRequest = ProfileRequest.builder()
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .serviceProductId("5efdb5b6dda04383b8f0355f")
                 .build();

@@ -9,10 +9,12 @@ import lombok.SneakyThrows;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import java.io.IOException;
+
 public class VerifyCodeService extends BaseVAService {
     @SneakyThrows
     public Response<VerifyCodeResponse> postVerifyCode(String phoneNumber, String bearerToken, VerifyCodeRequest body) {
-        VerifyСodeAPI service =  retrofit.create(VerifyСodeAPI.class);
+        VerifyСodeAPI service =  getRetrofit().create(VerifyСodeAPI.class);
         Call<VerifyCodeResponse> call = service.postVerifyCode(phoneNumber, "Bearer " + bearerToken, body);
         return call.execute();
     }

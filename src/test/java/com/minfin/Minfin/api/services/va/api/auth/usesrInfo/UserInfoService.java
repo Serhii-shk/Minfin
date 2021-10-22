@@ -11,7 +11,7 @@ public class UserInfoService extends BaseVAService {
 
     @SneakyThrows
     public Response<UserInfoResponse> getUserInfo(String bearerToken) {
-        UserInfoAPI service = retrofit.create(UserInfoAPI.class);
+        UserInfoAPI service = getRetrofit().create(UserInfoAPI.class);
         Call<UserInfoResponse> call = service.getUserInfo("Bearer " + bearerToken);
         return call.execute();
     }

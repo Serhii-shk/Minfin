@@ -12,7 +12,7 @@ import retrofit2.Response;
 public class PhoneIdService extends BaseVAService {
     @SneakyThrows
     public Response<PhoneIdResponse> getPhonesId(PhoneIdBody profileId) {
-        PhoneIdAPI service = retrofit.create(PhoneIdAPI.class);
+        PhoneIdAPI service = getRetrofit().create(PhoneIdAPI.class);
         Call<PhoneIdResponse> call = service.getPhoneId(new Gson().toJson(profileId));
         return call.execute();
     }

@@ -41,6 +41,7 @@ dependencies {
     testImplementation("com.squareup.retrofit2:retrofit:${retrofitVersion}")
     testImplementation("com.squareup.retrofit2:converter-gson:${retrofitVersion}")
     testImplementation('com.google.code.gson:gson:2.8.8')
+    implementation 'com.github.javafaker:javafaker:1.0.2'
 
 }
 

@@ -12,7 +12,7 @@ public class MinfinLoginService extends BaseVAService {
 
     @SneakyThrows
     public Response<MinfinLoginResponse> postMinfinLogin(MinfinLoginRequest body) {
-        MinfinLoginAPI service = retrofit.create(MinfinLoginAPI.class);
+        MinfinLoginAPI service = getRetrofit().create(MinfinLoginAPI.class);
         Call<MinfinLoginResponse> call = service.postMinfinLogin(body);
         return call.execute();
     }

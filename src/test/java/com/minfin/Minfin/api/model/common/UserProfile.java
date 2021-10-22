@@ -62,7 +62,7 @@ public class UserProfile {
 //    private String id;
 //
 //    //BranchesBody
-//    private String address;
+    private String address;
 //    private String branchType;
 //    private int city;
 //    private String profileId;
