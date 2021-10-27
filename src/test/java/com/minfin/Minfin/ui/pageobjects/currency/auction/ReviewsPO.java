@@ -18,7 +18,7 @@ public class ReviewsPO {
     public SelenideElement reviewText = $x("//textarea[@name='text']");
     public SelenideElement uploadImage = $(".Section__Main.BranchPhotos input");
     public SelenideElement imageItem = $x("//img[@class='ImageItem__Img']");
-    public SelenideElement publishReviewButton = $x("//button[@class='styles__Button-sc-1phpxpj-34 gFxekH']");
+    public SelenideElement publishReviewButton = $x("//div[contains(@class,'styles__ModalFooter-')]");
     public SelenideElement availability5 = $x("//*[@data-type='availability' and @data-rating='5']");
     public SelenideElement availability4 = $x("//*[@data-type='availability' and @data-rating='4']");
     public SelenideElement currencyRate5 = $x("//*[@data-type='currency_rate' and @data-rating='5']");

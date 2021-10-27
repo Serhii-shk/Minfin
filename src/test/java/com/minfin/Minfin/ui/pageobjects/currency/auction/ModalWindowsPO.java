@@ -8,7 +8,11 @@ import static com.codeborne.selenide.Selenide.$x;
 import static io.qameta.allure.Allure.step;
 
 public class ModalWindowsPO {
-    public SelenideElement modalThanksForReview =$x("//div[@class='styles__ModalThanks-sc-1phpxpj-44 gOsOeH']");
+    public SelenideElement modalThanksForReview =$x("//div[contains(@class,'styles__ModalThanks-')]");
+
+    //div[@class='styles__ModalThanks-sc-1phpxpj-44 gOsOeH']
+
+
     public SelenideElement modalNextReviewAfter24 = $x(" //span[contains(text(),'Новый отзыв для этого пользователя можно оставить через 24 часа')]");
     public SelenideElement closeModalWindow = $x("//button[@aria-label='close']");
     public SelenideElement modalCloseModalsThanksForReview =$x("//div[@type='button']/*");
