@@ -33,6 +33,8 @@ import retrofit2.Response;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static org.assertj.core.api.BDDAssertions.then;
+
 public class CustomPayment {
 
     @Test
@@ -58,20 +60,23 @@ public class CustomPayment {
                 .firstName("secene1856")
                 .phone(phoneNumber)
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
 
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code()).isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
-
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -85,7 +90,8 @@ public class CustomPayment {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
@@ -103,7 +109,8 @@ public class CustomPayment {
                 userInfo.body().getProfileId(),
                 minfinLoginResponse.body().getAccessToken(),
                 paymentBody);
-        assert paymentResponse.code() == 200;
+        then(paymentResponse.code())
+                .isEqualTo(200);
 
     }
 
@@ -130,20 +137,23 @@ public class CustomPayment {
                 .firstName("secene1856")
                 .phone(phoneNumber)
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
-
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
-
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -157,7 +167,8 @@ public class CustomPayment {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
@@ -175,8 +186,8 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         paymentBody);
-        assert paymentResponse.code() == 200;
-
+        then(paymentResponse.code())
+                .isEqualTo(200);
 
         SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
                 .email("s.shkurenko@treeum.net")
@@ -188,8 +199,8 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         sendNotificationBody);
-        assert sendNotificationResponse.code() == 200;
-
+        then(sendNotificationResponse.code())
+                .isEqualTo(200);
 
     }
 
@@ -216,20 +227,23 @@ public class CustomPayment {
                 .firstName("secene1856")
                 .phone(phoneNumber)
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
-
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
-
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -243,7 +257,8 @@ public class CustomPayment {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
@@ -261,8 +276,8 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         paymentBody);
-        assert paymentResponse.code() == 200;
-
+        then(paymentResponse.code())
+                .isEqualTo(200);
 
         SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
                 .email("s.shkurenko@treeum.net")
@@ -274,22 +289,16 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         sendNotificationBody);
-
-        assert sendNotificationResponse.code() == 200;
+        then(sendNotificationResponse.code())
+                .isEqualTo(200);
 
         String paymentId = paymentResponse.body().getPayment().getId();
         Response<PaymentRequestFormResponse> paymentRequestFormResponse = new PaymentRequestFormService()
                 .postPaymentRequestForm(paymentId);
-        assert paymentRequestFormResponse.code() == 200;
+        then(paymentRequestFormResponse.code())
+                .isEqualTo(200);
 
     }
-
-
-
-
-
-
-
 
 
     @Test
@@ -315,20 +324,23 @@ public class CustomPayment {
                 .firstName("secene1856")
                 .phone(phoneNumber)
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
-
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
-
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -342,7 +354,8 @@ public class CustomPayment {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
@@ -360,7 +373,8 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         paymentBody);
-        assert paymentResponse.code() == 200;
+        then(paymentResponse.code())
+                .isEqualTo(200);
 
     }
 
@@ -388,20 +402,23 @@ public class CustomPayment {
                 .firstName("secene1856")
                 .phone(phoneNumber)
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
-
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
-
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -415,7 +432,8 @@ public class CustomPayment {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
@@ -433,8 +451,8 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         paymentBody);
-        assert paymentResponse.code() == 200;
-
+        then(paymentResponse.code())
+                .isEqualTo(200);
 
         SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
                 .email("s.shkurenko@treeum.net")
@@ -446,10 +464,11 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         sendNotificationBody);
-        assert sendNotificationResponse.code() == 200;
-
+        then(sendNotificationResponse.code())
+                .isEqualTo(200);
 
     }
+
 
     @Test
     @Issue("CA-813")
@@ -474,20 +493,23 @@ public class CustomPayment {
                 .firstName("secene1856")
                 .phone(phoneNumber)
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
-
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
-
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -501,7 +523,8 @@ public class CustomPayment {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
@@ -519,8 +542,8 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         paymentBody);
-        assert paymentResponse.code() == 200;
-
+        then(paymentResponse.code())
+                .isEqualTo(200);
 
         SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
                 .email("s.shkurenko@treeum.net")
@@ -532,8 +555,8 @@ public class CustomPayment {
                         userInfo.body().getProfileId(),
                         minfinLoginResponse.body().getAccessToken(),
                         sendNotificationBody);
-
-        assert sendNotificationResponse.code() == 200;
+        then(sendNotificationResponse.code())
+                .isEqualTo(200);
 
         String paymentId = paymentResponse.body().getPayment().getId();
         PaymentRequestFormTwoLinksBody paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
@@ -542,7 +565,8 @@ public class CustomPayment {
 
         Response<PaymentRequestFormTwoLinksResponse> paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
                 .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
-        assert paymentRequestFormTwoLinksResponse.code() == 200;
+        then(paymentRequestFormTwoLinksResponse.code())
+                .isEqualTo(200);
 
         paymentResponse.body().getPayment().getId();
         paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
@@ -551,8 +575,8 @@ public class CustomPayment {
 
         paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
                 .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
-        assert paymentRequestFormTwoLinksResponse.code() == 200;
-
+        then(paymentRequestFormTwoLinksResponse.code())
+                .isEqualTo(200);
 
     }
 }

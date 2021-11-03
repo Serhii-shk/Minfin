@@ -60,6 +60,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static io.restassured.RestAssured.when;
 import static io.restassured.config.JsonConfig.jsonConfig;
 import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.DOUBLE;
+import static org.assertj.core.api.BDDAssertions.then;
 
 @DisplayName("Тесты API")
 public class ExchangeBranches {
@@ -69,12 +70,6 @@ public class ExchangeBranches {
 
     @BeforeEach
     void setupRaConfig() {
-//        JsonConfig jsonConfig = JsonConfig.jsonConfig()
-//                .numberReturnType(JsonPathConfig.NumberReturnType.DOUBLE);
-//        RestAssuredConfig.config()
-//                .jsonConfig(jsonConfig)
-//                .getEncoderConfig()
-//                .appendDefaultContentCharsetToContentTypeIfUndefined(false);
         RestAssured.config = RestAssured.config().jsonConfig(jsonConfig().numberReturnType((DOUBLE)));
 
     }
@@ -206,7 +201,8 @@ public class ExchangeBranches {
                 .firstName("secene1856")
                 .phone(phoneNumber)
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
 
         assert new AuthService().postAuth(email, password).code() == 200;
 
