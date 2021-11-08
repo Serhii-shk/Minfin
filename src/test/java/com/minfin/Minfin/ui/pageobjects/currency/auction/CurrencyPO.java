@@ -21,7 +21,6 @@ public class CurrencyPO {
     public SelenideElement authButton = $x("//div[@class='js-toggle-auth']");
     public SelenideElement registrButton = $(".mfm-auth--screen .mfm-auth--footer-btn");
     String cardId = "[id='%s']";
-    //    String baseUrl = "/currency/auction-stage/";
     String baseUrl = "/currency/auction-%s/";
 
     public LoginPO clickLoginButton() {

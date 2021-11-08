@@ -1,5 +1,6 @@
 package com.minfin.Minfin.api.test;
 
+import com.minfin.Minfin.api.generation.UserGenerator;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
 import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
 import com.minfin.Minfin.api.model.va.api.auth.changeProfileType.ChangeProfileTypeRequest;
@@ -31,12 +32,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import retrofit2.Response;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
 public class CustomPayment {
-
+    final String isoTime = LocalDateTime.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+    int adminUserId = 870351;
     @Test
     @Issue("CA-813")
     @TmsLink("CA-A-40")
@@ -47,7 +50,6 @@ public class CustomPayment {
     void creationOfPaymentByAdminWithOnePay200() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-
         String password = "123qweQWE";
 
         RegisterRequest registerRequest = RegisterRequest.builder()
@@ -79,7 +81,7 @@ public class CustomPayment {
                 .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(870351)
+                .userId(adminUserId)
                 .firstName("testRVKtest")
                 .lastName("testRVKtest")
                 .accountType("register_user")
@@ -96,7 +98,7 @@ public class CustomPayment {
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .amount(0)
                 .payByLink(true)
@@ -156,7 +158,7 @@ public class CustomPayment {
                 .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(870351)
+                .userId(adminUserId)
                 .firstName("testRVKtest")
                 .lastName("testRVKtest")
                 .accountType("register_user")
@@ -173,7 +175,7 @@ public class CustomPayment {
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .amount(0)
                 .payByLink(true)
@@ -246,7 +248,7 @@ public class CustomPayment {
                 .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(870351)
+                .userId(adminUserId)
                 .firstName("testRVKtest")
                 .lastName("testRVKtest")
                 .accountType("register_user")
@@ -263,7 +265,7 @@ public class CustomPayment {
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .amount(0)
                 .payByLink(true)
@@ -297,7 +299,6 @@ public class CustomPayment {
                 .postPaymentRequestForm(paymentId);
         then(paymentRequestFormResponse.code())
                 .isEqualTo(200);
-
     }
 
 
@@ -343,7 +344,7 @@ public class CustomPayment {
                 .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(870351)
+                .userId(adminUserId)
                 .firstName("testRVKtest")
                 .lastName("testRVKtest")
                 .accountType("register_user")
@@ -360,7 +361,7 @@ public class CustomPayment {
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .amount(0)
                 .payByLink(true)
@@ -421,7 +422,7 @@ public class CustomPayment {
                 .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(870351)
+                .userId(adminUserId)
                 .firstName("testRVKtest")
                 .lastName("testRVKtest")
                 .accountType("register_user")
@@ -438,7 +439,7 @@ public class CustomPayment {
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .amount(0)
                 .payByLink(true)
@@ -512,7 +513,7 @@ public class CustomPayment {
                 .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(870351)
+                .userId(adminUserId)
                 .firstName("testRVKtest")
                 .lastName("testRVKtest")
                 .accountType("register_user")
@@ -529,7 +530,7 @@ public class CustomPayment {
         LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(String.valueOf(date.plusMonths(1)))
+                .activeAt(isoTime)
                 .countItems(1)
                 .amount(0)
                 .payByLink(true)

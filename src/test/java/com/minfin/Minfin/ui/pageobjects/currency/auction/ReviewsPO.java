@@ -10,7 +10,7 @@ import static io.qameta.allure.Allure.step;
 
 public class ReviewsPO {
 
-    public SelenideElement nextStep = $x("//button[@class='styles__Button-sc-1phpxpj-35 gSchVx']");
+    public SelenideElement nextStep = $x("//button[@id='nextStepReview']");
     public SelenideElement ratingErrorMessage = $x("//div[@class='styles__ErrorMessage-sc-1phpxpj-27 gPeHPd']");
     public String ratingStar = "//*[@data-rating='%d']";
     public SelenideElement excellentService = $x("//button[@data-id='pos_no_errors']");
@@ -18,7 +18,7 @@ public class ReviewsPO {
     public SelenideElement reviewText = $x("//textarea[@name='text']");
     public SelenideElement uploadImage = $(".Section__Main.BranchPhotos input");
     public SelenideElement imageItem = $x("//img[@class='ImageItem__Img']");
-    public SelenideElement publishReviewButton = $x("//div[contains(@class,'styles__ModalFooter-')]");
+    public SelenideElement publishReviewButton = $x("//button[@id='sendReview']");
     public SelenideElement availability5 = $x("//*[@data-type='availability' and @data-rating='5']");
     public SelenideElement availability4 = $x("//*[@data-type='availability' and @data-rating='4']");
     public SelenideElement currencyRate5 = $x("//*[@data-type='currency_rate' and @data-rating='5']");

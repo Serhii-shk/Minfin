@@ -27,7 +27,7 @@ public class ExchangeCardPO {
     public SelenideElement reviewDeleted = $x("(//div[@type='deleted'])[1]");
     public SelenideElement modalReviewDeleted = $("[class^='styles__SnackbarWrapper-sc-110il7f-0 izOZYq']");
     public SelenideElement modalAuthOrRegistration = $x("//div[@class='styles__ModalAuthWrapper-sc-1phpxpj-32 gRUelK']");
-    public SelenideElement sortButton = $x("//div[@class='DropdownContent OrderSelector__Content']");
+    public SelenideElement sortButton = $x("//div[contains(@id, 'OrderSelector__Content-')]");
     public SelenideElement sortNewFirst = $x("//div[@id='sortNewFirst']");
     public SelenideElement cancelForReviewButton = $x("(//button[@class='styles__Button-sc-1phpxpj-34 styles__OutlineButton-sc-1phpxpj-35 gFxekH icGSYQ'])[1]");
     public SelenideElement answerForReviewButton = $x("(//button[@class='styles__Button-sc-1phpxpj-34 styles__OutlineButton-sc-1phpxpj-35 gFxekH icGSYQ'])[1]");

@@ -42,7 +42,6 @@ import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.api.services.va.api.rates.RatesService;
 import com.minfin.Minfin.utils.StringUtils;
 import retrofit2.Response;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -50,10 +49,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static org.assertj.core.api.BDDAssertions.then;
+
 public class UserGenerator {
     final String isoTime = LocalDateTime.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
     String street = new Faker(new Locale("uk")).address().streetAddress();
-
 
     public UserProfile createRandomExchanger() {
 
@@ -70,19 +70,23 @@ public class UserGenerator {
                 .firstName("secene1856")
                 .phone("+380005554455")
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
-
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -96,8 +100,8 @@ public class UserGenerator {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
-
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         ProfileRequest profileRequest = ProfileRequest.builder()
                 .activeAt(isoTime)
@@ -105,26 +109,26 @@ public class UserGenerator {
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .build();
         String adminToken = minfinLoginResponse.body().getAccessToken();
-        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code() == 200;
-
+        then(new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code())
+                .isEqualTo(200);
 
         String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
 
         Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
-        assert phonesResponse.code() == 200;
-
+        then(phonesResponse.code())
+                .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
                 .build();
-        assert new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code() == 200;
-
+        then(new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code())
+                .isEqualTo(200);
 
         PhoneIdBody phoneIdBody = new PhoneIdBody();
         phoneIdBody.setProfileId(userInfo.body().getProfileId());
         Response<PhoneIdResponse> phonesIdResponse = new PhoneIdService().getPhonesId(phoneIdBody);
-        assert phonesIdResponse.code() == 200;
-
+        then(phonesIdResponse.code())
+                .isEqualTo(200);
 
         Mon mon = Mon.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
         Sat sat = Sat.builder().worked(true).start("9:00").end("20:00").breaks(new ArrayList<>()).build();
@@ -160,7 +164,8 @@ public class UserGenerator {
                         .build())
                 .build();
         Response<BranchesResponse> branchesResponseResponse = new BranchesService().postBranches(accessToken, branchesBody);
-        assert branchesResponseResponse.code() == 201;
+        then(branchesResponseResponse.code())
+                .isEqualTo(201);
 
         String licensesNumber = "123" + ThreadLocalRandom.current().nextLong(91000000L, 91099999L);
         LicensesBody licensesBody = LicensesBody.builder()
@@ -168,15 +173,15 @@ public class UserGenerator {
                 .name(licensesNumber)
                 .build();
         Response<LicensesResponse> licensesResponseResponse = new LicensesService().postLicenses(accessToken, licensesBody);
-        assert licensesResponseResponse.code() == 201;
-
+        then(licensesResponseResponse.code())
+                .isEqualTo(201);
 
         SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
                 .licenseId(licensesResponseResponse.body().getId())
                 .status("success")
                 .build();
-        assert new SetLicenseStatusService().postSetLicenseStatus(setLicenseStatusBody).code() == 200;
-
+        then(new SetLicenseStatusService().postSetLicenseStatus(setLicenseStatusBody).code())
+                .isEqualTo(200);
 
         Buy buy = Buy.builder()
                 .minCount(1000)
@@ -198,7 +203,10 @@ public class UserGenerator {
                         .sell(sell)
                         .build())
                 .build();
-        assert new RatesService().postRates(adminToken, ratesBody).code() == 200;
+
+        then(new RatesService().postRates(adminToken, ratesBody).code())
+                .isEqualTo(200);
+
         return UserProfile.builder().email(email).password(password)
                 .address(street).id(branchesResponseResponse.body().getId()).build();
     }
@@ -220,19 +228,23 @@ public class UserGenerator {
                 .firstName("secene1856")
                 .phone("+380005554455")
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
-
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("customer").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
+        then(userInfo.code())
+                .isEqualTo(200);
 
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
@@ -246,8 +258,8 @@ public class UserGenerator {
                 .verified(false)
                 .build();
         Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        assert minfinLoginResponse.code() == 200;
-
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
 
         ProfileRequest profileRequest = ProfileRequest.builder()
                 .activeAt(isoTime)
@@ -255,26 +267,25 @@ public class UserGenerator {
                 .serviceProductId("5efdb5b6dda04383b8f0355f")
                 .build();
         String adminToken = minfinLoginResponse.body().getAccessToken();
-        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code() == 200;
-
+        then(new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code())
+                .isEqualTo(200);
 
         String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-
         Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
-        assert phonesResponse.code() == 200;
-
+        then(phonesResponse.code())
+                .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
                 .build();
-        assert new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code() == 200;
-
+        then(new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code())
+                .isEqualTo(200);
 
         PhoneIdBody phoneIdBody = new PhoneIdBody();
         phoneIdBody.setProfileId(userInfo.body().getProfileId());
         Response<PhoneIdResponse> phonesIdResponse = new PhoneIdService().getPhonesId(phoneIdBody);
-        assert phonesIdResponse.code() == 200;
-
+        then(phonesIdResponse.code())
+                .isEqualTo(200);
 
     ApplicationsBody applicationsBody = ApplicationsBody.builder()
             .siteId("5e9457447c84a212fbe91ecd")
@@ -302,7 +313,8 @@ public class UserGenerator {
                     .build())
             .build();
     Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
-    assert applicationsResponseResponse.code() == 201;
+    then(applicationsResponseResponse.code())
+            .isEqualTo(201);
 
         return UserProfile.builder().email(email).password(password).build();
     }
@@ -322,62 +334,42 @@ public class UserGenerator {
                 .firstName("secene1856")
                 .phone("+380005554455")
                 .build();
-        assert new RegisterService().postRegister(registerRequest).code() == 200;
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
 
-        assert new AuthService().postAuth(email, password).code() == 200;
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
 
         Response<AuctionResponse> auction = new AuctionService().getAuction();
-        assert auction.code() == 200;
+        then(auction.code())
+                .isEqualTo(200);
 
         ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("customer").build();
         String accessToken = auction.body().getAccessToken();
-        assert new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code() == 200;
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        assert userInfo.code() == 200;
-//
-//        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-//                .userId(870351)
-//                .firstName("testRVKtest")
-//                .lastName("testRVKtest")
-//                .accountType("register_user")
-//                .login("newusertest94@yopmail.com")
-//                .nickname("testRVKtest")
-//                .slug("null")
-//                .agree(true)
-//                .verified(false)
-//                .build();
-//        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-//        assert minfinLoginResponse.code() == 200;
-
-//
-//        LocalDateTime date = LocalDateTime.now();
-//        ProfileRequest profileRequest = ProfileRequest.builder()
-//                .activeAt(String.valueOf(date.plusMonths(1)))
-//                .countItems(1)
-//                .serviceProductId("5efdb5b6dda04383b8f0355f")
-//                .build();
-//        String adminToken = minfinLoginResponse.body().getAccessToken();
-//        assert new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code() == 200;
-
+        then(userInfo.code())
+                .isEqualTo(200);
 
         String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
 
         Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
-        assert phonesResponse.code() == 200;
-
+        then(phonesResponse.code())
+                .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
                 .build();
-        assert new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code() == 200;
-
+        then(new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code())
+                .isEqualTo(200);
 
         PhoneIdBody phoneIdBody = new PhoneIdBody();
         phoneIdBody.setProfileId(userInfo.body().getProfileId());
         Response<PhoneIdResponse> phonesIdResponse = new PhoneIdService().getPhonesId(phoneIdBody);
-        assert phonesIdResponse.code() == 200;
-
+        then(phonesIdResponse.code())
+                .isEqualTo(200);
 
         ApplicationsBody applicationsBody = ApplicationsBody.builder()
                 .siteId("5e9457447c84a212fbe91ecd")
@@ -405,7 +397,8 @@ public class UserGenerator {
                         .build())
                 .build();
         Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
-        assert applicationsResponseResponse.code() == 201;
+        then(applicationsResponseResponse.code())
+                .isEqualTo(201);
 
         return UserProfile.builder().email(email).password(password).build();
     }
