@@ -1,6 +1,5 @@
 package com.minfin.Minfin.api.steps;
 
-import com.minfin.Minfin.api.generation.UserGenerator;
 import com.minfin.Minfin.api.model.common.AdminProfile;
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
@@ -12,15 +11,12 @@ import com.minfin.Minfin.api.model.va.api.payment.PaymentRequestFormResponse;
 import com.minfin.Minfin.api.model.va.api.payment.body.PaymentBody;
 import com.minfin.Minfin.api.model.va.api.payment.paymentRequestFormTwoLinks.body.PaymentRequestFormTwoLinksBody;
 import com.minfin.Minfin.api.model.va.api.payment.paymentRequestFormTwoLinks.response.PaymentRequestFormTwoLinksResponse;
-import com.minfin.Minfin.api.model.va.api.payment.response.Payment;
 import com.minfin.Minfin.api.model.va.api.payment.response.PaymentResponse;
 import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
-import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
 import com.minfin.Minfin.api.services.va.api.notification.SendNotificationService;
 import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormService;
 import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormTwoLinksService;
 import com.minfin.Minfin.api.services.va.api.payment.PaymentService;
-import com.minfin.Minfin.api.test.CustomPayment;
 import lombok.NonNull;
 import retrofit2.Response;
 
@@ -39,7 +35,6 @@ public class Steps {
     }
     int adminUserId = 870351;
     String exchangerM1 = "5efdb5b6dda04383b8f03570";
-    UserInfoResponse userInfo = new UserInfoResponse();
 
     public AdminProfile loginAsAdmin(){
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()

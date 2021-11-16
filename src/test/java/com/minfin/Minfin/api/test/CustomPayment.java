@@ -41,12 +41,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.assertj.core.api.BDDAssertions.then;
 
 public class CustomPayment {
-    final String isoTime;
-
-    {
-        DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        isoTime = LocalDateTime.now().plusMonths(1).format(ISO_FORMATTER);
-    }
 
     @Test
     @Issue("CA-813")
