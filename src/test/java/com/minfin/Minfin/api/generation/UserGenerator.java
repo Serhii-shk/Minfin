@@ -63,7 +63,7 @@ public class UserGenerator {
     String street = new Faker(new Locale("uk")).address().streetAddress();
 
 
-    public UserProfile createRandomExchanger() {
+    public UserProfile createRandomExchangerWithoutSubscription() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -94,24 +94,6 @@ public class UserGenerator {
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
         then(userInfo.code())
                 .isEqualTo(200);
-
-
-        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(870351)
-                .firstName("testRVKtest")
-                .lastName("testRVKtest")
-                .accountType("register_user")
-                .login("newusertest94@yopmail.com")
-                .nickname("testRVKtest")
-                .slug("null")
-                .agree(true)
-                .verified(false)
-                .build();
-        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        then(minfinLoginResponse.code())
-                .isEqualTo(200);
-
-
 
         return UserProfile.builder().email(email).password(password)
                 .profileId(userInfo.body().getProfileId()).build();
@@ -278,9 +260,44 @@ public class UserGenerator {
     }
 
 
+    public UserProfile createRandomCustomerProWithoutSubscription() {
+        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+        String password = "123qweQWE";
+
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(email)
+                .login("secene10test")
+                .password(password)
+                .privacy(true)
+                .rules(true)
+                .check(2)
+                .firstName("secene1856")
+                .phone("+380005554455")
+                .build();
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
+
+        Response<AuctionResponse> auction = new AuctionService().getAuction();
+        then(auction.code())
+                .isEqualTo(200);
+
+        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("customer").build();
+        String accessToken = auction.body().getAccessToken();
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
+
+        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
+        then(userInfo.code())
+                .isEqualTo(200);
+
+        return UserProfile.builder().email(email).password(password).build();
+    }
 
 
-    public UserProfile createRandomCustomerPro() {
+
+    public UserProfile createRandomCustomerProWithPaidSubscription() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -386,7 +403,44 @@ public class UserGenerator {
     }
 
 
-    public UserProfile createRandomCustomerFree() {
+    public UserProfile createRandomCustomerFreeWithoutAdt() {
+        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+        String password = "123qweQWE";
+
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(email)
+                .login("secene10test")
+                .password(password)
+                .privacy(true)
+                .rules(true)
+                .check(2)
+                .firstName("secene1856")
+                .phone("+380005554455")
+                .build();
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
+
+        Response<AuctionResponse> auction = new AuctionService().getAuction();
+        then(auction.code())
+                .isEqualTo(200);
+
+        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("customer").build();
+        String accessToken = auction.body().getAccessToken();
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
+
+        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
+        then(userInfo.code())
+                .isEqualTo(200);
+
+        return UserProfile.builder().email(email).password(password).build();
+    }
+
+
+    public UserProfile createRandomCustomerFreeWithAdt() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 

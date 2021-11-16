@@ -4,7 +4,6 @@ import com.minfin.Minfin.api.model.common.AdminProfile;
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
 import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginResponse;
-import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
 import com.minfin.Minfin.api.model.va.api.notification.body.SendNotificationBody;
 import com.minfin.Minfin.api.model.va.api.notification.response.SendNotificationResponse;
 import com.minfin.Minfin.api.model.va.api.payment.PaymentRequestFormResponse;

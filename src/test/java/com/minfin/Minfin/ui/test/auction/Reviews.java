@@ -27,12 +27,12 @@ public class Reviews extends TestBase {
     ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
     ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
     RegisterPO whenRegisterPO = new RegisterPO();
-    UserProfile firstExchanger = new UserGenerator().createRandomExchanger();
-    UserProfile secondExchanger = new UserGenerator().createRandomExchanger();
-    UserProfile firsUserPro = new UserGenerator().createRandomCustomerPro();
-    UserProfile secondUserPro = new UserGenerator().createRandomCustomerPro();
-    UserProfile firsUserFree = new UserGenerator().createRandomCustomerFree();
-    UserProfile secondUserFree = new UserGenerator().createRandomCustomerFree();
+    UserProfile exchangerWithoutSubscription = new UserGenerator().createRandomExchangerWithoutSubscription();
+    UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
+    UserProfile customerProWithoutSubscription = new UserGenerator().createRandomCustomerProWithoutSubscription();
+    UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
+    UserProfile CustomerFreeWithoutAdt = new UserGenerator().createRandomCustomerFreeWithoutAdt();
+    UserProfile CustomerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
     static MinfinAuthUser randomUser;
     @BeforeAll
     static void setupprecondition(){
@@ -71,9 +71,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void createReviewBranchToBranch() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), firstExchanger.getPassword())
+                .openAs(exchangerWithoutSubscription.getEmail(), exchangerWithoutSubscription.getPassword())
                 .selectNawBarAll()
-                .selectCardById(secondExchanger.getId())
+                .selectCardById(exchangerWithPaidSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -115,9 +115,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void createReviewProToBranch() {
         whenCurrencyPO
-                .openAs(firsUserPro.getEmail(), firsUserPro.getPassword())
+                .openAs(customerProWithoutSubscription.getEmail(), customerProWithoutSubscription.getPassword())
                 .selectNawBarAll()
-                .selectCardById(firstExchanger.getId())
+                .selectCardById(exchangerWithoutSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -159,9 +159,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void createReviewUserFreeToBranch() {
         whenCurrencyPO
-                .openAs(firsUserFree.getEmail(), firsUserFree.getPassword())
+                .openAs(CustomerFreeWithoutAdt.getEmail(), CustomerFreeWithoutAdt.getPassword())
                 .selectNawBarAll()
-                .selectCardById(firstExchanger.getId())
+                .selectCardById(exchangerWithoutSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -203,9 +203,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void secondCreateReview() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), firstExchanger.getPassword())
+                .openAs(exchangerWithoutSubscription.getEmail(), exchangerWithoutSubscription.getPassword())
                 .selectNawBarAll()
-                .selectCardById(secondExchanger.getId())
+                .selectCardById(exchangerWithPaidSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -253,7 +253,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void editReview() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
@@ -315,7 +315,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void deleteReview() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
@@ -363,7 +363,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void deleteImageInReview() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
@@ -420,7 +420,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void likeForReview() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickFirstReviewLike()
@@ -458,7 +458,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void complaintForReview() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickUserContextMenu()
@@ -481,7 +481,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void secondComplaintForReview() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickUserContextMenu()
@@ -537,7 +537,7 @@ public class Reviews extends TestBase {
 
         LoginPO loginPO = new LoginPO();
         loginPO
-                .login(firstExchanger.getEmail(), "123qweQWE");
+                .login(exchangerWithoutSubscription.getEmail(), "123qweQWE");
         ModalWindowsPO modalWindows = new ModalWindowsPO();
         modalWindows
                 .checkModalThanksForAddReview();
@@ -701,7 +701,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortNewFirst() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .checkSortNewFirst();
@@ -716,7 +716,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortDefault() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -733,7 +733,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortDescendingRating() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -750,7 +750,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortRatingGrowth() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -768,7 +768,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortByPopularity() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -785,7 +785,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByUnansweredReviews() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectUnansweredReviewFilter();
@@ -802,7 +802,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByNegativeReviews() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectNegativeReviewsFilter();
@@ -819,7 +819,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByPositiveReviews() {
         whenCurrencyPO
-                .openAs(firstExchanger.getEmail(), "123qweQWE")
+                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectPositiveReviewsFilter();

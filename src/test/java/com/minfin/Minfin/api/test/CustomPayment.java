@@ -3,40 +3,12 @@ package com.minfin.Minfin.api.test;
 import com.minfin.Minfin.api.generation.UserGenerator;
 import com.minfin.Minfin.api.model.common.AdminProfile;
 import com.minfin.Minfin.api.model.common.UserProfile;
-import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
-import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
-import com.minfin.Minfin.api.model.va.api.auth.changeProfileType.ChangeProfileTypeRequest;
-import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginRequest;
-import com.minfin.Minfin.api.model.va.api.auth.minfinLogin.MinfinLoginResponse;
-import com.minfin.Minfin.api.model.va.api.auth.userInfo.UserInfoResponse;
-import com.minfin.Minfin.api.model.va.api.notification.body.SendNotificationBody;
-import com.minfin.Minfin.api.model.va.api.notification.response.SendNotificationResponse;
-import com.minfin.Minfin.api.model.va.api.payment.PaymentRequestFormResponse;
-import com.minfin.Minfin.api.model.va.api.payment.body.PaymentBody;
-import com.minfin.Minfin.api.model.va.api.payment.paymentRequestFormTwoLinks.body.PaymentRequestFormTwoLinksBody;
-import com.minfin.Minfin.api.model.va.api.payment.paymentRequestFormTwoLinks.response.PaymentRequestFormTwoLinksResponse;
-import com.minfin.Minfin.api.model.va.api.payment.response.PaymentResponse;
-import com.minfin.Minfin.api.services.minfin.api.auth.auction.AuctionService;
-import com.minfin.Minfin.api.services.minfin.api.ib.partner.auth.AuthService;
-import com.minfin.Minfin.api.services.minfin.api.user.register.RegisterService;
-import com.minfin.Minfin.api.services.va.api.auth.changeProfileType.ChangeProfileTypeService;
-import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
-import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
-import com.minfin.Minfin.api.services.va.api.notification.SendNotificationService;
-import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormService;
-import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormTwoLinksService;
-import com.minfin.Minfin.api.services.va.api.payment.PaymentService;
 import com.minfin.Minfin.api.steps.Steps;
-import com.minfin.Minfin.utils.StringUtils;
 import io.qameta.allure.Issue;
 import io.qameta.allure.TmsLink;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import retrofit2.Response;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
@@ -51,7 +23,7 @@ public class CustomPayment {
     @Tag("CustomPayment")
     void creationOfPaymentByAdminWithOnePay200() {
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchanger();
+                .createRandomExchangerWithoutSubscription();
 
         Steps steps = new Steps();
 
@@ -73,7 +45,7 @@ public class CustomPayment {
     void sendingNotificationToUserByEmailOrPhone200() {
 
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchanger();
+                .createRandomExchangerWithoutSubscription();
 
         Steps steps = new Steps();
 
@@ -98,7 +70,7 @@ public class CustomPayment {
     void redirectingUserToPaymentFormPage200() {
 
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchanger();
+                .createRandomExchangerWithoutSubscription();
 
         Steps steps = new Steps();
 
@@ -126,7 +98,7 @@ public class CustomPayment {
     @Tag("CustomPayment")
     void creationOfPaymentByAdminWithTwoPay200() {
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchanger();
+                .createRandomExchangerWithoutSubscription();
 
         Steps steps = new Steps();
 
@@ -147,7 +119,7 @@ public class CustomPayment {
     @Tag("CustomPayment")
     void sendingTwoLinksNotificationToUserByEmailOrPhone200() {
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchanger();
+                .createRandomExchangerWithoutSubscription();
 
         Steps steps = new Steps();
 
@@ -174,7 +146,7 @@ public class CustomPayment {
 
 
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchanger();
+                .createRandomExchangerWithoutSubscription();
 
         Steps steps = new Steps();
 
