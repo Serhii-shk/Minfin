@@ -10,12 +10,15 @@ import com.minfin.Minfin.api.model.va.api.notification.body.SendNotificationBody
 import com.minfin.Minfin.api.model.va.api.notification.response.SendNotificationResponse;
 import com.minfin.Minfin.api.model.va.api.payment.PaymentRequestFormResponse;
 import com.minfin.Minfin.api.model.va.api.payment.body.PaymentBody;
+import com.minfin.Minfin.api.model.va.api.payment.paymentRequestFormTwoLinks.body.PaymentRequestFormTwoLinksBody;
+import com.minfin.Minfin.api.model.va.api.payment.paymentRequestFormTwoLinks.response.PaymentRequestFormTwoLinksResponse;
 import com.minfin.Minfin.api.model.va.api.payment.response.Payment;
 import com.minfin.Minfin.api.model.va.api.payment.response.PaymentResponse;
 import com.minfin.Minfin.api.services.va.api.auth.minfinLogin.MinfinLoginService;
 import com.minfin.Minfin.api.services.va.api.auth.usesrInfo.UserInfoService;
 import com.minfin.Minfin.api.services.va.api.notification.SendNotificationService;
 import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormService;
+import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormTwoLinksService;
 import com.minfin.Minfin.api.services.va.api.payment.PaymentService;
 import com.minfin.Minfin.api.test.CustomPayment;
 import lombok.NonNull;
@@ -81,10 +84,7 @@ public class Steps {
         exchanger.setProfileId(paymentResponse.body().getPayment().getProfileId());
 
         return exchanger;
-//                UserProfile.builder()
-//                .id(paymentResponse.body().getId())
-//                .profileId(paymentResponse.body().getPayment().getProfileId())
-//                .build();
+
     }
 
     public void sendNotification(@NonNull UserProfile exchanger, @NonNull AdminProfile adminAuth){
@@ -107,4 +107,65 @@ public class Steps {
                 .postPaymentRequestForm(exchanger.getPayment().getId());
         return exchanger;
     }
+
+    public UserProfile creatingPaymentToAdminForUserTwoPays(@NonNull UserProfile exchanger, @NonNull AdminProfile adminAuth){
+        PaymentBody paymentBody = PaymentBody.builder()
+                .serviceProductId(exchangerM1)
+                .activeAt(isoTime)
+                .countItems(1)
+                .amount(0)
+                .payByLink(true)
+                .paymentExpiresDays(3)
+                .paymentCount(2)
+                .build();
+        Response<PaymentResponse> paymentResponse = new PaymentService()
+                .postPayment(
+                        exchanger.getProfileId(),
+                        adminAuth.getAccessToken(),
+                        paymentBody);
+
+        exchanger.setPayment(paymentResponse.body().getPayment());
+        exchanger.setId(Objects.requireNonNull(paymentResponse.body()).getId());
+        exchanger.setProfileId(paymentResponse.body().getPayment().getProfileId());
+
+        return exchanger;
+    }
+
+    public void sendNotificationTwoPays(@NonNull UserProfile exchanger, @NonNull AdminProfile adminAuth){
+        SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
+                .email("s.shkurenko@treeum.net")
+                .phone("380979979468")
+                .build();
+
+        Response<SendNotificationResponse> sendNotificationResponse = new SendNotificationService()
+                .postSendNotification(
+                        exchanger.getProfileId(),
+                        adminAuth.getAccessToken(),
+                        sendNotificationBody);
+        then(sendNotificationResponse.code())
+                .isEqualTo(200);
+    }
+
+    public UserProfile paymentFormTwoPays(@NonNull UserProfile exchanger) {
+
+        PaymentRequestFormTwoLinksBody paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
+                .partId(0)
+                .build();
+
+        Response<PaymentRequestFormTwoLinksResponse> paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
+                .postPaymentRequestFormTwoLinks(exchanger.getPayment().getId(),paymentRequestFormTwoLinksBody);
+        then(paymentRequestFormTwoLinksResponse.code())
+                .isEqualTo(200);
+
+        PaymentRequestFormTwoLinksBody secondPaymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
+                .partId(1)
+                .build();
+
+        Response<PaymentRequestFormTwoLinksResponse> secondPaymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
+                .postPaymentRequestFormTwoLinks(exchanger.getPayment().getId(),secondPaymentRequestFormTwoLinksBody);
+        then(secondPaymentRequestFormTwoLinksResponse.code())
+                .isEqualTo(200);
+        return exchanger;
+    }
+
 }

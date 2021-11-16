@@ -131,59 +131,15 @@ public class CustomPayment {
     @Tag("CurrencyAuction")
     @Tag("CustomPayment")
     void creationOfPaymentByAdminWithTwoPay200() {
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+        UserProfile exchanger = new UserGenerator()
+                .createRandomExchanger();
 
-        String password = "123qweQWE";
+        Steps steps = new Steps();
 
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .email(email)
-                .login("secene10test")
-                .password(password)
-                .privacy(true)
-                .rules(true)
-                .check(2)
-                .firstName("secene1856")
-                .phone(phoneNumber)
-                .build();
-        then(new RegisterService().postRegister(registerRequest).code())
-                .isEqualTo(200);
-        then(new AuthService().postAuth(email, password).code())
-                .isEqualTo(200);
-
-        Response<AuctionResponse> auction = new AuctionService().getAuction();
-        then(auction.code())
-                .isEqualTo(200);
-
-        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
-        String accessToken = auction.body().getAccessToken();
-        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
-                .isEqualTo(200);
-
-        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        then(userInfo.code())
-                .isEqualTo(200);
-
-        AdminProfile adminAuth = new Steps()
+        AdminProfile adminAuth = steps
                 .loginAsAdmin();
-
-        PaymentBody paymentBody = PaymentBody.builder()
-                .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(isoTime)
-                .countItems(1)
-                .amount(0)
-                .payByLink(true)
-                .paymentExpiresDays(3)
-                .paymentCount(2)
-                .build();
-
-        Response<PaymentResponse> paymentResponse = new PaymentService()
-                .postPayment(
-                        userInfo.body().getProfileId(),
-                        adminAuth.getAccessToken(),
-                        paymentBody);
-        then(paymentResponse.code())
-                .isEqualTo(200);
+        steps
+                .creatingPaymentToAdminForUserTwoPays(exchanger, adminAuth);
 
     }
 
@@ -196,72 +152,19 @@ public class CustomPayment {
     @Tag("CurrencyAuction")
     @Tag("CustomPayment")
     void sendingTwoLinksNotificationToUserByEmailOrPhone200() {
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+        UserProfile exchanger = new UserGenerator()
+                .createRandomExchanger();
 
-        String password = "123qweQWE";
+        Steps steps = new Steps();
 
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .email(email)
-                .login("secene10test")
-                .password(password)
-                .privacy(true)
-                .rules(true)
-                .check(2)
-                .firstName("secene1856")
-                .phone(phoneNumber)
-                .build();
-        then(new RegisterService().postRegister(registerRequest).code())
-                .isEqualTo(200);
-        then(new AuthService().postAuth(email, password).code())
-                .isEqualTo(200);
-
-        Response<AuctionResponse> auction = new AuctionService().getAuction();
-        then(auction.code())
-                .isEqualTo(200);
-
-        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
-        String accessToken = auction.body().getAccessToken();
-        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
-                .isEqualTo(200);
-
-        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        then(userInfo.code())
-                .isEqualTo(200);
-
-        AdminProfile adminAuth = new Steps()
+        AdminProfile adminAuth = steps
                 .loginAsAdmin();
+        steps
+                .creatingPaymentToAdminForUserTwoPays(exchanger, adminAuth);
 
-        PaymentBody paymentBody = PaymentBody.builder()
-                .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(isoTime)
-                .countItems(1)
-                .amount(0)
-                .payByLink(true)
-                .paymentExpiresDays(3)
-                .paymentCount(2)
-                .build();
+        steps
+                .sendNotificationTwoPays(exchanger,adminAuth);
 
-        Response<PaymentResponse> paymentResponse = new PaymentService()
-                .postPayment(
-                        userInfo.body().getProfileId(),
-                        adminAuth.getAccessToken(),
-                        paymentBody);
-        then(paymentResponse.code())
-                .isEqualTo(200);
-
-        SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
-                .email("s.shkurenko@treeum.net")
-                .phone("380979979468")
-                .build();
-
-        Response<SendNotificationResponse> sendNotificationResponse = new SendNotificationService()
-                .postSendNotification(
-                        userInfo.body().getProfileId(),
-                        adminAuth.getAccessToken(),
-                        sendNotificationBody);
-        then(sendNotificationResponse.code())
-                .isEqualTo(200);
 
     }
 
@@ -274,92 +177,48 @@ public class CustomPayment {
     @Tag("CurrencyAuction")
     @Tag("CustomPayment")
     void redirectingUserToTwoPaymentFormPage200() {
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
 
-        String password = "123qweQWE";
 
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .email(email)
-                .login("secene10test")
-                .password(password)
-                .privacy(true)
-                .rules(true)
-                .check(2)
-                .firstName("secene1856")
-                .phone(phoneNumber)
-                .build();
-        then(new RegisterService().postRegister(registerRequest).code())
-                .isEqualTo(200);
-        then(new AuthService().postAuth(email, password).code())
-                .isEqualTo(200);
+        UserProfile exchanger = new UserGenerator()
+                .createRandomExchanger();
 
-        Response<AuctionResponse> auction = new AuctionService().getAuction();
-        then(auction.code())
-                .isEqualTo(200);
+        Steps steps = new Steps();
 
-        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
-        String accessToken = auction.body().getAccessToken();
-        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
-                .isEqualTo(200);
-
-        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        then(userInfo.code())
-                .isEqualTo(200);
-
-        AdminProfile adminAuth = new Steps()
+        AdminProfile adminAuth = steps
                 .loginAsAdmin();
+        steps
+                .creatingPaymentToAdminForUserTwoPays(exchanger, adminAuth);
 
-        PaymentBody paymentBody = PaymentBody.builder()
-                .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(isoTime)
-                .countItems(1)
-                .amount(0)
-                .payByLink(true)
-                .paymentExpiresDays(3)
-                .paymentCount(2)
-                .build();
+        steps
+                .sendNotificationTwoPays(exchanger,adminAuth);
+        steps.
+                paymentFormTwoPays(exchanger);
 
-        Response<PaymentResponse> paymentResponse = new PaymentService()
-                .postPayment(
-                        userInfo.body().getProfileId(),
-                        adminAuth.getAccessToken(),
-                        paymentBody);
-        then(paymentResponse.code())
-                .isEqualTo(200);
 
-        SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
-                .email("s.shkurenko@treeum.net")
-                .phone("380979979468")
-                .build();
 
-        Response<SendNotificationResponse> sendNotificationResponse = new SendNotificationService()
-                .postSendNotification(
-                        userInfo.body().getProfileId(),
-                        adminAuth.getAccessToken(),
-                        sendNotificationBody);
-        then(sendNotificationResponse.code())
-                .isEqualTo(200);
 
-        String paymentId = paymentResponse.body().getPayment().getId();
-        PaymentRequestFormTwoLinksBody paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
-                .partId(0)
-                .build();
+//        String paymentId = paymentResponse.body().getPayment().getId();
+//
+//        PaymentRequestFormTwoLinksBody paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
+//                .partId(0)
+//                .build();
+//
+//        Response<PaymentRequestFormTwoLinksResponse> paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
+//                .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
+//        then(paymentRequestFormTwoLinksResponse.code())
+//                .isEqualTo(200);
 
-        Response<PaymentRequestFormTwoLinksResponse> paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
-                .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
-        then(paymentRequestFormTwoLinksResponse.code())
-                .isEqualTo(200);
 
-        paymentResponse.body().getPayment().getId();
-        paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
-                .partId(1)
-                .build();
-
-        paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
-                .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
-        then(paymentRequestFormTwoLinksResponse.code())
-                .isEqualTo(200);
+//
+//        paymentResponse.body().getPayment().getId();
+//        paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
+//                .partId(1)
+//                .build();
+//
+//        paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
+//                .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
+//        then(paymentRequestFormTwoLinksResponse.code())
+//                .isEqualTo(200);
 
     }
 }
