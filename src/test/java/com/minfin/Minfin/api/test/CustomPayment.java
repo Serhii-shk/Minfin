@@ -195,31 +195,6 @@ public class CustomPayment {
                 paymentFormTwoPays(exchanger);
 
 
-
-
-//        String paymentId = paymentResponse.body().getPayment().getId();
-//
-//        PaymentRequestFormTwoLinksBody paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
-//                .partId(0)
-//                .build();
-//
-//        Response<PaymentRequestFormTwoLinksResponse> paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
-//                .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
-//        then(paymentRequestFormTwoLinksResponse.code())
-//                .isEqualTo(200);
-
-
-//
-//        paymentResponse.body().getPayment().getId();
-//        paymentRequestFormTwoLinksBody = PaymentRequestFormTwoLinksBody.builder()
-//                .partId(1)
-//                .build();
-//
-//        paymentRequestFormTwoLinksResponse = new PaymentRequestFormTwoLinksService()
-//                .postPaymentRequestFormTwoLinks(paymentId,paymentRequestFormTwoLinksBody);
-//        then(paymentRequestFormTwoLinksResponse.code())
-//                .isEqualTo(200);
-
     }
 }
 
