@@ -1,6 +1,7 @@
 package com.minfin.Minfin.api.generation;
 
 import com.github.javafaker.Faker;
+import com.minfin.Minfin.api.model.common.AdminProfile;
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
 import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
@@ -40,6 +41,7 @@ import com.minfin.Minfin.api.services.va.api.phones.PhoneIdService;
 import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.api.services.va.api.rates.RatesService;
+import com.minfin.Minfin.api.steps.Steps;
 import com.minfin.Minfin.utils.StringUtils;
 import retrofit2.Response;
 import java.time.LocalDateTime;
@@ -52,10 +54,73 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.assertj.core.api.BDDAssertions.then;
 
 public class UserGenerator {
-    final String isoTime = LocalDateTime.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+    final String isoTime;
+
+    {
+        DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        isoTime = LocalDateTime.now().plusMonths(1).format(ISO_FORMATTER);
+    }
     String street = new Faker(new Locale("uk")).address().streetAddress();
 
+
     public UserProfile createRandomExchanger() {
+        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+        String password = "123qweQWE";
+
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(email)
+                .login("secene10test")
+                .password(password)
+                .privacy(true)
+                .rules(true)
+                .check(2)
+                .firstName("secene1856")
+                .phone("+380005554455")
+                .build();
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
+
+        Response<AuctionResponse> auction = new AuctionService().getAuction();
+        then(auction.code())
+                .isEqualTo(200);
+
+        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
+        String accessToken = auction.body().getAccessToken();
+        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+                .isEqualTo(200);
+
+        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
+        then(userInfo.code())
+                .isEqualTo(200);
+
+
+        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
+                .userId(870351)
+                .firstName("testRVKtest")
+                .lastName("testRVKtest")
+                .accountType("register_user")
+                .login("newusertest94@yopmail.com")
+                .nickname("testRVKtest")
+                .slug("null")
+                .agree(true)
+                .verified(false)
+                .build();
+        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
+        then(minfinLoginResponse.code())
+                .isEqualTo(200);
+
+
+
+        return UserProfile.builder().email(email).password(password)
+                .profileId(userInfo.body().getProfileId()).build();
+    }
+
+
+
+    public UserProfile createRandomExchangerWithPaidSubscription() {
+
 
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
@@ -88,6 +153,7 @@ public class UserGenerator {
         then(userInfo.code())
                 .isEqualTo(200);
 
+
         MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
                 .userId(870351)
                 .firstName("testRVKtest")
@@ -108,7 +174,7 @@ public class UserGenerator {
                 .countItems(1)
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .build();
-        String adminToken = minfinLoginResponse.body().getAccessToken();
+        String adminToken = new Steps().loginAsAdmin().getAccessToken();
         then(new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code())
                 .isEqualTo(200);
 
@@ -208,7 +274,7 @@ public class UserGenerator {
                 .isEqualTo(200);
 
         return UserProfile.builder().email(email).password(password)
-                .address(street).id(branchesResponseResponse.body().getId()).build();
+                .address(street).id(branchesResponseResponse.body().getId()).profileId(userInfo.body().getProfileId()).build();
     }
 
 

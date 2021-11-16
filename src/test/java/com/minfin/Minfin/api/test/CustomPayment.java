@@ -1,6 +1,8 @@
 package com.minfin.Minfin.api.test;
 
 import com.minfin.Minfin.api.generation.UserGenerator;
+import com.minfin.Minfin.api.model.common.AdminProfile;
+import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
 import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
 import com.minfin.Minfin.api.model.va.api.auth.changeProfileType.ChangeProfileTypeRequest;
@@ -24,6 +26,7 @@ import com.minfin.Minfin.api.services.va.api.notification.SendNotificationServic
 import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormService;
 import com.minfin.Minfin.api.services.va.api.payment.PaymentRequestFormTwoLinksService;
 import com.minfin.Minfin.api.services.va.api.payment.PaymentService;
+import com.minfin.Minfin.api.steps.Steps;
 import com.minfin.Minfin.utils.StringUtils;
 import io.qameta.allure.Issue;
 import io.qameta.allure.TmsLink;
@@ -38,8 +41,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.assertj.core.api.BDDAssertions.then;
 
 public class CustomPayment {
-    final String isoTime = LocalDateTime.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
-    int adminUserId = 870351;
+    final String isoTime;
+
+    {
+        DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        isoTime = LocalDateTime.now().plusMonths(1).format(ISO_FORMATTER);
+    }
+
     @Test
     @Issue("CA-813")
     @TmsLink("CA-A-40")
@@ -48,71 +56,16 @@ public class CustomPayment {
     @Tag("CurrencyAuction")
     @Tag("CustomPayment")
     void creationOfPaymentByAdminWithOnePay200() {
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-        String password = "123qweQWE";
+        UserProfile exchanger = new UserGenerator()
+                .createRandomExchanger();
 
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .email(email)
-                .login("secene10test")
-                .password(password)
-                .privacy(true)
-                .rules(true)
-                .check(2)
-                .firstName("secene1856")
-                .phone(phoneNumber)
-                .build();
+        Steps steps = new Steps();
 
-        then(new RegisterService().postRegister(registerRequest).code())
-                .isEqualTo(200);
-        then(new AuthService().postAuth(email, password).code())
-                .isEqualTo(200);
+        AdminProfile adminAuth = steps
+                .loginAsAdmin();
 
-        Response<AuctionResponse> auction = new AuctionService().getAuction();
-        then(auction.code()).isEqualTo(200);
-
-        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
-        String accessToken = auction.body().getAccessToken();
-        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
-                .isEqualTo(200);
-
-        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        then(userInfo.code())
-                .isEqualTo(200);
-
-        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(adminUserId)
-                .firstName("testRVKtest")
-                .lastName("testRVKtest")
-                .accountType("register_user")
-                .login("newusertest94@yopmail.com")
-                .nickname("testRVKtest")
-                .slug("null")
-                .agree(true)
-                .verified(false)
-                .build();
-        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        then(minfinLoginResponse.code())
-                .isEqualTo(200);
-
-        LocalDateTime date = LocalDateTime.now();
-        PaymentBody paymentBody = PaymentBody.builder()
-                .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(isoTime)
-                .countItems(1)
-                .amount(0)
-                .payByLink(true)
-                .paymentExpiresDays(3)
-                .paymentCount(1)
-                .build();
-
-        Response<PaymentResponse> paymentResponse = new PaymentService()
-                .postPayment(
-                userInfo.body().getProfileId(),
-                minfinLoginResponse.body().getAccessToken(),
-                paymentBody);
-        then(paymentResponse.code())
-                .isEqualTo(200);
+        steps
+            .creatingPaymentToAdminForUser(exchanger, adminAuth);
 
     }
 
@@ -124,85 +77,20 @@ public class CustomPayment {
     @Tag("CurrencyAuction")
     @Tag("CustomPayment")
     void sendingNotificationToUserByEmailOrPhone200() {
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
 
-        String password = "123qweQWE";
+        UserProfile exchanger = new UserGenerator()
+                .createRandomExchanger();
 
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .email(email)
-                .login("secene10test")
-                .password(password)
-                .privacy(true)
-                .rules(true)
-                .check(2)
-                .firstName("secene1856")
-                .phone(phoneNumber)
-                .build();
-        then(new RegisterService().postRegister(registerRequest).code())
-                .isEqualTo(200);
-        then(new AuthService().postAuth(email, password).code())
-                .isEqualTo(200);
+        Steps steps = new Steps();
 
-        Response<AuctionResponse> auction = new AuctionService().getAuction();
-        then(auction.code())
-                .isEqualTo(200);
+        AdminProfile adminAuth = steps
+                .loginAsAdmin();
 
-        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
-        String accessToken = auction.body().getAccessToken();
-        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
-                .isEqualTo(200);
+        steps
+                .creatingPaymentToAdminForUser(exchanger, adminAuth);
 
-        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        then(userInfo.code())
-                .isEqualTo(200);
-
-        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(adminUserId)
-                .firstName("testRVKtest")
-                .lastName("testRVKtest")
-                .accountType("register_user")
-                .login("newusertest94@yopmail.com")
-                .nickname("testRVKtest")
-                .slug("null")
-                .agree(true)
-                .verified(false)
-                .build();
-        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        then(minfinLoginResponse.code())
-                .isEqualTo(200);
-
-        LocalDateTime date = LocalDateTime.now();
-        PaymentBody paymentBody = PaymentBody.builder()
-                .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(isoTime)
-                .countItems(1)
-                .amount(0)
-                .payByLink(true)
-                .paymentExpiresDays(3)
-                .paymentCount(1)
-                .build();
-
-        Response<PaymentResponse> paymentResponse = new PaymentService()
-                .postPayment(
-                        userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
-                        paymentBody);
-        then(paymentResponse.code())
-                .isEqualTo(200);
-
-        SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
-                .email("s.shkurenko@treeum.net")
-                .phone("380979979468")
-                .build();
-
-        Response<SendNotificationResponse> sendNotificationResponse = new SendNotificationService()
-                .postSendNotification(
-                        userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
-                        sendNotificationBody);
-        then(sendNotificationResponse.code())
-                .isEqualTo(200);
+        steps
+                .sendNotification(exchanger, adminAuth);
 
     }
 
@@ -214,91 +102,24 @@ public class CustomPayment {
     @Tag("CurrencyAuction")
     @Tag("CustomPayment")
     void redirectingUserToPaymentFormPage200() {
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
 
-        String password = "123qweQWE";
+        UserProfile exchanger = new UserGenerator()
+                .createRandomExchanger();
 
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .email(email)
-                .login("secene10test")
-                .password(password)
-                .privacy(true)
-                .rules(true)
-                .check(2)
-                .firstName("secene1856")
-                .phone(phoneNumber)
-                .build();
-        then(new RegisterService().postRegister(registerRequest).code())
-                .isEqualTo(200);
-        then(new AuthService().postAuth(email, password).code())
-                .isEqualTo(200);
+        Steps steps = new Steps();
 
-        Response<AuctionResponse> auction = new AuctionService().getAuction();
-        then(auction.code())
-                .isEqualTo(200);
+        AdminProfile adminAuth = steps
+                .loginAsAdmin();
 
-        ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
-        String accessToken = auction.body().getAccessToken();
-        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
-                .isEqualTo(200);
+        steps
+                .creatingPaymentToAdminForUser(exchanger, adminAuth);
 
-        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
-        then(userInfo.code())
-                .isEqualTo(200);
+        steps
+                .sendNotification(exchanger, adminAuth);
 
-        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(adminUserId)
-                .firstName("testRVKtest")
-                .lastName("testRVKtest")
-                .accountType("register_user")
-                .login("newusertest94@yopmail.com")
-                .nickname("testRVKtest")
-                .slug("null")
-                .agree(true)
-                .verified(false)
-                .build();
-        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        then(minfinLoginResponse.code())
-                .isEqualTo(200);
+        steps
+                .paymentForm(exchanger);
 
-        LocalDateTime date = LocalDateTime.now();
-        PaymentBody paymentBody = PaymentBody.builder()
-                .serviceProductId("5efdb5b6dda04383b8f03570")
-                .activeAt(isoTime)
-                .countItems(1)
-                .amount(0)
-                .payByLink(true)
-                .paymentExpiresDays(3)
-                .paymentCount(1)
-                .build();
-
-        Response<PaymentResponse> paymentResponse = new PaymentService()
-                .postPayment(
-                        userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
-                        paymentBody);
-        then(paymentResponse.code())
-                .isEqualTo(200);
-
-        SendNotificationBody sendNotificationBody = SendNotificationBody.builder()
-                .email("s.shkurenko@treeum.net")
-                .phone("380979979468")
-                .build();
-
-        Response<SendNotificationResponse> sendNotificationResponse = new SendNotificationService()
-                .postSendNotification(
-                        userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
-                        sendNotificationBody);
-        then(sendNotificationResponse.code())
-                .isEqualTo(200);
-
-        String paymentId = paymentResponse.body().getPayment().getId();
-        Response<PaymentRequestFormResponse> paymentRequestFormResponse = new PaymentRequestFormService()
-                .postPaymentRequestForm(paymentId);
-        then(paymentRequestFormResponse.code())
-                .isEqualTo(200);
     }
 
 
@@ -343,22 +164,9 @@ public class CustomPayment {
         then(userInfo.code())
                 .isEqualTo(200);
 
-        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(adminUserId)
-                .firstName("testRVKtest")
-                .lastName("testRVKtest")
-                .accountType("register_user")
-                .login("newusertest94@yopmail.com")
-                .nickname("testRVKtest")
-                .slug("null")
-                .agree(true)
-                .verified(false)
-                .build();
-        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        then(minfinLoginResponse.code())
-                .isEqualTo(200);
+        AdminProfile adminAuth = new Steps()
+                .loginAsAdmin();
 
-        LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .activeAt(isoTime)
@@ -372,7 +180,7 @@ public class CustomPayment {
         Response<PaymentResponse> paymentResponse = new PaymentService()
                 .postPayment(
                         userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
+                        adminAuth.getAccessToken(),
                         paymentBody);
         then(paymentResponse.code())
                 .isEqualTo(200);
@@ -421,22 +229,9 @@ public class CustomPayment {
         then(userInfo.code())
                 .isEqualTo(200);
 
-        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(adminUserId)
-                .firstName("testRVKtest")
-                .lastName("testRVKtest")
-                .accountType("register_user")
-                .login("newusertest94@yopmail.com")
-                .nickname("testRVKtest")
-                .slug("null")
-                .agree(true)
-                .verified(false)
-                .build();
-        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        then(minfinLoginResponse.code())
-                .isEqualTo(200);
+        AdminProfile adminAuth = new Steps()
+                .loginAsAdmin();
 
-        LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .activeAt(isoTime)
@@ -450,7 +245,7 @@ public class CustomPayment {
         Response<PaymentResponse> paymentResponse = new PaymentService()
                 .postPayment(
                         userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
+                        adminAuth.getAccessToken(),
                         paymentBody);
         then(paymentResponse.code())
                 .isEqualTo(200);
@@ -463,7 +258,7 @@ public class CustomPayment {
         Response<SendNotificationResponse> sendNotificationResponse = new SendNotificationService()
                 .postSendNotification(
                         userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
+                        adminAuth.getAccessToken(),
                         sendNotificationBody);
         then(sendNotificationResponse.code())
                 .isEqualTo(200);
@@ -512,22 +307,9 @@ public class CustomPayment {
         then(userInfo.code())
                 .isEqualTo(200);
 
-        MinfinLoginRequest minfinLoginRequest = MinfinLoginRequest.builder()
-                .userId(adminUserId)
-                .firstName("testRVKtest")
-                .lastName("testRVKtest")
-                .accountType("register_user")
-                .login("newusertest94@yopmail.com")
-                .nickname("testRVKtest")
-                .slug("null")
-                .agree(true)
-                .verified(false)
-                .build();
-        Response<MinfinLoginResponse> minfinLoginResponse = new MinfinLoginService().postMinfinLogin(minfinLoginRequest);
-        then(minfinLoginResponse.code())
-                .isEqualTo(200);
+        AdminProfile adminAuth = new Steps()
+                .loginAsAdmin();
 
-        LocalDateTime date = LocalDateTime.now();
         PaymentBody paymentBody = PaymentBody.builder()
                 .serviceProductId("5efdb5b6dda04383b8f03570")
                 .activeAt(isoTime)
@@ -541,7 +323,7 @@ public class CustomPayment {
         Response<PaymentResponse> paymentResponse = new PaymentService()
                 .postPayment(
                         userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
+                        adminAuth.getAccessToken(),
                         paymentBody);
         then(paymentResponse.code())
                 .isEqualTo(200);
@@ -554,7 +336,7 @@ public class CustomPayment {
         Response<SendNotificationResponse> sendNotificationResponse = new SendNotificationService()
                 .postSendNotification(
                         userInfo.body().getProfileId(),
-                        minfinLoginResponse.body().getAccessToken(),
+                        adminAuth.getAccessToken(),
                         sendNotificationBody);
         then(sendNotificationResponse.code())
                 .isEqualTo(200);

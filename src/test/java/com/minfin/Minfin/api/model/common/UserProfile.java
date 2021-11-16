@@ -1,5 +1,8 @@
 package com.minfin.Minfin.api.model.common;
 
+import com.google.gson.annotations.SerializedName;
+import com.minfin.Minfin.api.model.va.api.payment.PaymentRequestFormResponse;
+import com.minfin.Minfin.api.model.va.api.payment.response.Payment;
 import lombok.Builder;
 import lombok.Data;
 
@@ -38,7 +41,7 @@ public class UserProfile {
 //    private Object serviceKey;
 //    private String profileType;
 //    private String authId;
-//    private String profileId;
+      private String profileId;
 //    private Object serviceExpire;
 //    private String nickname;
 //    private Boolean verified;
@@ -83,4 +86,13 @@ public class UserProfile {
 //    //LicensesResponse
 //
 //    //RatesBody
+
+   private Payment payment;
+//    PaymentRequestFormResponse
+    private double amount;
+//    private String profileType;
+//    private String paymentId;
+//    private String paymentForm;
+//    private String nickname;
+    private String description;
 }
