@@ -23,7 +23,7 @@ public class CustomPayment {
     @Tag("CustomPayment")
     void creationOfPaymentByAdminWithOnePay200() {
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchangerWithoutSubscription();
+                .createPureRandomExchanger();
 
         Steps steps = new Steps();
 
@@ -45,7 +45,7 @@ public class CustomPayment {
     void sendingNotificationToUserByEmailOrPhone200() {
 
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchangerWithoutSubscription();
+                .createPureRandomExchanger();
 
         Steps steps = new Steps();
 
@@ -70,7 +70,7 @@ public class CustomPayment {
     void redirectingUserToPaymentFormPage200() {
 
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchangerWithoutSubscription();
+                .createPureRandomExchanger();
 
         Steps steps = new Steps();
 
@@ -98,7 +98,7 @@ public class CustomPayment {
     @Tag("CustomPayment")
     void creationOfPaymentByAdminWithTwoPay200() {
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchangerWithoutSubscription();
+                .createPureRandomExchanger();
 
         Steps steps = new Steps();
 
@@ -119,7 +119,7 @@ public class CustomPayment {
     @Tag("CustomPayment")
     void sendingTwoLinksNotificationToUserByEmailOrPhone200() {
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchangerWithoutSubscription();
+                .createPureRandomExchanger();
 
         Steps steps = new Steps();
 
@@ -146,7 +146,7 @@ public class CustomPayment {
 
 
         UserProfile exchanger = new UserGenerator()
-                .createRandomExchangerWithoutSubscription();
+                .createPureRandomExchanger();
 
         Steps steps = new Steps();
 

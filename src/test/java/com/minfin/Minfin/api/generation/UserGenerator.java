@@ -60,10 +60,8 @@ public class UserGenerator {
         DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         isoTime = LocalDateTime.now().plusMonths(1).format(ISO_FORMATTER);
     }
-    String street = new Faker(new Locale("uk")).address().streetAddress();
 
-
-    public UserProfile createRandomExchangerWithoutSubscription() {
+    public UserProfile createPureRandomExchanger() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -169,8 +167,7 @@ public class UserGenerator {
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
                 .build();
-        then(new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code())
-                .isEqualTo(200);
+        then(new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code()).isEqualTo(200);
 
         PhoneIdBody phoneIdBody = new PhoneIdBody();
         phoneIdBody.setProfileId(userInfo.body().getProfileId());
@@ -260,7 +257,7 @@ public class UserGenerator {
     }
 
 
-    public UserProfile createRandomCustomerProWithoutSubscription() {
+    public UserProfile createPureRandomCustomerPro() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -353,10 +350,10 @@ public class UserGenerator {
         then(new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code())
                 .isEqualTo(200);
 
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
-        then(phonesResponse.code())
-                .isEqualTo(200);
+//        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+//        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
+//        then(phonesResponse.code())
+//                .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
@@ -399,11 +396,15 @@ public class UserGenerator {
     then(applicationsResponseResponse.code())
             .isEqualTo(201);
 
-        return UserProfile.builder().email(email).password(password).build();
+        return UserProfile.builder()
+                .email(email)
+                .password(password)
+                .id(applicationsResponseResponse.body().getId())
+                .build();
     }
 
 
-    public UserProfile createRandomCustomerFreeWithoutAdt() {
+    public UserProfile createPureRandomCustomerFree() {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
@@ -472,12 +473,12 @@ public class UserGenerator {
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
         then(userInfo.code())
                 .isEqualTo(200);
-
-        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-
-        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
-        then(phonesResponse.code())
-                .isEqualTo(200);
+//
+//        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+//
+//        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
+//        then(phonesResponse.code())
+//                .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
@@ -520,7 +521,11 @@ public class UserGenerator {
         then(applicationsResponseResponse.code())
                 .isEqualTo(201);
 
-        return UserProfile.builder().email(email).password(password).build();
+        return UserProfile.builder()
+                .email(email)
+                .password(password)
+                .id(applicationsResponseResponse.body().getId())
+                .build();
     }
 
 

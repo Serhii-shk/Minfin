@@ -27,12 +27,12 @@ public class Reviews extends TestBase {
     ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
     ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
     RegisterPO whenRegisterPO = new RegisterPO();
-    UserProfile exchangerWithoutSubscription = new UserGenerator().createRandomExchangerWithoutSubscription();
+    UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
     UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
-    UserProfile customerProWithoutSubscription = new UserGenerator().createRandomCustomerProWithoutSubscription();
+    UserProfile pureCustomerPro = new UserGenerator().createPureRandomCustomerPro();
     UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
-    UserProfile CustomerFreeWithoutAdt = new UserGenerator().createRandomCustomerFreeWithoutAdt();
-    UserProfile CustomerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
+    UserProfile pureCustomerFree = new UserGenerator().createPureRandomCustomerFree();
+    UserProfile customerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
     static MinfinAuthUser randomUser;
     @BeforeAll
     static void setupprecondition(){
@@ -71,7 +71,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void createReviewBranchToBranch() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), exchangerWithoutSubscription.getPassword())
+                .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
                 .selectNawBarAll()
                 .selectCardById(exchangerWithPaidSubscription.getId())
                 .clickReviewButton()
@@ -115,9 +115,9 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void createReviewProToBranch() {
         whenCurrencyPO
-                .openAs(customerProWithoutSubscription.getEmail(), customerProWithoutSubscription.getPassword())
+                .openAs(pureCustomerPro.getEmail(), pureCustomerPro.getPassword())
                 .selectNawBarAll()
-                .selectCardById(exchangerWithoutSubscription.getId())
+                .selectCardById(exchangerWithPaidSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -159,9 +159,272 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void createReviewUserFreeToBranch() {
         whenCurrencyPO
-                .openAs(CustomerFreeWithoutAdt.getEmail(), CustomerFreeWithoutAdt.getPassword())
+                .openAs(pureCustomerFree.getEmail(), pureCustomerFree.getPassword())
                 .selectNawBarAll()
-                .selectCardById(exchangerWithoutSubscription.getId())
+                .selectCardById(exchangerWithPaidSubscription.getId())
+                .clickReviewButton()
+                .clickNextStep();
+
+        thenReviewsAssert
+                .checkRequiredRatingStars();
+
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
+        thenReviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO
+                .clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
+
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
+
+        thenExchangeCardAssert.checkReviewOnModeration();
+    }
+
+
+    @Test
+    //@RepeatedTest(10)
+    @Issue("CA-563")
+    @TmsLink("CA-A-33")
+    @DisplayName("Создание отзыва от пользователя 'Пользователя Pro' для 'Пользователя Pro'")
+    @Tag("UI")
+    @Tag("CurrencyAuction")
+    @Tag("Reviews")
+    public void createReviewUserProToUserPro() {
+        whenCurrencyPO
+                .openAs(pureCustomerPro.getEmail(), pureCustomerPro.getPassword())
+                .selectNawBarAll()
+                .selectCardById(customerProWithSubscription.getId())
+                .clickReviewButton()
+                .clickNextStep();
+
+        thenReviewsAssert
+                .checkRequiredRatingStars();
+
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
+        thenReviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO
+                .clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
+
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
+
+        thenExchangeCardAssert.checkReviewOnModeration();
+    }
+
+    @Test
+    //@RepeatedTest(10)
+    @Issue("CA-563")
+    @TmsLink("CA-A-34")
+    @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Пользователя Pro'")
+    @Tag("UI")
+    @Tag("CurrencyAuction")
+    @Tag("Reviews")
+    public void createReviewBranchToUserPro() {
+        whenCurrencyPO
+                .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
+                .selectNawBarAll()
+                .selectCardById(customerProWithSubscription.getId())
+                .clickReviewButton()
+                .clickNextStep();
+
+        thenReviewsAssert
+                .checkRequiredRatingStars();
+
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
+        thenReviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO
+                .clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
+
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
+
+        thenExchangeCardAssert.checkReviewOnModeration();
+    }
+
+
+    @Test
+    //@RepeatedTest(10)
+    @Issue("CA-563")
+    @TmsLink("CA-A-35")
+    @DisplayName("Создание отзыва от 'Обычного пользователя' для 'Пользователя Pro'")
+    @Tag("UI")
+    @Tag("CurrencyAuction")
+    @Tag("Reviews")
+    public void createReviewUserFreeToUserPro() {
+        whenCurrencyPO
+                .openAs(pureCustomerFree.getEmail(), pureCustomerFree.getPassword())
+                .selectNawBarAll()
+                .selectCardById(customerProWithSubscription.getId())
+                .clickReviewButton()
+                .clickNextStep();
+
+        thenReviewsAssert
+                .checkRequiredRatingStars();
+
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
+        thenReviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO
+                .clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
+
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
+
+        thenExchangeCardAssert.checkReviewOnModeration();
+    }
+
+
+    @Test
+    //@RepeatedTest(10)
+    @Issue("CA-563")
+    @TmsLink("CA-A-36")
+    @DisplayName("Создание отзыва от 'Обычного пользователя' для 'Обычного пользователя'")
+    @Tag("UI")
+    @Tag("CurrencyAuction")
+    @Tag("Reviews")
+    public void createReviewUserFreeToUserFree() {
+        whenCurrencyPO
+                .openAs(pureCustomerFree.getEmail(), pureCustomerFree.getPassword())
+                .selectNawBarAll()
+                .selectCardById(customerFreeWithAdt.getId())
+                .clickReviewButton()
+                .clickNextStep();
+
+        thenReviewsAssert
+                .checkRequiredRatingStars();
+
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
+        thenReviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO
+                .clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
+
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
+
+        thenExchangeCardAssert.checkReviewOnModeration();
+    }
+
+
+    @Test
+    //@RepeatedTest(10)
+    @Issue("CA-563")
+    @TmsLink("CA-A-37")
+    @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Обычного пользователя'")
+    @Tag("UI")
+    @Tag("CurrencyAuction")
+    @Tag("Reviews")
+    public void createReviewBranchToUserFree() {
+        whenCurrencyPO
+                .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
+                .selectNawBarAll()
+                .selectCardById(customerFreeWithAdt.getId())
+                .clickReviewButton()
+                .clickNextStep();
+
+        thenReviewsAssert
+                .checkRequiredRatingStars();
+
+        whenReviewsPO
+                .setRatingStar(5)
+                .setCons(ExchangeProsAndCons.POS_NO_ERRORS)
+                .setReviewText("Безопасность на высшем уровне, хороший курс")
+                .uploadImage("118521740.jpg");
+
+        thenReviewsAssert.checkUploadedImageItem();
+
+        whenReviewsPO
+                .clickNextStep()
+                .setAvailability5Stars()
+                .setCurrencyRate5Stars()
+                .setQuality3Stars()
+                .setSafety5Stars()
+                .clickPublishReviewButton();
+
+        modalWindowsPO
+                .checkModalThanksForAddReview()
+                .clickCloseModalsThanksForReview()
+                .scrollAfterCreatedReviews();
+
+        thenExchangeCardAssert.checkReviewOnModeration();
+    }
+
+
+    @Test
+    //@RepeatedTest(10)
+    @Issue("CA-563")
+    @TmsLink("CA-A-38")
+    @DisplayName("Создание отзыва от пользователя 'Пользователя Pro' для 'Обычного пользователя'")
+    @Tag("UI")
+    @Tag("CurrencyAuction")
+    @Tag("Reviews")
+    public void createReviewUserProToUserFree() {
+        whenCurrencyPO
+                .openAs(pureCustomerPro.getEmail(), pureCustomerPro.getPassword())
+                .selectNawBarAll()
+                .selectCardById(customerFreeWithAdt.getId())
                 .clickReviewButton()
                 .clickNextStep();
 
@@ -203,7 +466,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void secondCreateReview() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), exchangerWithoutSubscription.getPassword())
+                .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
                 .selectNawBarAll()
                 .selectCardById(exchangerWithPaidSubscription.getId())
                 .clickReviewButton()
@@ -253,7 +516,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void editReview() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
@@ -315,7 +578,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void deleteReview() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
@@ -363,7 +626,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void deleteImageInReview() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickReviewButton()
@@ -420,7 +683,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void likeForReview() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickFirstReviewLike()
@@ -458,7 +721,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void complaintForReview() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickUserContextMenu()
@@ -481,7 +744,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void secondComplaintForReview() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickUserContextMenu()
@@ -537,7 +800,7 @@ public class Reviews extends TestBase {
 
         LoginPO loginPO = new LoginPO();
         loginPO
-                .login(exchangerWithoutSubscription.getEmail(), "123qweQWE");
+                .login(pureExchanger.getEmail(), "123qweQWE");
         ModalWindowsPO modalWindows = new ModalWindowsPO();
         modalWindows
                 .checkModalThanksForAddReview();
@@ -701,7 +964,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortNewFirst() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .checkSortNewFirst();
@@ -716,7 +979,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortDefault() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -733,7 +996,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortDescendingRating() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -750,7 +1013,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortRatingGrowth() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -768,7 +1031,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void sortByPopularity() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .clickSortButton()
@@ -785,7 +1048,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByUnansweredReviews() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectUnansweredReviewFilter();
@@ -802,7 +1065,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByNegativeReviews() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectNegativeReviewsFilter();
@@ -819,7 +1082,7 @@ public class Reviews extends TestBase {
     @Tag("Reviews")
     public void filterByPositiveReviews() {
         whenCurrencyPO
-                .openAs(exchangerWithoutSubscription.getEmail(), "123qweQWE")
+                .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
                 .selectCardById("losa888-614d7870706bc707b6f2b4d8")
                 .selectPositiveReviewsFilter();
