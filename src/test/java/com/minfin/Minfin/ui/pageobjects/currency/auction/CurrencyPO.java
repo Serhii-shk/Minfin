@@ -20,6 +20,7 @@ public class CurrencyPO {
     public SelenideElement firstCard = $x("(//button[@class='Card'])[1]");
     public SelenideElement authButton = $x("//div[@class='js-toggle-auth']");
     public SelenideElement registrButton = $(".mfm-auth--screen .mfm-auth--footer-btn");
+    public SelenideElement choosePlan = $x("//button[@data-gtm-ea='choosePlan-top']");
     String cardId = "[id='%s']";
     String baseUrl = "/currency/auction-%s/";
 
@@ -56,6 +57,11 @@ public class CurrencyPO {
         step("when select card by id "
                 + id, () -> $(String.format(cardId, id)).shouldBe(Condition.visible, Duration.ofSeconds(10)).click());
         return new ExchangeCardPO();
+    }
+
+    public SubscriptionSelectionPO clickChoosePlan(){
+        step("when click choose plan", () -> choosePlan.click());
+        return new SubscriptionSelectionPO();
     }
 
 }

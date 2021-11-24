@@ -372,10 +372,10 @@ public class UserGenerator {
         then(new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code())
                 .isEqualTo(200);
 
-//        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-//        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
-//        then(phonesResponse.code())
-//                .isEqualTo(200);
+        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
+        then(phonesResponse.code())
+                .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
@@ -495,12 +495,12 @@ public class UserGenerator {
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
         then(userInfo.code())
                 .isEqualTo(200);
-//
-//        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-//
-//        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
-//        then(phonesResponse.code())
-//                .isEqualTo(200);
+
+        String phoneNumber = "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
+
+        Response<PhonesResponse> phonesResponse = new PhonesService().postPhones(phoneNumber, accessToken);
+        then(phonesResponse.code())
+                .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
@@ -548,6 +548,43 @@ public class UserGenerator {
                 .password(password)
                 .id(applicationsResponseResponse.body().getId())
                 .build();
+    }
+
+    public UserProfile createUserWithoutSubscription() {
+        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+        String password = "123qweQWE";
+
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(email)
+                .login("secene10test")
+                .password(password)
+                .privacy(true)
+                .rules(true)
+                .check(2)
+                .firstName("secene1856")
+                .phone("+380005554455")
+                .build();
+        then(new RegisterService().postRegister(registerRequest).code())
+                .isEqualTo(200);
+        then(new AuthService().postAuth(email, password).code())
+                .isEqualTo(200);
+
+        Response<AuctionResponse> auction = new AuctionService().getAuction();
+        then(auction.code())
+                .isEqualTo(200);
+
+        //ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
+
+        String accessToken = auction.body().getAccessToken();
+//        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
+//                .isEqualTo(200);
+
+        Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
+        then(userInfo.code())
+                .isEqualTo(200);
+
+        return UserProfile.builder().email(email).password(password)
+                .profileId(userInfo.body().getProfileId()).build();
     }
 
 
