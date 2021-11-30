@@ -2,16 +2,17 @@ package com.minfin.Minfin.ui.pageobjects.currency.auction;
 
 import com.codeborne.selenide.SelenideElement;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 import static io.qameta.allure.Allure.step;
 
 public class SubscriptionSelectionPO {
-    public SelenideElement checkbox = $x("//span[@class='CheckboxCheckmark']");
+    public SelenideElement checkbox = $(".checkboxHover");
     public SelenideElement confirmButton = $x("//button[@class='Button offer-agreement-modal__confirm primary']");
     public SelenideElement subscriptionTypeProButton = $x("(//button[@class='Button TypeCard__Footer__ChooseButton outlined'])[2]");
 
-    public SubscriptionSelectionPO clickCheckbox(){
-        step("when click checkbox", () -> checkbox.click());
+    public SubscriptionSelectionPO clickSubscriptionCheckbox(){
+        step("when click subscription checkbox", () -> checkbox.click());
         return this;
     }
 

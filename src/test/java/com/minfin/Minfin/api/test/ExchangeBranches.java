@@ -42,6 +42,7 @@ import com.minfin.Minfin.api.services.va.api.phones.PhoneIdService;
 import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.api.services.va.api.rates.RatesService;
+import com.minfin.Minfin.ui.test.TestBase;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -64,9 +65,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 
 @DisplayName("Тесты API")
 public class ExchangeBranches {
-    String baseUrl = "https://va-backend-stage.treeum.net/";
-    OkHttpClient client = new OkHttpClient();
-
+    String baseUrl = String.format("https://va-backend-%s.treeum.net/", TestBase.getEnv());
 
     @BeforeEach
     void setupRaConfig() {

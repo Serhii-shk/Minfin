@@ -26,16 +26,13 @@ public class BuySubscription extends TestBase {
         whenCurrencyPO
                 .openAs(userWithoutSubsc.getEmail(), userWithoutSubsc.getPassword())
                 .clickChoosePlan()
-                .clickCheckbox()
+                .clickSubscriptionCheckbox()
                 .clickConfirmButton()
                 .clickSubscriptionTypeProButton()
                 .clickTerm3MonthButton()
-                .clickCheckoutButton()
-                .clickPayButtonOfModal()
-                .inputCardToField()
-                .inputDate()
-                .inputCvv()
-                .clickPayOfPortmoneButton();
+                .clickSubmitPaymentButton()
+                .clickPayOnPortmone()
+                .makePortmonePayment();
     }
 
 }

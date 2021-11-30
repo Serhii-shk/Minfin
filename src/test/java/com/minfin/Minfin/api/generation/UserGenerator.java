@@ -1,6 +1,7 @@
 package com.minfin.Minfin.api.generation;
 
 import com.github.javafaker.Faker;
+import com.minfin.Minfin.api.model.common.AdminProfile;
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
 import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
@@ -42,9 +43,7 @@ import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.api.services.va.api.rates.RatesService;
 import com.minfin.Minfin.api.steps.Steps;
 import com.minfin.Minfin.utils.StringUtils;
-import lombok.NonNull;
 import retrofit2.Response;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -104,16 +103,10 @@ public class UserGenerator {
         String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
         String password = "123qweQWE";
 
-        UserProfile exchanger = UserProfile.builder()
-                .email(email)
-                .password(password)
-                .build();
-
-
         RegisterRequest registerRequest = RegisterRequest.builder()
-                .email(exchanger.getEmail())
+                .email(email)
                 .login("secene10test")
-                .password(exchanger.getPassword())
+                .password(password)
                 .privacy(true)
                 .rules(true)
                 .check(2)
@@ -164,7 +157,7 @@ public class UserGenerator {
                 .isEqualTo(200);
 
         String phoneNumber = getRandomPhoneNumber();
-        Response<PhonesResponse> phonesResponse = phonesServicePostPhones(phoneNumber, accessToken);
+        Response<PhonesResponse> phonesResponse = phonesServicePostPhones( accessToken);
         then(phonesResponse.code())
                 .isEqualTo(200);
 
@@ -260,13 +253,13 @@ public class UserGenerator {
                 .address(street).id(branchesResponseResponse.body().getId()).profileId(userInfo.body().getProfileId()).build();
     }
 
-    private Response<PhonesResponse> phonesServicePostPhones(@NonNull UserProfile exchanger) {
+    private Response<PhonesResponse> phonesServicePostPhones(String accessToken) {
         Response<PhonesResponse> phonesResponse = null;
         for (int i = 0; i < 10; i++) {
             String randomPhoneNumber = getRandomPhoneNumber();
-            phonesResponse = new PhonesService().postPhones(exchangerrandomPhoneNumber, exchanger.get);
+            phonesResponse = new PhonesService().postPhones(randomPhoneNumber, accessToken);
             if (phonesResponse.isSuccessful()) {
-                exchanger.setPhone(randomPhoneNumber);
+//                exchanger.setPhone(randomPhoneNumber);
                 return phonesResponse;
             } else if (i == 9) {
                 throw new IllegalStateException("Please clear DB unique phone numbers are over");
@@ -314,6 +307,7 @@ public class UserGenerator {
 
         return UserProfile.builder().email(email).password(password).build();
     }
+
 
 
     public UserProfile createRandomCustomerProWithPaidSubscription() {
@@ -389,34 +383,34 @@ public class UserGenerator {
         then(phonesIdResponse.code())
                 .isEqualTo(200);
 
-        ApplicationsBody applicationsBody = ApplicationsBody.builder()
-                .siteId("5e9457447c84a212fbe91ecd")
-                .profileId(userInfo.body().getProfileId())
-                .phoneId(phonesIdResponse.body().getItems().get(0).getId())
-                .location(com.minfin.Minfin.api.model.va.api.applications.body.Location.builder()
-                        .coordinates(List.of(50.400679, 30.616587))
-                        .type("Point")
-                        .build())
-                .address("ул. Княжий Затон 21")
-                .city(1)
-                .type("buy")
-                .currency("usd")
-                .rate(27)
-                .amount(1000)
-                .description("Test test test")
-                .modifications(Modifications.builder()
-                        .pinned(false)
-                        .painted(false)
-                        .build())
-                .services(com.minfin.Minfin.api.model.va.api.applications.body.Services.builder()
-                        .parts(false)
-                        .transfer(false)
-                        .damagedBills(false)
-                        .build())
-                .build();
-        Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
-        then(applicationsResponseResponse.code())
-                .isEqualTo(201);
+    ApplicationsBody applicationsBody = ApplicationsBody.builder()
+            .siteId("5e9457447c84a212fbe91ecd")
+            .profileId(userInfo.body().getProfileId())
+            .phoneId(phonesIdResponse.body().getItems().get(0).getId())
+            .location(com.minfin.Minfin.api.model.va.api.applications.body.Location.builder()
+                    .coordinates(List.of(50.400679, 30.616587))
+                    .type("Point")
+                    .build())
+            .address("ул. Княжий Затон 21")
+            .city(1)
+            .type("buy")
+            .currency("usd")
+            .rate(27)
+            .amount(1000)
+            .description("Test test test")
+            .modifications(Modifications.builder()
+                    .pinned(false)
+                    .painted(false)
+                    .build())
+            .services(com.minfin.Minfin.api.model.va.api.applications.body.Services.builder()
+                    .parts(false)
+                    .transfer(false)
+                    .damagedBills(false)
+                    .build())
+            .build();
+    Response<ApplicationsResponse> applicationsResponseResponse = new ApplicationsService().postApplications(accessToken, applicationsBody);
+    then(applicationsResponseResponse.code())
+            .isEqualTo(201);
 
         return UserProfile.builder()
                 .email(email)
