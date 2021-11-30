@@ -30,7 +30,7 @@ public abstract class TestBase {
     }
 
     public static String getEnv() {
-        String configEnv = "stage";
+        String configEnv = "review2";
         switch (configEnv) {
             case "review1":
                 env = "review1";

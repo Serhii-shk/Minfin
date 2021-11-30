@@ -30,7 +30,12 @@ public class BuySubscription extends TestBase {
                 .clickConfirmButton()
                 .clickSubscriptionTypeProButton()
                 .clickTerm3MonthButton()
-                .clickCheckoutButton();
+                .clickCheckoutButton()
+                .clickPayButtonOfModal()
+                .inputCardToField()
+                .inputDate()
+                .inputCvv()
+                .clickPayOfPortmoneButton();
     }
 
 }
