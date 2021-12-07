@@ -3,6 +3,7 @@ package com.minfin.Minfin.ui.pageobjects;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BasePO {
 
@@ -20,5 +21,9 @@ public class BasePO {
         }
         return null;
 
+    }
+
+    public static String getRandomPhoneNumber() {
+        return "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
     }
 }

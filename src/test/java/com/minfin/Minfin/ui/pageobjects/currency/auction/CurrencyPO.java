@@ -25,18 +25,18 @@ public class CurrencyPO {
     String baseUrl = "/currency/auction-%s/";
 
     public LoginPO clickLoginButton() {
-        step("when click auth button", () -> authButton.click());
+        step("When click auth button", () -> authButton.click());
         return new LoginPO();
     }
 
     public CurrencyPO selectNawBarAll() {
-        step("when select naw bar all ", () -> nawBarAll.click());
+        step("When select naw bar all ", () -> nawBarAll.click());
         return this;
     }
 
 
     public CurrencyPO openAs(String login, String password) {
-        step("when open as " + login + password
+        step("When open as " + login + password
                 , () -> {
                     this.open();
                     new HeaderPO().clickAuthButton().login(login, password);
@@ -47,20 +47,20 @@ public class CurrencyPO {
     }
 
     public CurrencyPO open() {
-        step("when open ", () -> {
+        step("When open ", () -> {
             Selenide.open(String.format(baseUrl, TestBase.getEnv()), AuthenticationType.BASIC, "tester", "qO5pI8fD1wN4qZ3w");
         });
         return this;
     }
 
     public ExchangeCardPO selectCardById(String id) {
-        step("when select card by id "
+        step("When select card by id "
                 + id, () -> $(String.format(cardId, id)).shouldBe(Condition.visible, Duration.ofSeconds(10)).click());
         return new ExchangeCardPO();
     }
 
     public SubscriptionSelectionPO clickChoosePlan(){
-        step("when click choose plan", () -> choosePlan.click());
+        step("When click choose plan", () -> choosePlan.click());
         return new SubscriptionSelectionPO();
     }
 

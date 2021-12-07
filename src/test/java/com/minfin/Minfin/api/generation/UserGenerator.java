@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.minfin.Minfin.ui.pageobjects.BasePO.getRandomPhoneNumber;
 import static org.assertj.core.api.BDDAssertions.then;
 
 public class UserGenerator {
@@ -268,9 +269,7 @@ public class UserGenerator {
         return phonesResponse;
     }
 
-    private String getRandomPhoneNumber() {
-        return "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
-    }
+
 
 
     public UserProfile createPureRandomCustomerPro() {
@@ -567,11 +566,7 @@ public class UserGenerator {
         then(auction.code())
                 .isEqualTo(200);
 
-        //ChangeProfileTypeRequest typeRequest = ChangeProfileTypeRequest.builder().type("exchanger").build();
-
         String accessToken = auction.body().getAccessToken();
-//        then(new ChangeProfileTypeService().postChangeProfileType(accessToken, typeRequest).code())
-//                .isEqualTo(200);
 
         Response<UserInfoResponse> userInfo = new UserInfoService().getUserInfo(accessToken);
         then(userInfo.code())

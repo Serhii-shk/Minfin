@@ -50,208 +50,208 @@ public class ExchangeCardPO {
 
 
     public ReviewsPO clickReviewButton() {
-        step("when click review button ", ()->reviewsButton.click());
+        step("When click review button ", ()->reviewsButton.click());
         return new ReviewsPO();
     }
 
     public ModalWindowsPO secondClickReviewButton() {
-        step("when second click review button ", ()->reviewsButton.click());
+        step("When second click review button ", ()->reviewsButton.click());
         return new ModalWindowsPO();
     }
 
     public ExchangeCardPO clickFirstReviewLike() {
-        step("when click firs review like ", ()->firstReviewsLike.scrollTo().click());
+        step("When click firs review like ", ()->firstReviewsLike.scrollTo().click());
         return this;
     }
 
     public ExchangeCardPO clickReviewsLike() {
-        step("when click reviews like ", ()->firstReviewsLike.click());
+        step("When click reviews like ", ()->firstReviewsLike.click());
         return this;
     }
 
     public ExchangeCardPO scrollAfterCreatedReviews() {
-        step("when scroll after created reviews ", ()->reviewsButton.scrollIntoView(false));
+        step("When scroll after created reviews ", ()->reviewsButton.scrollIntoView(false));
         return new ExchangeCardPO();
     }
 
     public ExchangeCardPO checkLikeEnabledForFirstReview() {
-        step("when check like enabled for first review ", ()-> likeEnabledForFirstReview.shouldBe(visible));
+        step("When check like enabled for first review ", ()-> likeEnabledForFirstReview.shouldBe(visible));
         return this;
     }
 
     public ExchangeCardPO checkLikeDisabledForFirstReview() {
-        step("when check like disabled for first review ", ()->likeDisabledForFirstReview.shouldBe(visible));
+        step("When check like disabled for first review ", ()->likeDisabledForFirstReview.shouldBe(visible));
         return this;
     }
 
     public ExchangeCardPO clickUserContextMenu() {
-        step("when click user context menu ", ()->userContextMenu.shouldBe(visible, Duration.ofSeconds(10)).scrollTo().click());
+        step("When click user context menu ", ()->userContextMenu.shouldBe(visible, Duration.ofSeconds(10)).scrollTo().click());
         return this;
     }
 
     public ExchangeCardPO clickContextMenuComplaintButton() {
-        step("when click context menu complaint button ", ()->contextMenuComplaintButton.click());
+        step("When click context menu complaint button ", ()->contextMenuComplaintButton.click());
         return this;
     }
 
     public ExchangeCardPO clickCancelComplaintButton() {
-        step("when click cancel complaint button ", ()->cancelComplaintButton.click());
+        step("When click cancel complaint button ", ()->cancelComplaintButton.click());
         return this;
     }
 
     public ExchangeCardPO setComplaintText() {
-        step("when set complaint text ", ()->complaintText.setValue("Test complaint for review"));
+        step("When set complaint text ", ()->complaintText.setValue("Test complaint for review"));
         return this;
     }
 
     public ExchangeCardPO clickPostComplaintButton() {
-        step("when click post complaint button ", ()->postComplaintButton.click());
+        step("When click post complaint button ", ()->postComplaintButton.click());
         return this;
     }
 
     public ReviewsPO clickEditReviewButton() {
-        step("when click edit review button ", ()->editReviewButton.click());
+        step("When click edit review button ", ()->editReviewButton.click());
         return new ReviewsPO();
     }
 
     public ExchangeCardPO clickDeleteReviewButton() {
-        step("when click delete review button ", ()->deleteReviewButton.click());
+        step("When click delete review button ", ()->deleteReviewButton.click());
         return this;
     }
 
     public ExchangeCardPO clickRestoreReview() {
-        step("when click restore review ", ()->restoreReview.click());
+        step("When click restore review ", ()->restoreReview.click());
         return this;
     }
 
     public ExchangeCardPO clickSortButton() {
-        step("when click sort button ", ()->sortButton.click());
+        step("When click sort button ", ()->sortButton.click());
         return this;
     }
 
     public ExchangeCardPO selectSortNewFirst() {
-        step("when select sort new first ", ()->sortNewFirst.click());
+        step("When select sort new first ", ()->sortNewFirst.click());
         return this;
     }
 
     public ExchangeCardPO clickCancelForReviewButton() {
-        step("when click cancel for review button ", ()->cancelForReviewButton.click());
+        step("When click cancel for review button ", ()->cancelForReviewButton.click());
         return this;
     }
 
     public ExchangeCardPO clickAnswerForReviewButton() {
-        step("when click answer for review button ", ()->answerForReviewButton.click());
+        step("When click answer for review button ", ()->answerForReviewButton.click());
         return this;
     }
 
     public ExchangeCardPO clickSendAnswerReviewButton() {
-        step("when click send answer review button ", ()->sendAnswerReviewButton.click());
+        step("When click send answer review button ", ()->sendAnswerReviewButton.click());
         return this;
     }
 
     public ExchangeCardPO setValueTextInputField() {
-        step("when set value text input field ", ()->answerText.setValue("Ответ Обменника на отзыв"));
+        step("When set value text input field ", ()->answerText.setValue("Ответ Обменника на отзыв"));
         return this;
     }
 
     public ExchangeCardPO checkModalAnswerPosted() {
-        step("when check modal answer posted ", ()->modalAnswerPosted.shouldBe(visible));
+        step("When check modal answer posted ", ()->modalAnswerPosted.shouldBe(visible));
         return new ExchangeCardPO();
     }
 
     public ExchangeCardPO clickEditAnswerButtonForFirstReview() {
-        step("when click edit answer button for first review ", ()->editAnswerButton.click());
+        step("When click edit answer button for first review ", ()->editAnswerButton.click());
         ;
         return this;
     }
 
     public ExchangeCardPO clearAnswerText() {
-        step("when clear answer text ", ()->answerText.clear());
+        step("When clear answer text ", ()->answerText.clear());
         return this;
     }
 
     public ExchangeCardPO setValueEditAnswerText() {
-        step("when set value edit answer text ", ()->answerText.setValue("TestTestTestTestTestTest"));
+        step("When set value edit answer text ", ()->answerText.setValue("TestTestTestTestTestTest"));
         return this;
     }
 
     public ExchangeCardPO checkModalAnswerEdited() {
-        step("when check modal answer edited ", ()->modalAnswerEdited.shouldBe(visible));
+        step("When check modal answer edited ", ()->modalAnswerEdited.shouldBe(visible));
         return this;
     }
 
     public ExchangeCardPO checkSortDefault() {
-        step("when check sort default ", ()->sortButton.shouldHave(exactText("По умолчанию")));
+        step("When check sort default ", ()->sortButton.shouldHave(exactText("По умолчанию")));
         return this;
     }
 
     public ExchangeCardPO checkSortNewFirst() {
-        step("when check sort new first ", ()->sortButton.shouldHave(exactText("Сначала новые")));
+        step("When check sort new first ", ()->sortButton.shouldHave(exactText("Сначала новые")));
         return this;
     }
 
     public ExchangeCardPO selectSortDescendingRating() {
-        step("when select sort descending rating ", ()->sortDescendingRating.click());
+        step("When select sort descending rating ", ()->sortDescendingRating.click());
         return this;
     }
 
     public ExchangeCardPO checkSortDescendingRating() {
-        step("when check sort descending rating ", ()->sortButton.shouldHave(exactText("По убыванию рейтинга")));
+        step("When check sort descending rating ", ()->sortButton.shouldHave(exactText("По убыванию рейтинга")));
         return this;
     }
 
     public ExchangeCardPO selectSortRatingGrowth() {
-        step("when select sort rating growth ", ()->sortRatingGrowth.click());
+        step("When select sort rating growth ", ()->sortRatingGrowth.click());
         return this;
     }
 
     public ExchangeCardPO checkSortRatingGrowth() {
-        step("when check sort rating growth ", ()->sortButton.shouldHave(exactText("По возрастанию рейтинга")));
+        step("When check sort rating growth ", ()->sortButton.shouldHave(exactText("По возрастанию рейтинга")));
         return this;
     }
 
     public ExchangeCardPO selectSortByPopularity() {
-        step("when select sort by popularity ", ()->sortByPopularity.click());
+        step("When select sort by popularity ", ()->sortByPopularity.click());
         return this;
     }
 
     public ExchangeCardPO checkSortByPopularity() {
-        step("when check sort by popularity ", ()->sortButton.shouldHave(exactText("По популярности")));
+        step("When check sort by popularity ", ()->sortButton.shouldHave(exactText("По популярности")));
         return this;
     }
 
     public ExchangeCardPO selectUnansweredReviewFilter() {
-        step("when select unanswered review filter ",()->unansweredReviewFilter.click());
+        step("When select unanswered review filter ",()->unansweredReviewFilter.click());
         return this;
     }
 
     public ExchangeCardPO selectNegativeReviewsFilter() {
-        step("when select negative reviews filter ", ()->negativeReviewsFilter.click());
+        step("When select negative reviews filter ", ()->negativeReviewsFilter.click());
         return this;
     }
 
     public ExchangeCardPO selectPositiveReviewsFilter() {
-        step("when select  positive reviews filter ", ()->positiveReviewsFilter.click());
+        step("When select  positive reviews filter ", ()->positiveReviewsFilter.click());
         return this;
     }
 
     public ExchangeCardPO selectSortByDefault() {
-        step("when select sort by default ", ()->sortByDefault.click());
+        step("When select sort by default ", ()->sortByDefault.click());
         return this;
     }
 
     public ExchangeCardPO checkSortByDefault() {
-        step("when check sort by default ", ()->sortButton.shouldHave(exactText("По умолчанию")));
+        step("When check sort by default ", ()->sortButton.shouldHave(exactText("По умолчанию")));
         return this;
     }
 
     public ExchangeCardPO checkModalComplaintPosted() {
-        step("when check modal complaint posted ", ()->modalAnswerPosted.shouldBe(visible));
+        step("When check modal complaint posted ", ()->modalAnswerPosted.shouldBe(visible));
         return this;
     }
 
     public ExchangeCardPO checkModalForbiddenAddComplaint() {
-        step("when check modal forbidden add complaint ", ()->modalForbiddenAddComplaint.should(visible));
+        step("When check modal forbidden add complaint ", ()->modalForbiddenAddComplaint.should(visible));
         return this;
     }
 

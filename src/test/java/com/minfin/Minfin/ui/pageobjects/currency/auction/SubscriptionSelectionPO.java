@@ -10,20 +10,26 @@ public class SubscriptionSelectionPO {
     public SelenideElement checkbox = $(".checkboxHover");
     public SelenideElement confirmButton = $x("//button[@class='Button offer-agreement-modal__confirm primary']");
     public SelenideElement subscriptionTypeProButton = $x("(//button[@class='Button TypeCard__Footer__ChooseButton outlined'])[2]");
+    public SelenideElement subscriptionTypeExchangerButton = $x("(//button[@class='Button TypeCard__Footer__ChooseButton outlined'])[1]");
 
     public SubscriptionSelectionPO clickSubscriptionCheckbox(){
-        step("when click subscription checkbox", () -> checkbox.click());
+        step("When click subscription checkbox", () -> checkbox.click());
         return this;
     }
 
     public SubscriptionSelectionPO clickConfirmButton(){
-        step("when click confirm button", () -> confirmButton.click());
+        step("When click confirm button", () -> confirmButton.click());
         return this;
     }
 
     public PaymentForSubscriptionPO clickSubscriptionTypeProButton(){
-        step("click subscription type pro button", () -> subscriptionTypeProButton.click());
+        step("When click subscription type pro button", () -> subscriptionTypeProButton.click());
         return new PaymentForSubscriptionPO();
+    }
+
+    public ExchangerMenuPO clickSubscriptionTypeExchangerButton(){
+        step("When click subscription type Exchanger button", () -> subscriptionTypeExchangerButton.click());
+        return new ExchangerMenuPO();
     }
 
 }

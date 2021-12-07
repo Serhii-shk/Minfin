@@ -31,87 +31,87 @@ public class ReviewsPO {
 
 
     public ReviewsPO setRatingStar(int starNumber){
-        step("when set rating star " + starNumber, ()->$x(String.format(ratingStar, starNumber)).click());
+        step("When set rating star " + starNumber, ()->$x(String.format(ratingStar, starNumber)).click());
         return this;
     }
 
     public ReviewsPO setCons(ExchangeProsAndCons cons){
-        step("when set cons " + cons, ()->$(cons.getSelector()).click());
+        step("When set cons " + cons, ()->$(cons.getSelector()).click());
         return this;
     }
 
     public ReviewsPO setGoodSafety() {
-        step("when set good safety ", ()->goodSafety.click());
+        step("When set good safety ", ()->goodSafety.click());
         return this;
     }
 
     public ReviewsPO setReviewText(String text){
-        step("when set review text " + text, ()->reviewText.setValue(text));
+        step("When set review text " + text, ()->reviewText.setValue(text));
         return this;
     }
 
     public ReviewsPO clearReviewText() {
-        step("when clear review text ", ()->reviewText.clear());
+        step("When clear review text ", ()->reviewText.clear());
         return this;
     }
 
     public ReviewsPO clickNextStep(){
-        step("when click next step ", ()->nextStep.click());
+        step("When click next step ", ()->nextStep.click());
         return this;
     }
 
     public ReviewsPO uploadImage(String fileName){
-        step("when upload image " +fileName, ()->uploadImage.uploadFile(new BasePO().getFileFromResource(fileName)));
+        step("When upload image " +fileName, ()->uploadImage.uploadFile(new BasePO().getFileFromResource(fileName)));
         return this;
     }
 
     public ModalWindowsPO clickPublishReviewButton(){
-        step("when click publish review button ", ()->publishReviewButton.click());
+        step("When click publish review button ", ()->publishReviewButton.click());
         return new ModalWindowsPO();
     }
 
     public ReviewsPO setAvailability5Stars() {
-        step("when set availability 5 stars ", ()->availability5.click());
+        step("When set availability 5 stars ", ()->availability5.click());
         return this;
     }
 
     public ReviewsPO setAvailability4Stars() {
-        step("when set availability 4 stars ", ()->availability4.click());
+        step("When set availability 4 stars ", ()->availability4.click());
         return this;
     }
 
     public ReviewsPO setCurrencyRate5Stars() {
-        step("when set currency rate 5 stars ", ()->currencyRate5.click());
+        step("When set currency rate 5 stars ", ()->currencyRate5.click());
         return this;
     }
 
     public ReviewsPO setCurrencyRate4Stars() {
-        step("when set currency rate 4 stars ", ()->currencyRate4.click());
+        step("When set currency rate 4 stars ", ()->currencyRate4.click());
         return this;
     }
 
     public ReviewsPO setQuality3Stars() {
-        step("when set qvality 3 stars ", ()->quality3.click());
+        step("When set qvality 3 stars ", ()->quality3.click());
         return this;
     }
 
     public ReviewsPO setQuality4Stars() {
-        step("when set quality 4 stars ", ()->quality4.click());
+        step("When set quality 4 stars ", ()->quality4.click());
         return this;
     }
 
     public ReviewsPO setSafety5Stars() {
-        step("when set safety 5 stars ", ()->safety5.click());
+        step("When set safety 5 stars ", ()->safety5.click());
         return this;
     }
 
     public ReviewsPO setSafety4Stars() {
-        step("when set safety 4 stars ", ()->safety4.click());
+        step("When set safety 4 stars ", ()->safety4.click());
         return this;
     }
 
     public ReviewsPO clickRemoveImageButton() {
-        step("when click remove image button ",()->removeImageButton.click());
+        step("When click remove image button ",()->removeImageButton.click());
         return this;
     }
 
