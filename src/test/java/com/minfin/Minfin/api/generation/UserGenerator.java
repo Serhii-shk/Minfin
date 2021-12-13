@@ -42,6 +42,7 @@ import com.minfin.Minfin.api.services.va.api.phones.PhonesService;
 import com.minfin.Minfin.api.services.va.api.phones.VerifyCodeService;
 import com.minfin.Minfin.api.services.va.api.rates.RatesService;
 import com.minfin.Minfin.api.steps.Steps;
+import com.minfin.Minfin.ui.pageobjects.BasePO;
 import com.minfin.Minfin.utils.StringUtils;
 import retrofit2.Response;
 import java.time.LocalDateTime;
@@ -210,10 +211,9 @@ public class UserGenerator {
         then(branchesResponseResponse.code())
                 .isEqualTo(201);
 
-        String licensesNumber = "123" + ThreadLocalRandom.current().nextLong(91000000L, 91099999L);
         LicensesBody licensesBody = LicensesBody.builder()
                 .profileId(userInfo.body().getProfileId())
-                .name(licensesNumber)
+                .name(BasePO.getLicensesNumber())
                 .build();
         Response<LicensesResponse> licensesResponseResponse = new LicensesService().postLicenses(accessToken, licensesBody);
         then(licensesResponseResponse.code())

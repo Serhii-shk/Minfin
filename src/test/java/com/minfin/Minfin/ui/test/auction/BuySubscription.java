@@ -49,7 +49,7 @@ public class BuySubscription extends TestBase {
     @Tag("UI")
     @Tag("CurrencyAuction")
     @Tag("BuySubscription")
-    public void buySubscriptionXchanger(){
+    public void buySubscriptionExchanger(){
         whenCurrencyPO
                 .openAs(userWithoutSubsc.getEmail(), userWithoutSubsc.getPassword())
                 .clickChoosePlan()
@@ -79,9 +79,33 @@ public class BuySubscription extends TestBase {
                 .setCurrencyBuy()
                 .setExactAmountCheckbox()
                 .setBuyRate()
-                .setSumBuy();
+                .setSumBuy()
+                .clickCreateExchangerButton()
+                .clickGoPaymentButton()
+                .setLicenseInput()
+                .sendToCheckButton()
+                .clickGoToPayButton()
+                .clickAmountExchangerDropdown()
+                .clickExchangePoints2List()
+                .clickTerm3MonthButton()
+                .clickSubmitPaymentButton()
+                .clickPayOnPortmone();
 
     }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

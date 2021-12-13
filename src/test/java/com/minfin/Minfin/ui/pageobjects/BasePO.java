@@ -26,4 +26,10 @@ public class BasePO {
     public static String getRandomPhoneNumber() {
         return "38000" + ThreadLocalRandom.current().nextLong(9100000L, 9109999L);
     }
+
+    public static String getLicensesNumber() {
+        return "123" + ThreadLocalRandom.current().nextLong(91000000L, 91099999L);
+    }
+
+
 }

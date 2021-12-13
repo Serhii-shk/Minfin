@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.$x;
 import static io.qameta.allure.Allure.step;
 
 public class AddExchangerPO implements IBaseUrl {
+    @Override
     public String getUrl() {
         return "add";
     }
