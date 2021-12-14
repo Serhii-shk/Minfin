@@ -2,6 +2,7 @@ package com.minfin.Minfin.ui.test.auction;
 
 import com.minfin.Minfin.api.generation.UserGenerator;
 import com.minfin.Minfin.api.model.common.UserProfile;
+import com.minfin.Minfin.ui.asserts.ExchangerMenuAssert;
 import com.minfin.Minfin.ui.asserts.ProMenuAssert;
 import com.minfin.Minfin.ui.pageobjects.currency.auction.CurrencyPO;
 import com.minfin.Minfin.ui.test.TestBase;
@@ -15,7 +16,8 @@ import org.junit.jupiter.api.Test;
 public class BuySubscription extends TestBase {
     CurrencyPO whenCurrencyPO = new CurrencyPO();
     UserProfile userWithoutSubsc = new UserGenerator().createUserWithoutSubscription();
-    ProMenuAssert thenUserMenuAssert = new ProMenuAssert();
+    ProMenuAssert thenProMenuAssert = new ProMenuAssert();
+    ExchangerMenuAssert thenExchangerMenuAssert = new ExchangerMenuAssert();
 
 
     @Test
@@ -36,8 +38,8 @@ public class BuySubscription extends TestBase {
                 .clickTerm3MonthButton()
                 .clickSubmitPaymentButton()
                 .clickPayOnPortmone()
-                .makePortmonePayment();
-        thenUserMenuAssert
+                .makePortmonePaymentProSubscription();
+        thenProMenuAssert
                 .checkTypePRO();
     }
 
@@ -89,7 +91,10 @@ public class BuySubscription extends TestBase {
                 .clickExchangePoints2List()
                 .clickTerm3MonthButton()
                 .clickSubmitPaymentButton()
-                .clickPayOnPortmone();
+                .clickPayOnPortmone()
+                .makePortmonePaymentExchangerSubscription();
+        thenExchangerMenuAssert
+                .checkTypeExch();
 
     }
 

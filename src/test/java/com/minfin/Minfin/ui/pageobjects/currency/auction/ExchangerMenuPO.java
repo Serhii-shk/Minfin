@@ -13,7 +13,6 @@ public class ExchangerMenuPO implements IBaseUrl {
         return "office";
     }
 
-//    public SelenideElement accountType = $x("//span[@class='Typography proInfo body1 align']");
     private static final SelenideElement ADD_APPLICATION = $x("//a[@class='CreateApplicationLink']");
     private static final SelenideElement GO_TO_PAY_BUTTON = $x("(//div/button[@type='button'])[1]");
 

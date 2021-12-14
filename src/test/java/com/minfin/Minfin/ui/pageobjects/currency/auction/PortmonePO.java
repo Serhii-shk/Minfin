@@ -17,7 +17,7 @@ public class PortmonePO {
     String cardDate = "1231";
     String cvvCard = "123";
 
-    public ProMenuPO makePortmonePayment() {
+    public ProMenuPO makePortmonePaymentProSubscription() {
         step("When make portmone payment", () ->
         {
             switchTo().innerFrame("portmonepaymentframe");
@@ -29,6 +29,20 @@ public class PortmonePO {
             switchTo().defaultContent();
         });
         return new ProMenuPO();
+    }
+
+    public ExchangerMenuPO makePortmonePaymentExchangerSubscription() {
+        step("When make portmone payment", () ->
+        {
+            switchTo().innerFrame("portmonepaymentframe");
+            PAY_CARD_INPUT.setValue(visaCard);
+            PAY_EXP_DATE_INPUT.setValue(cardDate);
+            PAY_CVV_INPUT.setValue(cvvCard);
+            SEND_PAYMENT_BUTTON.click();
+            CLOSE_OFFER_MODAL.click();
+            switchTo().defaultContent();
+        });
+        return new ExchangerMenuPO();
     }
 
 

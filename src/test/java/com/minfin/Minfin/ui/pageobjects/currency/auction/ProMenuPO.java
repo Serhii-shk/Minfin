@@ -9,10 +9,10 @@ import static io.qameta.allure.Allure.step;
 public class ProMenuPO implements IBaseUrl {
     @Override
     public String getUrl() {
-        return "my";
+        return "my/";
     }
 
-    public SelenideElement accountType = $x("//span[@class='Typography proInfo body1 align']");
+    private static final SelenideElement ACCOUNT_TYPE = $x("//span[@class='Typography proInfo body1 align']");
 
 
 }
