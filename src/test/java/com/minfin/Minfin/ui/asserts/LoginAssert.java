@@ -7,33 +7,33 @@ import org.assertj.core.api.Assertions;
 
 import java.time.Duration;
 
+import static io.qameta.allure.Allure.step;
 import static org.openqa.selenium.support.ui.ExpectedConditions.urlContains;
 
 public class LoginAssert {
 
-    private final LoginPO loginPO = new LoginPO();
-
     public LoginAssert loginButtonShouldBeVisible() {
-        loginPO.loginButton.shouldBe(Condition.visible);
+        step("When login button should be visible", () -> LoginPO.getLoginButton().shouldBe(Condition.visible));
         return this;
     }
 
     public LoginAssert passwordInputShouldBeVisible() {
-        loginPO.passwordInput.shouldBe(Condition.visible);
+        step("When password in put should be visible", () -> LoginPO.getPasswordInput().shouldBe(Condition.visible));
         return this;
     }
 
     public LoginAssert loginInputShouldBeVisible() {
-        loginPO.loginInput.shouldBe(Condition.visible);
+        step("When login input should be visible", () -> LoginPO.getLoginInput().shouldBe(Condition.visible));
         return this;
     }
 
     public LoginAssert currentUrlContainsBaseLoginUrl() {
-        Assertions.assertThat(Selenide.Wait()
+        step("When current url contains base login url", () -> Assertions.assertThat(Selenide.Wait()
                 .withTimeout(Duration.ofSeconds(5))
                 .until(urlContains("https://minfin.com.ua/login"))
-        ).isTrue();
+        ).isTrue());
         return this;
     }
+
 
 }

@@ -16,21 +16,19 @@ import static io.qameta.allure.Allure.step;
 
 public class CurrencyPO {
 
-    public SelenideElement nawBarAll = $x("//button[@id='navigation-undefined']");
-    public SelenideElement firstCard = $x("(//button[@class='Card'])[1]");
-    public SelenideElement authButton = $x("//div[@class='js-toggle-auth']");
-    public SelenideElement registrButton = $(".mfm-auth--screen .mfm-auth--footer-btn");
-    public SelenideElement choosePlan = $x("//button[@data-gtm-ea='choosePlan-top']");
+    private static final SelenideElement NAW_BAR_ALL = $x("//button[@id='navigation-undefined']");
+    private static final SelenideElement AUTH_BUTTON = $x("//div[@class='js-toggle-auth']");
+    private static final SelenideElement CHOOSE_PLAN = $x("//button[@data-gtm-ea='choosePlan-top']");
     String cardId = "[id='%s']";
     String baseUrl = "/currency/auction-%s/";
 
     public LoginPO clickLoginButton() {
-        step("When click auth button", () -> authButton.click());
+        step("When click auth button", () -> AUTH_BUTTON.click());
         return new LoginPO();
     }
 
     public CurrencyPO selectNawBarAll() {
-        step("When select naw bar all ", () -> nawBarAll.click());
+        step("When select naw bar all ", () -> NAW_BAR_ALL.click());
         return this;
     }
 
@@ -40,7 +38,6 @@ public class CurrencyPO {
                 , () -> {
                     this.open();
                     new HeaderPO().clickAuthButton().login(login, password);
-
                 });
         return this;
 
@@ -60,7 +57,7 @@ public class CurrencyPO {
     }
 
     public SubscriptionSelectionPO clickChoosePlan(){
-        step("When click choose plan", () -> choosePlan.click());
+        step("When click choose plan", () -> CHOOSE_PLAN.click());
         return new SubscriptionSelectionPO();
     }
 

@@ -7,23 +7,35 @@ import static io.qameta.allure.Allure.step;
 
 public class LoginPO {
 
-    public SelenideElement loginInput = $(".mfm-auth--input");
-    public SelenideElement passwordInput = $("[name='Password']");
-    public SelenideElement loginButton = $(".mfm-auth--submit-btn");
-    public SelenideElement registerButton = $(".mfm-auth--footer [onclick*='/register']");
+    public static SelenideElement getLoginInput() {
+        return LOGIN_INPUT;
+    }
+    private static final SelenideElement LOGIN_INPUT = $(".mfm-auth--input");
+
+    public static SelenideElement getPasswordInput() {
+        return PASSWORD_INPUT;
+    }
+    private static final SelenideElement PASSWORD_INPUT = $("[name='Password']");
+
+    public static SelenideElement getLoginButton() {
+        return LOGIN_BUTTON;
+    }
+    private static final SelenideElement LOGIN_BUTTON = $(".mfm-auth--submit-btn");
+
+    private static final SelenideElement REGISTER_BUTTON = $(".mfm-auth--footer [onclick*='/register']");
 
 
     public void login(String login, String password) {
         step("when login " + login + password
                 , ()-> {
-                    loginInput.sendKeys(login);
-                    passwordInput.sendKeys(password);
-                    loginButton.click();
+                    LOGIN_INPUT.sendKeys(login);
+                    PASSWORD_INPUT.sendKeys(password);
+                    LOGIN_BUTTON.click();
                 });
     }
 
     public RegisterPO clickRegisterButton() {
-        step("when click register button ", () -> registerButton.click());
+        step("when click register button ", () -> REGISTER_BUTTON.click());
         return new RegisterPO();
     }
 }
