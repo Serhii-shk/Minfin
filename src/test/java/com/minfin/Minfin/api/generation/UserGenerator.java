@@ -16,7 +16,6 @@ import com.minfin.Minfin.api.model.va.api.branches.body.*;
 import com.minfin.Minfin.api.model.va.api.branches.response.BranchesResponse;
 import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesBody;
 import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesResponse;
-import com.minfin.Minfin.api.model.va.api.licenses.setLicenseStatus.SetLicenseStatusBody;
 import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
 import com.minfin.Minfin.api.model.va.api.phones.VerifyCodeRequest;
 import com.minfin.Minfin.api.model.va.api.phones.phoneId.PhoneIdBody;
@@ -229,10 +228,10 @@ public class UserGenerator {
         then(licensesResponseResponse.code())
                 .isEqualTo(200);
 
-        SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
-                .licenseId(licensesResponseResponse.body().getId())
-                .status("success")
-                .build();
+//        SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
+//                .licenseId(licensesResponseResponse.body().getId())
+//                .status("success")
+//                .build();
         then(new SetLicenseStatusService().postSetLicenseStatus(adminToken,userInfo.body().getProfileId()).code())
                 .isEqualTo(204);
 

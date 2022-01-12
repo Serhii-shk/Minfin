@@ -2,6 +2,7 @@ package com.minfin.Minfin.ui.pageobjects.currency.auction;
 
 import com.codeborne.selenide.SelenideElement;
 import com.minfin.Minfin.ui.pageobjects.IBaseUrl;
+import lombok.SneakyThrows;
 
 import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.step;
@@ -23,8 +24,10 @@ public class PaymentForSubscriptionPO implements IBaseUrl {
         return this;
     }
 
+    @SneakyThrows
     public PaymentForSubscriptionPO clickSubmitPaymentButton() {
         step("When click submit button", () -> CHECKOUT_BUTTON.click());
+        Thread.sleep(2000);
         return this;
     }
 

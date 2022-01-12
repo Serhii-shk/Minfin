@@ -14,7 +14,7 @@ public class ExchangerMenuPO implements IBaseUrl {
     }
 
     private static final SelenideElement ADD_APPLICATION = $x("//a[@id='createApplicationLink']");
-    private static final SelenideElement GO_TO_PAY_BUTTON = $x("//button[@id='paymentBtn']");
+    private static final SelenideElement GO_TO_PAY_BUTTON = $x("//button[@id='licenseSubmitBtn']");
 
     public static SelenideElement getAccountType() {
         return ACCOUNT_TYPE;

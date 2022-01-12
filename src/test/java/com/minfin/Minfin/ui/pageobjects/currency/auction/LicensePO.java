@@ -13,7 +13,7 @@ public class LicensePO implements IBaseUrl {
         return "office/add/license/";
     }
 
-    private static final SelenideElement LICENSE_INPUT = $x("//input[@type='text']");
+    private static final SelenideElement LICENSE_INPUT = $x("//input[@id='number']");
     private static final SelenideElement GO_PAYMENT_BUTTON = $x("//button[@id='licenseSubmitBtn']");
 
 
@@ -32,8 +32,8 @@ public class LicensePO implements IBaseUrl {
     }
 
 
-    public ExchangerMenuPO sendToCheckButton() {
+    public PaymentForSubscriptionPO sendToCheckButton() {
         step("When click go payment button", () -> GO_PAYMENT_BUTTON.click());
-        return new ExchangerMenuPO();
+        return new PaymentForSubscriptionPO();
     }
 }
