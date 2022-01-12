@@ -12,11 +12,11 @@ public class PaymentForSubscriptionPO implements IBaseUrl {
         return "subscription-type/";
     }
 
-    private static final SelenideElement TERM_3_MONTH_BUTTON = $x("(//div[@class='SubscriptionTypeCard'])[1]");
-    private static final SelenideElement CHECKOUT_BUTTON = $x("//button[@class='Button ChooseSubscriptionType__ServicesBlock__Submit__Button outlined']");
+    private static final SelenideElement TERM_3_MONTH_BUTTON = $x("(//div[@id='subscriptionType'])[2]");
+    private static final SelenideElement CHECKOUT_BUTTON = $x("//button[@id='chooseSubscriptionTypeBtn']");
     private static final SelenideElement PAY_ON_PORTMONE_BUTTON = $x("//button[@id='paymentButton']");
-    private static final SelenideElement AMOUNT_EXCHANGER_DROPDOWN = $x("//div[@class='DropdownContent']");
-    private static final SelenideElement EXCHANGE_POINTS_2_LIST = $x("(//div[@class='DropdownItemContainer Dropdown__Item'])[1]");
+    private static final SelenideElement AMOUNT_EXCHANGER_DROPDOWN = $x("//div[@id='chooseDropdownItem']");
+    private static final SelenideElement EXCHANGE_POINTS_2_LIST = $x("//div[@id='dropdownItem-2']");
 
     public PaymentForSubscriptionPO clickTerm3MonthButton() {
         step("When click term 3 month button", () -> TERM_3_MONTH_BUTTON.click());

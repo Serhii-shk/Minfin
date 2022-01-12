@@ -14,7 +14,7 @@ public class LicensePO implements IBaseUrl {
     }
 
     private static final SelenideElement LICENSE_INPUT = $x("//input[@type='text']");
-    private static final SelenideElement GO_PAYMENT_BUTTON = $x("//button[@class='Button SubmitButton primary normal']");
+    private static final SelenideElement GO_PAYMENT_BUTTON = $x("//button[@id='licenseSubmitBtn']");
 
 
 

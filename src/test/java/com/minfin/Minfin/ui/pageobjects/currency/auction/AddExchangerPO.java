@@ -1,12 +1,10 @@
 package com.minfin.Minfin.ui.pageobjects.currency.auction;
 
 import com.codeborne.selenide.SelenideElement;
-import com.minfin.Minfin.ui.pageobjects.BasePO;
 import com.minfin.Minfin.ui.pageobjects.IBaseUrl;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 import static io.qameta.allure.Allure.step;
 
@@ -21,19 +19,19 @@ public class AddExchangerPO implements IBaseUrl {
     }
     String street = "Крещатик 21";
     int smsCode = 2233;
-    private static final SelenideElement CITY_DROPDOWN = $(".Controls .DropdownContent");
+    private static final SelenideElement CITY_DROPDOWN = $x("//section[@class='Controls']//div[@id='chooseDropdownItem']");
     private static final SelenideElement KIEV = $x("//span[text()='Киев']");
     private static final SelenideElement ADDRESS = $x("//div[@class='SearchLocationInput']");
     private static final SelenideElement ADDRESS_LIST = $x("(//div[@class='DropdownMenu__Item'])[1]");
     private static final SelenideElement ADDRESS_INPUT = $x("//input[@inputmode='text']");
     private static final SelenideElement PHONE_INPUT = $x("//input[@inputmode='decimal']");
-    private static final SelenideElement SATURDAY_DAY_OFF_CHECKBOX = $x("(//header[@class='ScheduleItem__Header'] //span[@class='checkboxHover'])[1]");
-    private static final SelenideElement SUNDAY_DAY_OFF_CHECKBOX = $x("(//header[@class='ScheduleItem__Header'] //span[@class='checkboxHover'])[2]");
-    private static final SelenideElement DAMAGED_BANKNOTES_CHECKBOX = $x("(//section[@class='Controls']//label[@class='CheckboxContainer'])[1]");
-    private static final SelenideElement VIDEO_SURVEILLANCE_CHECKBOX = $x("(//section[@class='Controls']//label[@class='CheckboxContainer'])[2]");
-    private static final SelenideElement RECOUNT_ROOM_CHECKBOX = $x("(//section[@class='Controls']//label[@class='CheckboxContainer'])[3]");
+    private static final SelenideElement SATURDAY_DAY_OFF_CHECKBOX = $x("(//span[@id='checkboxHover'])[1]");
+    private static final SelenideElement SUNDAY_DAY_OFF_CHECKBOX = $x("(//span[@id='checkboxHover'])[2]");
+    private static final SelenideElement DAMAGED_BANKNOTES_CHECKBOX = $x("(//section[@class='Controls']//span[@id='checkboxHover'])[1]");
+    private static final SelenideElement VIDEO_SURVEILLANCE_CHECKBOX = $x("(//section[@class='Controls']//span[@id='checkboxHover'])[2]");
+    private static final SelenideElement RECOUNT_ROOM_CHECKBOX = $x("(//section[@class='Controls']//span[@id='checkboxHover'])[3]");
     private static final SelenideElement EXCHANGER_DESCRIPTION_INPUT = $x("//textarea[@class='textArea']");
-    private static final SelenideElement NEXT_STEP_BUTTON = $x("//button[@class='Button SubmitButton primary normal']");
+    private static final SelenideElement NEXT_STEP_BUTTON = $x("//button[@id='nextStepBtn']");
     private static final SelenideElement SMS_CODE_INPUT = $x("//input[@type='tel']");
     private static final SelenideElement CONFIRM_BUTTON = $x("//button[@class='Button primary sizeM normal']");
 

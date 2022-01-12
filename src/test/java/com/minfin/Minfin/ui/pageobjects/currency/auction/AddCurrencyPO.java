@@ -3,9 +3,6 @@ package com.minfin.Minfin.ui.pageobjects.currency.auction;
 import com.codeborne.selenide.SelenideElement;
 import com.minfin.Minfin.ui.pageobjects.IBaseUrl;
 import lombok.SneakyThrows;
-import org.apache.http.conn.util.PublicSuffixList;
-
-import javax.swing.plaf.PanelUI;
 
 import static com.codeborne.selenide.Selenide.$x;
 import static io.qameta.allure.Allure.step;
@@ -17,17 +14,17 @@ public class AddCurrencyPO implements IBaseUrl {
         return "office/add/currency/currency_id";
     }
 
-    String rateEur = "32.50";
+    String rateEur = "31.10";
     int sumEur = 1000;
-    private static final SelenideElement ADD_CURRENCY_BUTTON = $x("//button[@class='Button AddBtSection__Button normal icon']");
-    private static final SelenideElement CURRENCY_DROPDOWN = $x("(//div[@class='DropdownContent'])[1]");
+    private static final SelenideElement ADD_CURRENCY_BUTTON = $x("//button[@id='addCurrencyBtn']");
+    private static final SelenideElement CURRENCY_DROPDOWN = $x("(//div[@id='chooseDropdownItem'])[1]");
     private static final SelenideElement CURRENCY_EUR = $x("(//div[@class='DropdownItemContainer Dropdown__Item'])[1]");
-    private static final SelenideElement BUY_SELL_DROPDOWN = $x("(//div[@class='DropdownContent'])[2]");
-    private static final SelenideElement CURRENCY_BUY = $x("(//div[@class='DropdownItemContainer Dropdown__Item'])[1]");
+    private static final SelenideElement BUY_SELL_DROPDOWN = $x("(//div[@id='chooseDropdownItem'])[2]");
+    private static final SelenideElement CURRENCY_BUY = $x("//div[@id='dropdownItem-2']");
     private static final SelenideElement EXACT_AMOUNT_CHECKBOX = $x("//label[@class='CheckboxContainer']");
-    private static final SelenideElement BUY_RATE = $x("//div[@class='FloatInput active']//input[@type='text']");
+    private static final SelenideElement BUY_RATE = $x("//input[@id='rate_buy']");
     private static final SelenideElement SUM_BUY = $x("//div[@class='FloatInput FloatInput--left']//input[@type='text']");
-    private static final SelenideElement CREATE_EXCHANGER_BUTTON = $x(" //button[@class='Button SubmitBtSection__Button primary normal']");
+    private static final SelenideElement CREATE_EXCHANGER_BUTTON = $x("//button[@id='addBranchBtn']");
 
     public  AddCurrencyPO clickAddCurrencyButton() {
         step("When click  add currency button", () -> ADD_CURRENCY_BUTTON.click());
@@ -37,7 +34,7 @@ public class AddCurrencyPO implements IBaseUrl {
     @SneakyThrows
     public AddCurrencyPO clickCurrencyDropdown() {
         step("When click currency dropdown", () -> CURRENCY_DROPDOWN.click());
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         return this;
     }
 

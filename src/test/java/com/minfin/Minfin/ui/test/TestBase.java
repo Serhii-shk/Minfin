@@ -9,6 +9,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Objects;
+
+import static com.minfin.Minfin.ui.TestBase.getWebDriverConfig;
+
 @ExtendWith({TextReportExtension.class})
 @ExtendWith({BrowserPerTestStrategyExtension.class})
 public abstract class TestBase {
@@ -30,7 +34,9 @@ public abstract class TestBase {
     }
 
     public static String getEnv() {
-        String configEnv = "stage";
+        String configEnv = Objects.isNull(System.getenv("ENVIRONMENT")) ? getWebDriverConfig().runEnvironment()
+                : System.getenv("ENVIRONMENT");
+
         switch (configEnv) {
             case "review1":
                 env = "review1";

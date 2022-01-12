@@ -1,7 +1,6 @@
 package com.minfin.Minfin.api.generation;
 
 import com.github.javafaker.Faker;
-import com.minfin.Minfin.api.model.common.AdminProfile;
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
 import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
@@ -45,6 +44,7 @@ import com.minfin.Minfin.api.steps.Steps;
 import com.minfin.Minfin.ui.pageobjects.BasePO;
 import com.minfin.Minfin.utils.StringUtils;
 import retrofit2.Response;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -56,12 +56,20 @@ import static com.minfin.Minfin.ui.pageobjects.BasePO.getRandomPhoneNumber;
 import static org.assertj.core.api.BDDAssertions.then;
 
 public class UserGenerator {
-    final String isoTime;
+    public final String isoTime;
+    public final String localDateTime;
     String street = new Faker(new Locale("uk")).address().streetAddress();
+    String exchangerM1SubscrType = "5efdb5b6dda04383b8f03570";
+    String phoneNumber;
 
     {
         DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         isoTime = LocalDateTime.now().plusMonths(1).format(ISO_FORMATTER);
+    }
+
+    {
+        DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        localDateTime = LocalDateTime.now().format(ISO_FORMATTER);
     }
 
     public UserProfile createPureRandomExchanger() {
@@ -152,21 +160,23 @@ public class UserGenerator {
         ProfileRequest profileRequest = ProfileRequest.builder()
                 .activeAt(isoTime)
                 .countItems(1)
-                .serviceProductId("5efdb5b6dda04383b8f03570")
+                .serviceProductId(exchangerM1SubscrType)
                 .build();
         String adminToken = new Steps().loginAsAdmin().getAccessToken();
         then(new ProfileService().postChangeProfileType(userInfo.body().getProfileId(), adminToken, profileRequest).code())
                 .isEqualTo(200);
 
-        String phoneNumber = getRandomPhoneNumber();
-        Response<PhonesResponse> phonesResponse = phonesServicePostPhones( accessToken);
+
+        Response<PhonesResponse> phonesResponse = phonesServicePostPhones(accessToken);
+
         then(phonesResponse.code())
                 .isEqualTo(200);
 
         VerifyCodeRequest verifyCodeRequest = VerifyCodeRequest.builder()
                 .verificationCode("234234")
                 .build();
-        then(new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code()).isEqualTo(200);
+        then(new VerifyCodeService().postVerifyCode(phoneNumber, accessToken, verifyCodeRequest).code())
+                .isEqualTo(200);
 
         PhoneIdBody phoneIdBody = new PhoneIdBody();
         phoneIdBody.setProfileId(userInfo.body().getProfileId());
@@ -212,19 +222,19 @@ public class UserGenerator {
                 .isEqualTo(201);
 
         LicensesBody licensesBody = LicensesBody.builder()
-                .profileId(userInfo.body().getProfileId())
+                .date(localDateTime)
                 .name(BasePO.getLicensesNumber())
                 .build();
         Response<LicensesResponse> licensesResponseResponse = new LicensesService().postLicenses(accessToken, licensesBody);
         then(licensesResponseResponse.code())
-                .isEqualTo(201);
+                .isEqualTo(200);
 
         SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
                 .licenseId(licensesResponseResponse.body().getId())
                 .status("success")
                 .build();
-        then(new SetLicenseStatusService().postSetLicenseStatus(setLicenseStatusBody).code())
-                .isEqualTo(200);
+        then(new SetLicenseStatusService().postSetLicenseStatus(adminToken,userInfo.body().getProfileId()).code())
+                .isEqualTo(204);
 
         Buy buy = Buy.builder()
                 .minCount(1000)
@@ -261,6 +271,7 @@ public class UserGenerator {
             phonesResponse = new PhonesService().postPhones(randomPhoneNumber, accessToken);
             if (phonesResponse.isSuccessful()) {
 //                exchanger.setPhone(randomPhoneNumber);
+                phoneNumber = randomPhoneNumber;
                 return phonesResponse;
             } else if (i == 9) {
                 throw new IllegalStateException("Please clear DB unique phone numbers are over");

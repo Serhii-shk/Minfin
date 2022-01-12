@@ -13,4 +13,7 @@ public class LicensesBody{
 
 	@SerializedName("name")
 	private String name;
+
+	@SerializedName("date")
+	private String date;
 }

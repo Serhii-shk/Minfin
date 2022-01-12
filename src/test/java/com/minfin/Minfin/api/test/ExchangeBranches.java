@@ -1,5 +1,6 @@
 package com.minfin.Minfin.api.test;
 
+import com.minfin.Minfin.api.generation.UserGenerator;
 import com.minfin.Minfin.api.model.common.UserProfile;
 import com.minfin.Minfin.api.model.minfin.api.auth.auction.AuctionResponse;
 import com.minfin.Minfin.api.model.minfin.api.user.register.RegisterRequest;
@@ -15,7 +16,6 @@ import com.minfin.Minfin.api.model.va.api.branches.body.*;
 import com.minfin.Minfin.api.model.va.api.branches.response.BranchesResponse;
 import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesBody;
 import com.minfin.Minfin.api.model.va.api.licenses.createLicenses.LicensesResponse;
-import com.minfin.Minfin.api.model.va.api.licenses.setLicenseStatus.SetLicenseStatusBody;
 import com.minfin.Minfin.api.model.va.api.phones.PhonesResponse;
 import com.minfin.Minfin.api.model.va.api.phones.VerifyCodeRequest;
 import com.minfin.Minfin.api.model.va.api.phones.phoneId.PhoneIdBody;
@@ -46,7 +46,6 @@ import com.minfin.Minfin.ui.test.TestBase;
 import com.minfin.Minfin.utils.StringUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -297,21 +296,19 @@ public class ExchangeBranches {
         then(branchesResponseResponse.code())
                 .isEqualTo(201);
 
+        UserGenerator userGenerator = new UserGenerator();
+
         String licensesNumber = "123" + ThreadLocalRandom.current().nextLong(91000000L, 91099999L);
         LicensesBody licensesBody = LicensesBody.builder()
-                .profileId(userInfo.body().getProfileId())
+                .date(userGenerator.localDateTime)
                 .name(licensesNumber)
                 .build();
         Response<LicensesResponse> licensesResponseResponse = new LicensesService().postLicenses(accessToken, licensesBody);
         then(licensesResponseResponse.code())
-                .isEqualTo(201);
-
-        SetLicenseStatusBody setLicenseStatusBody = SetLicenseStatusBody.builder()
-                .licenseId(licensesResponseResponse.body().getId())
-                .status("success")
-                .build();
-        then(new SetLicenseStatusService().postSetLicenseStatus(setLicenseStatusBody).code())
                 .isEqualTo(200);
+
+        then(new SetLicenseStatusService().postSetLicenseStatus(adminToken, userInfo.body().getProfileId()).code())
+                .isEqualTo(204);
 
         Buy buy = Buy.builder()
                 .minCount(1000)

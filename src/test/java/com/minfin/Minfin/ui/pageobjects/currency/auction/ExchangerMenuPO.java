@@ -13,8 +13,8 @@ public class ExchangerMenuPO implements IBaseUrl {
         return "office";
     }
 
-    private static final SelenideElement ADD_APPLICATION = $x("//a[@class='CreateApplicationLink']");
-    private static final SelenideElement GO_TO_PAY_BUTTON = $x("(//div/button[@type='button'])[1]");
+    private static final SelenideElement ADD_APPLICATION = $x("//a[@id='createApplicationLink']");
+    private static final SelenideElement GO_TO_PAY_BUTTON = $x("//button[@id='paymentBtn']");
 
     public static SelenideElement getAccountType() {
         return ACCOUNT_TYPE;

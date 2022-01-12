@@ -11,7 +11,7 @@ import retrofit2.http.POST;
 public interface LicensesAPI {
 
     @Headers({"Content-Type: application/json"})
-    @POST("api/licenses/")
+    @POST("api/licenses/my")
     Call<LicensesResponse> postLicenses(@Header(value = "Authorization") String bearerToken,
                                         @Body LicensesBody body);
 }
