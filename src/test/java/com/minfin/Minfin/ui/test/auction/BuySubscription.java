@@ -92,7 +92,7 @@ public class BuySubscription extends TestBase {
                 .clickPayOnPortmone()
                 .makePortmonePaymentExchangerSubscription();
         thenExchangerMenuAssert
-                .checkTypeExch();
+                .checkTypeExch(); //test commit
 
     }
 
