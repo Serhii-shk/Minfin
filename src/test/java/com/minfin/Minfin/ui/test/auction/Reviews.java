@@ -15,8 +15,6 @@ import io.qameta.allure.Issue;
 import io.qameta.allure.TmsLink;
 import org.junit.jupiter.api.*;
 
-import static io.restassured.RestAssured.given;
-
 @DisplayName("Тесты UI")
 public class Reviews extends TestBase {
     ReviewsPO whenReviewsPO = new ReviewsPO();
@@ -40,6 +38,7 @@ public class Reviews extends TestBase {
     }
 
     @Test
+    //@RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-30")
     @DisplayName("Создание ползователя")
@@ -62,7 +61,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-4")
     @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Обменника'")
@@ -106,7 +105,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-31")
     @DisplayName("Создание отзыва от пользователя 'Пользователь Pro' для 'Обменника'")
@@ -150,7 +149,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-32")
     @DisplayName("Создание отзыва от пользователя 'Обычный Пользователь' для 'Обменника'")
@@ -194,7 +193,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-33")
     @DisplayName("Создание отзыва от пользователя 'Пользователя Pro' для 'Пользователя Pro'")
@@ -237,7 +236,7 @@ public class Reviews extends TestBase {
     }
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-34")
     @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Пользователя Pro'")
@@ -281,7 +280,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-35")
     @DisplayName("Создание отзыва от 'Обычного пользователя' для 'Пользователя Pro'")
@@ -325,7 +324,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-36")
     @DisplayName("Создание отзыва от 'Обычного пользователя' для 'Обычного пользователя'")
@@ -369,7 +368,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-37")
     @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Обычного пользователя'")
@@ -413,7 +412,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-38")
     @DisplayName("Создание отзыва от пользователя 'Пользователя Pro' для 'Обычного пользователя'")
@@ -457,7 +456,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-//    @RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-12")
     @DisplayName("Проверка на повторное добавление отзыва для того же обменника в течении 24ч")
@@ -507,7 +506,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    //@RepeatedTest(10)
+    @RepeatedTest(10)
     @Issue("CA-563")
     @TmsLink("CA-A-7")
     @DisplayName("Редактирование отзыва")

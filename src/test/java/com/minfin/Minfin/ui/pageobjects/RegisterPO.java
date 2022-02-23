@@ -10,18 +10,18 @@ import static io.qameta.allure.Allure.step;
 
 public class RegisterPO {
 
-    private SelenideElement loginInput = $x("//input[@name='Login']");
-    private SelenideElement emailInput = $x("//input[@name='Email']");
+    private SelenideElement loginInput = $x("(//input[@name='Login'])[4]");
+    private SelenideElement emailInput = $x("(//input[@name='Email'])[4]");
     private SelenideElement password1Input = $("dd#password1 input");
     private SelenideElement password2Input = $("dd#password2 input");
     private SelenideElement checkboxRecaptcha = $x("//div[@role='presentation'][2]");
     private SelenideElement registerButton = $x("//input[@id='registrationFormSubmit']");
 
-   // public MinfinAuthUser createRandomUser() {
-        String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+    String email = "test_" + StringUtils.randomAlphabeticString(5) + "@test.test";
+    String login = "tester" + StringUtils.randomAlphabeticString(5);
 
     public RegisterPO setLoginInput() {
-        step("when input random login", () -> loginInput.setValue("tester2dsd"));
+        step("when input random login", () -> loginInput.setValue(login));
         return this;
     }
 
@@ -41,8 +41,8 @@ public class RegisterPO {
     }
 
     public RegisterPO clickCheckboxRecaptcha() {
-       executeJavaScript(
-               "document.getElementById('recaptcha-anchor').click()");
+//       executeJavaScript(
+//               "document.getElementById('recaptcha-anchor').click()");
         switchTo().innerFrame("a-1qkvl361b20x");
         checkboxRecaptcha.click();
         return this;

@@ -25,7 +25,7 @@ public class PortmonePO {
             PAY_EXP_DATE_INPUT.setValue(cardDate);
             PAY_CVV_INPUT.setValue(cvvCard);
             SEND_PAYMENT_BUTTON.click();
-            CLOSE_OFFER_MODAL.click();
+         //   CLOSE_OFFER_MODAL.click();
             switchTo().defaultContent();
         });
         return new ProMenuPO();
@@ -39,7 +39,7 @@ public class PortmonePO {
             PAY_EXP_DATE_INPUT.setValue(cardDate);
             PAY_CVV_INPUT.setValue(cvvCard);
             SEND_PAYMENT_BUTTON.click();
-            CLOSE_OFFER_MODAL.click();
+          //  CLOSE_OFFER_MODAL.click();
             switchTo().defaultContent();
         });
         return new ExchangerMenuPO();
