@@ -19,6 +19,7 @@ public class CurrencyPO {
     private static final SelenideElement NAW_BAR_ALL = $x("//button[@id='navigation-undefined']");
     private static final SelenideElement AUTH_BUTTON = $x("//div[@class='js-toggle-auth']");
     private static final SelenideElement CHOOSE_PLAN = $x("//button[@data-gtm-ea='choosePlan-top']");
+    private static final SelenideElement LOAD_MORE_BUTTON = $x("//button[@class='LoadMoreButton']");
     String cardId = "[id='%s']";
     String baseUrl = "/currency/auction-%s/";
 
@@ -56,9 +57,14 @@ public class CurrencyPO {
         return new ExchangeCardPO();
     }
 
-    public SubscriptionSelectionPO clickChoosePlan(){
+    public SubscriptionSelectionPO clickChoosePlan() {
         step("When click choose plan", () -> CHOOSE_PLAN.click());
         return new SubscriptionSelectionPO();
+    }
+
+    public CurrencyPO clickLoadMoreButton() {
+        step("When click load more button", () -> LOAD_MORE_BUTTON.click());
+        return this;
     }
 
 }

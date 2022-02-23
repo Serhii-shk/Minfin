@@ -25,43 +25,43 @@ public class Reviews extends TestBase {
     ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
     ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
     RegisterPO whenRegisterPO = new RegisterPO();
-    UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
-    UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
-    UserProfile pureCustomerPro = new UserGenerator().createPureRandomCustomerPro();
-    UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
-    UserProfile pureCustomerFree = new UserGenerator().createPureRandomCustomerFree();
-    UserProfile customerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
+    //UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
+    //UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
+    //UserProfile pureCustomerPro = new UserGenerator().createPureRandomCustomerPro();
+    //UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
+    //UserProfile pureCustomerFree = new UserGenerator().createPureRandomCustomerFree();
+    //UserProfile customerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
     static MinfinAuthUser randomUser;
     @BeforeAll
     static void setupprecondition(){
 //        randomUser = new UserService().createRandomUser();
     }
 
+//    @Test
+//    //@RepeatedTest(10)
+//    @Issue("CA-563")
+//    @TmsLink("CA-A-30")
+//    @DisplayName("Создание ползователя")
+//    @Tag("UI")
+//    @Tag("CurrencyAuction")
+//    @Tag("Reviews")
+//    public void registerUserViaUi() {
+//        whenCurrencyPO
+//                .open()
+//                .clickLoginButton()
+//                .clickRegisterButton()
+//                .setLoginInput()
+//                .setEmailInput()
+//                .setPassword1Input()
+//                .setPassword2Input()
+//                .clickCheckboxRecaptcha()
+//                .clickRegisterButton();
+//
+//    }   // тест не актуален пока не решиться проблема с рекапчей
+
+
     @Test
-    //@RepeatedTest(10)
-    @Issue("CA-563")
-    @TmsLink("CA-A-30")
-    @DisplayName("Создание ползователя")
-    @Tag("UI")
-    @Tag("CurrencyAuction")
-    @Tag("Reviews")
-    public void registerUserViaUi() {
-        whenCurrencyPO
-                .open()
-                .clickLoginButton()
-                .clickRegisterButton()
-                .setLoginInput()
-                .setEmailInput()
-                .setPassword1Input()
-                .setPassword2Input()
-                .clickCheckboxRecaptcha()
-                .clickRegisterButton();
-
-    }
-
-
-    @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) // pass
     @Issue("CA-563")
     @TmsLink("CA-A-4")
     @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Обменника'")
@@ -69,6 +69,8 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewBranchToBranch() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
+        UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
                 .selectNawBarAll()
@@ -105,7 +107,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) //pass
     @Issue("CA-563")
     @TmsLink("CA-A-31")
     @DisplayName("Создание отзыва от пользователя 'Пользователь Pro' для 'Обменника'")
@@ -113,6 +115,8 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewProToBranch() {
+        UserProfile pureCustomerPro = new UserGenerator().createPureRandomCustomerPro();
+        UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
         whenCurrencyPO
                 .openAs(pureCustomerPro.getEmail(), pureCustomerPro.getPassword())
                 .selectNawBarAll()
@@ -149,7 +153,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) // pass
     @Issue("CA-563")
     @TmsLink("CA-A-32")
     @DisplayName("Создание отзыва от пользователя 'Обычный Пользователь' для 'Обменника'")
@@ -157,6 +161,8 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewUserFreeToBranch() {
+        UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
+        UserProfile pureCustomerFree = new UserGenerator().createPureRandomCustomerFree();
         whenCurrencyPO
                 .openAs(pureCustomerFree.getEmail(), pureCustomerFree.getPassword())
                 .selectNawBarAll()
@@ -193,7 +199,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) // pass
     @Issue("CA-563")
     @TmsLink("CA-A-33")
     @DisplayName("Создание отзыва от пользователя 'Пользователя Pro' для 'Пользователя Pro'")
@@ -201,9 +207,12 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewUserProToUserPro() {
+        UserProfile pureCustomerPro = new UserGenerator().createPureRandomCustomerPro();
+        UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
         whenCurrencyPO
                 .openAs(pureCustomerPro.getEmail(), pureCustomerPro.getPassword())
                 .selectNawBarAll()
+                .clickLoadMoreButton()
                 .selectCardById(customerProWithSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
@@ -221,7 +230,6 @@ public class Reviews extends TestBase {
 
         whenReviewsPO
                 .clickNextStep()
-                .setAvailability5Stars()
                 .setCurrencyRate5Stars()
                 .setQuality3Stars()
                 .setSafety5Stars()
@@ -236,7 +244,7 @@ public class Reviews extends TestBase {
     }
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) // pass
     @Issue("CA-563")
     @TmsLink("CA-A-34")
     @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Пользователя Pro'")
@@ -244,9 +252,12 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewBranchToUserPro() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
+        UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
                 .selectNawBarAll()
+                .clickLoadMoreButton()
                 .selectCardById(customerProWithSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
@@ -264,7 +275,7 @@ public class Reviews extends TestBase {
 
         whenReviewsPO
                 .clickNextStep()
-                .setAvailability5Stars()
+               // .setAvailability5Stars()
                 .setCurrencyRate5Stars()
                 .setQuality3Stars()
                 .setSafety5Stars()
@@ -280,7 +291,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) // pass
     @Issue("CA-563")
     @TmsLink("CA-A-35")
     @DisplayName("Создание отзыва от 'Обычного пользователя' для 'Пользователя Pro'")
@@ -288,9 +299,12 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewUserFreeToUserPro() {
+        UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
+        UserProfile pureCustomerFree = new UserGenerator().createPureRandomCustomerFree();
         whenCurrencyPO
                 .openAs(pureCustomerFree.getEmail(), pureCustomerFree.getPassword())
                 .selectNawBarAll()
+                .clickLoadMoreButton()
                 .selectCardById(customerProWithSubscription.getId())
                 .clickReviewButton()
                 .clickNextStep();
@@ -308,7 +322,6 @@ public class Reviews extends TestBase {
 
         whenReviewsPO
                 .clickNextStep()
-                .setAvailability5Stars()
                 .setCurrencyRate5Stars()
                 .setQuality3Stars()
                 .setSafety5Stars()
@@ -324,7 +337,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) // pass
     @Issue("CA-563")
     @TmsLink("CA-A-36")
     @DisplayName("Создание отзыва от 'Обычного пользователя' для 'Обычного пользователя'")
@@ -332,9 +345,12 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewUserFreeToUserFree() {
+        UserProfile pureCustomerFree = new UserGenerator().createPureRandomCustomerFree();
+        UserProfile customerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
         whenCurrencyPO
                 .openAs(pureCustomerFree.getEmail(), pureCustomerFree.getPassword())
                 .selectNawBarAll()
+                .clickLoadMoreButton()
                 .selectCardById(customerFreeWithAdt.getId())
                 .clickReviewButton()
                 .clickNextStep();
@@ -352,7 +368,6 @@ public class Reviews extends TestBase {
 
         whenReviewsPO
                 .clickNextStep()
-                .setAvailability5Stars()
                 .setCurrencyRate5Stars()
                 .setQuality3Stars()
                 .setSafety5Stars()
@@ -368,7 +383,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) //pass
     @Issue("CA-563")
     @TmsLink("CA-A-37")
     @DisplayName("Создание отзыва от пользователя 'Обменник' для 'Обычного пользователя'")
@@ -376,9 +391,12 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewBranchToUserFree() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
+        UserProfile customerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
                 .selectNawBarAll()
+                .clickLoadMoreButton()
                 .selectCardById(customerFreeWithAdt.getId())
                 .clickReviewButton()
                 .clickNextStep();
@@ -396,7 +414,6 @@ public class Reviews extends TestBase {
 
         whenReviewsPO
                 .clickNextStep()
-                .setAvailability5Stars()
                 .setCurrencyRate5Stars()
                 .setQuality3Stars()
                 .setSafety5Stars()
@@ -412,7 +429,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) // pass
     @Issue("CA-563")
     @TmsLink("CA-A-38")
     @DisplayName("Создание отзыва от пользователя 'Пользователя Pro' для 'Обычного пользователя'")
@@ -420,9 +437,12 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewUserProToUserFree() {
+        UserProfile pureCustomerPro = new UserGenerator().createPureRandomCustomerPro();
+        UserProfile customerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
         whenCurrencyPO
                 .openAs(pureCustomerPro.getEmail(), pureCustomerPro.getPassword())
                 .selectNawBarAll()
+                .clickLoadMoreButton()
                 .selectCardById(customerFreeWithAdt.getId())
                 .clickReviewButton()
                 .clickNextStep();
@@ -440,7 +460,6 @@ public class Reviews extends TestBase {
 
         whenReviewsPO
                 .clickNextStep()
-                .setAvailability5Stars()
                 .setCurrencyRate5Stars()
                 .setQuality3Stars()
                 .setSafety5Stars()
@@ -456,7 +475,7 @@ public class Reviews extends TestBase {
 
 
     @Test
-    @RepeatedTest(10)
+    //@RepeatedTest(10) //
     @Issue("CA-563")
     @TmsLink("CA-A-12")
     @DisplayName("Проверка на повторное добавление отзыва для того же обменника в течении 24ч")
@@ -464,6 +483,8 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void secondCreateReview() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
+        UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), pureExchanger.getPassword())
                 .selectNawBarAll()
@@ -514,6 +535,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void editReview() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -576,6 +598,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void deleteReview() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -624,6 +647,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void deleteImageInReview() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -681,6 +705,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void likeForReview() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -719,6 +744,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void complaintForReview() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -742,6 +768,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void secondComplaintForReview() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -768,6 +795,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void createReviewNoAuth() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .open()
                 .selectNawBarAll()
@@ -962,6 +990,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortNewFirst() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -977,6 +1006,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortDefault() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -994,6 +1024,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortDescendingRating() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -1011,6 +1042,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortRatingGrowth() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -1029,6 +1061,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void sortByPopularity() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -1046,6 +1079,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void filterByUnansweredReviews() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -1063,6 +1097,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void filterByNegativeReviews() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()
@@ -1080,6 +1115,7 @@ public class Reviews extends TestBase {
     @Tag("CurrencyAuction")
     @Tag("Reviews")
     public void filterByPositiveReviews() {
+        UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
         whenCurrencyPO
                 .openAs(pureExchanger.getEmail(), "123qweQWE")
                 .selectNawBarAll()

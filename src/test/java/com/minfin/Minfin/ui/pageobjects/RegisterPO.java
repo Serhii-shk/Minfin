@@ -41,8 +41,8 @@ public class RegisterPO {
     }
 
     public RegisterPO clickCheckboxRecaptcha() {
-//       executeJavaScript(
-//               "document.getElementById('recaptcha-anchor').click()");
+       executeJavaScript(
+               "document.getElementById('recaptcha-anchor').click()");
         switchTo().innerFrame("a-1qkvl361b20x");
         checkboxRecaptcha.click();
         return this;
