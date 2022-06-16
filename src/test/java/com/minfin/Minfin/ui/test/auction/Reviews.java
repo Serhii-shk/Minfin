@@ -25,12 +25,7 @@ public class Reviews extends TestBase {
     ExchangeCardPO whenExchangeCardPO = new ExchangeCardPO();
     ModalWindowsPO modalWindowsPO = new ModalWindowsPO();
     RegisterPO whenRegisterPO = new RegisterPO();
-    //UserProfile pureExchanger = new UserGenerator().createPureRandomExchanger();
-    //UserProfile exchangerWithPaidSubscription = new UserGenerator().createRandomExchangerWithPaidSubscription();
-    //UserProfile pureCustomerPro = new UserGenerator().createPureRandomCustomerPro();
-    //UserProfile customerProWithSubscription = new UserGenerator().createRandomCustomerProWithPaidSubscription();
-    //UserProfile pureCustomerFree = new UserGenerator().createPureRandomCustomerFree();
-    //UserProfile customerFreeWithAdt = new UserGenerator().createRandomCustomerFreeWithAdt();
+
     static MinfinAuthUser randomUser;
     @BeforeAll
     static void setupprecondition(){
